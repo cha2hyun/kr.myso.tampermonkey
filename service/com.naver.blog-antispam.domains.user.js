@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 스팸 차단글 자동화 도구 - 모든 도메인
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://tampermonkey.myso.kr/service/com.naver.blog-antispam.domains.user.js
 // @description  네이버 블로그 스팸 차단글 설정에서 손쉽게 모든 국제 도메인을 차단 키워드로 등록 할 수 있습니다.
 // @author       Won Choi
@@ -26,7 +26,7 @@ async function main() {
             if(!el_kwd || !el_btn) return workflow();
             if(el_kwd != $document.activeElement) el_kwd.focus();
             el_kwd.value = "";
-            const tx_lst = Array.from(el_lst).map(el=>el.innerText.trim());
+            const tx_lst = Array.from(el_lst).map(el=>(el.title || el.innerText).trim());
             const filters = domains.filter(o=>!tx_lst.includes(o));
             const keyword = filters[0];
             const keyboardEvent = (element, keyCode) => {
