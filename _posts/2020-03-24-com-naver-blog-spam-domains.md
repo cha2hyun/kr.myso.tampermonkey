@@ -1,1 +1,1 @@
-/com.naver.blog@spam.domains.user.js
+/service/com.naver.blog@spam.domains.user.js
