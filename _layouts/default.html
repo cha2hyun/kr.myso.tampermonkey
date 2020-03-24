@@ -1,21 +1,22 @@
+{% capture meta_title %}{% if page.id %}{{ page.name }} {{ page.version }}{% else %}인플루언서를 위한 무료 자동화 도구{% endif %}{% endcapture %}
+{% capture meta_description %}{% if page.id %}{{ page.description }}{% else %}Tampermonkey를 활용한 자동화 서비스 확장 기능{% endif %}{% endcapture %}
+{% capture redirection_url %}{% if page.id %}{{ page.updateURL | strip }}{% else %}https://blog.myso.kr/221870540540{% endif %}{% endcapture %}
 <!doctype html>
 <html>
   <head>
-    <title>인플루언서를 위한 무료 자동화 도구</title>
-    <meta name="description" content="Tampermonkey를 활용한 자동화 서비스 확장 기능">
+    <title>{{ meta_title }}</title>
+    <meta name="description" content="{{ meta_description }}">
     <meta property="og:type" content="profile">
-    <meta property="og:title" content="인플루언서를 위한 무료 자동화 도구">
-    <meta property="og:description" content="Tampermonkey를 활용한 자동화 서비스 확장 기능">
-    <meta property="og:url" content="http://link.myso.kr{{ page.url }}">
+    <meta property="og:title" content="{{ meta_title }}">
+    <meta property="og:description" content="{{ meta_description }}">
+    <meta property="og:url" content="http://tampermonkey.myso.kr{{ page.url }}">
     <meta property="og:image" content="https://avatars2.githubusercontent.com/u/1237913">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@cw4196">
-    <meta name="twitter:title" content="인플루언서를 위한 무료 자동화 도구">
-    <meta name="twitter:description" content="Tampermonkey를 활용한 자동화 서비스 확장 기능">
+    <meta name="twitter:title" content="{{ meta_title }}">
+    <meta name="twitter:description" content="{{ meta_description }}">
     <meta property="profile:first_name" content="Won">
     <meta property="profile:last_name" content="Choi">
-    <script>{% capture redirection_url %}{% if page.id %}{{ page.excerpt | remove: '<p>' | remove: '</p>' | strip }}{% else %}https://blog.myso.kr/221870540540{% endif %}{% endcapture %}
-      window.location.replace("{{ redirection_url }}");
-    </script>
+    <script>window.location.replace("{{ redirection_url }}");</script>
   </head>
 </html>
