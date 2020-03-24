@@ -1,0 +1,3 @@
+permalink: /:title
+timezone: Asia/Seoul
+future: true
