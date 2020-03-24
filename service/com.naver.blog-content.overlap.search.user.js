@@ -16,7 +16,7 @@ async function main() {
         e.preventDefault();
         if(confirm('해당 기능은 본문 내용 일부를 무작위로 추출하여 검색합니다. 계속하시겠습니까?')) {
             const arr = document.querySelector('.se-main-container').innerText.replace(/[\n]+/g, ' ').split(' ');
-            const idx = Math.floor(Math.random() * (arr.length - 50));
+            const idx = Math.floor(Math.random() * (arr.length - 10));
             const uri = new URL('https://search.naver.com/search.naver');
             uri.searchParams.set('sm', 'tab_opt');
             uri.searchParams.set('where', 'nexearch');
