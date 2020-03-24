@@ -1,5 +1,4 @@
 ---
-layout: service
 name: 네이버 블로그 스팸 차단글 자동화 도구 - 모든 도메인
 version: 1.0.3
 updateURL: https://tampermonkey.myso.kr/service/com.naver.blog@spam.domains.user.js
