@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 검색결과 캡쳐도구
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://tampermonkey.myso.kr/service/com.naver.blog-screenshot.search.user.js
 // @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
 // @author       Won Choi
@@ -83,7 +83,12 @@ async function main() {
             });
         }
         const container = document.querySelector('.blog2_post_function');
-        container.innerHTML = '<a href="#" class="url pcol2 _returnFalse _transPosition _se3screenshotbtn"style="cursor:pointer; margin-right:11px;">상위노출 캡쳐</a>' + container.innerHTML;
+        const anchor = document.createElement('a'); anchor.href = '#';
+        anchor.className = 'url pcol2 _returnFalse _transPosition _se3screenshotbtn';
+        anchor.style.cursor = 'pointer';
+        anchor.style.marginRight = '11px';
+        anchor.innerText = '상위노출 캡처';
+        container.prepend(anchor);
         const button = container.querySelector('._se3screenshotbtn');
         button.onclick = async function(e) {
             e.preventDefault();
