@@ -1,0 +1,6 @@
+---
+name: 네이버 블로그 검색결과 캡쳐도구
+version: 1.0.0
+updateURL: https://tampermonkey.myso.kr/service/com.naver.blog-screenshot.search.user.js
+description: 네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
+---
