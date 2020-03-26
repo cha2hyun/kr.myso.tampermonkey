@@ -2,7 +2,7 @@
 // @name         네이버 블로그 검색결과 캡쳐도구
 // @namespace    https://tampermonkey.myso.kr/
 // @version      1.0.2
-// @updateURL    https://tampermonkey.myso.kr/service/com.naver.blog-screenshot.search.user.js
+// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-screenshot.search.user.js
 // @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
 // @author       Won Choi
 // @match        https://blog.naver.com/PostView.nhn?*
