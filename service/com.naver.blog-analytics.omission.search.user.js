@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 PC 통계 플러스 - 통합검색 노출누락 여부 확인
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.omission.search.user.js
 // @description  네이버 블로그 통계에서 네이버 통합검색 노출 여부 확인이 가능한 버튼을 추가해줍니다.
 // @author       Won Choi
@@ -10,10 +10,11 @@
 // ==/UserScript==
 async function main() {
     const container = document.querySelector('.u_ni_header_wrap > div > .u_ni_info_section > div');
-    container.innerHTML += '<div class="u_ni_btn_group" style="left:0"><div class="u_ni_menu_component u_ni_ext_group"><ul class="u_ni_menu_list" role="menu"></ul></div></div>';
-    const canvas = container.querySelector('.u_ni_ext_group ul.u_ni_menu_list');
-    const button_wrap_a = document.createElement('li'); button_wrap_a.className = 'u_ni_menu_item u_ni_is_active'; canvas.appendChild(button_wrap_a);
-    const button_wrap_b = document.createElement('li'); button_wrap_b.className = 'u_ni_menu_item u_ni_is_active'; canvas.appendChild(button_wrap_b);
+    const group = document.createElement('div'); group.className = 'u_ni_btn_group'; group.style.left = 0; group.style.right = 'auto'; container.appendChild(group);
+    const group_inner = document.createElement('div'); group_inner.className = 'u_ni_menu_component u_ni_ext_group'; group.appendChild(group_inner);
+    const group_list = document.createElement('ul'); group_list.className = 'u_ni_menu_list'; group_list.role = 'menu'; group_inner.appendChild(group_list);
+    const button_wrap_a = document.createElement('li'); button_wrap_a.className = 'u_ni_menu_item u_ni_is_active'; group_list.appendChild(button_wrap_a);
+    const button_wrap_b = document.createElement('li'); button_wrap_b.className = 'u_ni_menu_item u_ni_is_active'; group_list.appendChild(button_wrap_b);
     const button_a = document.createElement('a'); button_a.href = '#'; button_a.innerText = '누락확인'; button_wrap_a.appendChild(button_a);
     const button_b = document.createElement('a'); button_b.href = '#'; button_b.innerText = '유사확인'; button_wrap_b.appendChild(button_b);
     function post_info() {
