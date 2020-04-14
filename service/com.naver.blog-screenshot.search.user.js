@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 검색결과 캡쳐도구
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-screenshot.search.user.js
 // @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
 // @author       Won Choi
@@ -64,7 +64,8 @@ async function main() {
         window.addEventListener('message', (e)=>{
             const { action, dataURL } = e.data;
             if(action === 'screenshot.dataURL') {
-                GM_download(dataURL, `screenshot_${query}_${Date.now()}_${location.hostname}.png`);
+                const uri = new URL(location.href);
+                GM_download(dataURL, `screenshot_${query}_${Date.now()}_${location.hostname}_${uri.searchParams.get('where') || 'all'}.png`);
                 window.close();
             }
         });
@@ -92,11 +93,19 @@ async function main() {
             e.preventDefault();
             const query = prompt('검색 할 키워드를 입력하세요.'); if(!query) return;
             const uri_m = new URL('https://m.search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
-            const uri_d = new URL('https://search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
             uri_m.searchParams.set('query', query); uri_m.searchParams.set('highlight', window.top.location.pathname);
-            uri_d.searchParams.set('query', query); uri_d.searchParams.set('highlight', window.top.location.pathname);
             await screenshot(uri_m.toString());
+            const uri_mv = new URL('https://m.search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
+            uri_mv.searchParams.set('query', query); uri_mv.searchParams.set('highlight', window.top.location.pathname);
+            uri_mv.searchParams.set('where', 'm_view');
+            await screenshot(uri_mv.toString());
+            const uri_d = new URL('https://search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
+            uri_d.searchParams.set('query', query); uri_d.searchParams.set('highlight', window.top.location.pathname);
             await screenshot(uri_d.toString());
+            const uri_dv = new URL('https://search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
+            uri_dv.searchParams.set('query', query); uri_dv.searchParams.set('highlight', window.top.location.pathname);
+            uri_dv.searchParams.set('where', 'post');
+            await screenshot(uri_dv.toString());
         }
         container.prepend(anchor);
     }
