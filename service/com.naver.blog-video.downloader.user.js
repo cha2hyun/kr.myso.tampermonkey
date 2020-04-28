@@ -32,6 +32,7 @@ async function main() {
             location.href = video.source;
         }
     }, false);
+    loadUGCPlayer();
 }
 function checkForDOM() { return (document.head) ? main() : requestIdleCallback(checkForDOM); }
 requestIdleCallback(checkForDOM);
