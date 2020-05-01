@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그 편집기에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -12,21 +12,7 @@ async function main() {
     window.addEventListener('keyup', (e)=>{
         const sections = Array.from(document.querySelectorAll('.se-container .se-component')).map((component) => {
             const section = {};
-            if(component.classList.contains('se-text')) {
-                const data = Array.from(component.querySelectorAll('.se-text-paragraph')); if(!data.length) return;
-                section.type = 'text';
-                section.data = data.map(el=>el.innerText);
-            }
-            if(component.classList.contains('se-quotation')) {
-                const data = Array.from(component.querySelectorAll('.se-text-paragraph')); if(!data.length) return;
-                section.type = 'quote';
-                section.data = data.map(el=>el.innerText);
-            }
-            if(component.classList.contains('se-image')) {
-                const data = Array.from(component.querySelectorAll('.se-text-paragraph')); if(!data.length) return;
-                section.type = 'quote';
-                section.data = data.map(el=>el.innerText);
-            }
+            const data = Array.from(component.querySelectorAll('.se-text-paragraph')); section.data = data.map(el=>el.innerText);
             return section;
         });
         const contentLength = sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
