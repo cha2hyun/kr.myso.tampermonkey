@@ -7,6 +7,7 @@
 // @author       Won Choi
 // @match        *://blog.naver.com/cw4196/postwrite?*
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
+// @match        *://blog.naver.com/PostUpdateForm.nhn?*
 // ==/UserScript==
 async function main() {
     window.addEventListener('keyup', (e)=>{
