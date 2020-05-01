@@ -34,7 +34,7 @@ async function main() {
         const se_toast_popup_message = se_toast_popup_content.querySelector('.se-toast-popup-message') || document.createElement('p');
         if(!se_toast_popup.className) { se_toast_popup.className = 'se-toast-popup se-toast-interaction-enter content-length'; container_header.after(se_toast_popup); }
         if(!se_toast_popup_container.className) { se_toast_popup_container.className = 'se-toast-popup-contiainer'; se_toast_popup.append(se_toast_popup_container); }
-        if(!se_toast_popup_content.className) { se_toast_popup_content.className = 'se-toast-popup-content'; se_toast_popup_container.append(se_toast_popup_content); }
+        if(!se_toast_popup_content.className) { se_toast_popup_content.className = 'se-toast-popup-content se-toast-popup-content-info'; se_toast_popup_container.append(se_toast_popup_content); }
         if(!se_toast_popup_message.className) { se_toast_popup_message.className = 'se-toast-popup-message'; se_toast_popup_message.setAttribute('role', 'alert'); se_toast_popup_content.append(se_toast_popup_message); }
         se_toast_popup_message.innerText = `글자수 : ${contentLength}자 (공백제외: ${contentLengthTrim}자)`;
         container.__toast_timer = clearTimeout(container.__toast_timer);
