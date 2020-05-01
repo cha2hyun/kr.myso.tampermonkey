@@ -5,7 +5,6 @@
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그 편집기에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
-// @match        *://blog.naver.com/cw4196/postwrite?*
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
 // ==/UserScript==
