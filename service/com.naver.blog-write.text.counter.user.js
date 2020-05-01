@@ -22,6 +22,11 @@ async function main() {
                 section.type = 'quote';
                 section.data = data.map(el=>el.innerText);
             }
+            if(component.classList.contains('se-image')) {
+                const data = Array.from(component.querySelectorAll('.se-text-paragraph')); if(!data.length) return;
+                section.type = 'quote';
+                section.data = data.map(el=>el.innerText);
+            }
             return section;
         });
         const contentLength = sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
