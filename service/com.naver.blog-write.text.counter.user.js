@@ -35,7 +35,7 @@ async function main() {
         if(!se_toast_popup_container.className) { se_toast_popup_container.className = 'se-toast-popup-contiainer'; se_toast_popup.append(se_toast_popup_container); }
         if(!se_toast_popup_content.className) { se_toast_popup_content.className = 'se-toast-popup-content'; se_toast_popup_container.append(se_toast_popup_content); }
         if(!se_toast_popup_message.className) { se_toast_popup_message.className = 'se-toast-popup-message'; se_toast_popup_message.setAttribute('role', 'alert'); se_toast_popup_content.append(se_toast_popup_message); }
-        se_toast_popup_message.innerText = `글자수 : ${contentLength}자`;
+        se_toast_popup_message.innerText = `글자수 : ${contentLength}자 (공백제외: ${contentLength.replace(/[\s]+/g, '')}자)`;
         container.__toast_timer = clearTimeout(container.__toast_timer);
         container.__toast_timer = setTimeout(() => container.removeChild(se_toast_popup), 3000);
     }, false);
