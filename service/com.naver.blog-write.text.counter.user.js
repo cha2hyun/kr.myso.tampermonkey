@@ -1,14 +1,16 @@
 // ==UserScript==
-// @name         네이버 블로그 글자수 세기
+// @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
-// @description  네이버 블로그 포스트/편집기에서 글자수 세기를 활성화합니다.
+// @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
 // @match        *://post.editor.naver.com/editor/canvas*
 // @match        *://blog.naver.com/PostView.nhn?*
+// @match        *://post.naver.com/viewer/postView.nhn?*
+// @match        *://m.post.naver.com/viewer/postView.nhn?*
 // @grant        GM_addStyle
 // ==/UserScript==
 async function main() {
@@ -68,7 +70,7 @@ async function main() {
     `);
 
     function handler(e) {
-        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
+        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
             const section = {};
             const data = Array.from(component.querySelectorAll('.se_textarea, .se-text-paragraph')); section.data = data.map(el=>el.innerText);
             return section;
