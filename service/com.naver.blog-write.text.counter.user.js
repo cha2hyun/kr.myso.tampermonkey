@@ -101,7 +101,7 @@ async function main() {
     window.addEventListener('keyup', handler, false);
     window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
-    if(location.hostname.includes('post.naver.com')) document.addEventListener('click', handler_click, false);
+    // document.addEventListener('click', handler_click, false);
     handler();
 }
 function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
