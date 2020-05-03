@@ -1,14 +1,17 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
+// @match        *://blog.naver.com/*/*
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
-// @match        *://post.editor.naver.com/editor/canvas*
 // @match        *://blog.naver.com/PostView.nhn?*
+// @match        *://m.blog.naver.com/PostView.nhn?*
+// @match        *://post.editor.naver.com/editor*
+// @match        *://m.post.editor.naver.com/editor*
 // @match        *://post.naver.com/viewer/postView.nhn?*
 // @match        *://m.post.naver.com/viewer/postView.nhn?*
 // @grant        GM_addStyle
@@ -25,7 +28,7 @@ async function main() {
 }
 .se-toast-popup.content-length .se-toast-popup-contiainer {
     position: absolute;
-    bottom: 50px;
+    bottom: 90px;
     right: 0;
     left: 0;
     height: 0;
@@ -70,11 +73,12 @@ async function main() {
     `);
 
     function handler(e) {
-        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
+        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
             const section = {};
             const data = Array.from(component.querySelectorAll('.se_textarea, .se-text-paragraph')); section.data = data.map(el=>el.innerText);
             return section;
         });
+        if(!sections.length) return;
         const contentLength = sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         const contentLengthTrim = sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         const container = document.querySelector('body');
@@ -90,9 +94,17 @@ async function main() {
         //container.__toast_timer = clearTimeout(container.__toast_timer);
         //container.__toast_timer = setTimeout(() => container.removeChild(se_toast_popup), 3000);
     }
+    function handler_click(e) {
+        const el = e.target;
+        console.log(el);
+        if(el.className.includes('se_cardThumb')) {
+            setTimeout(()=>handler(e));
+        }
+    }
     window.addEventListener('keyup', handler, false);
     window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
+    document.addEventListener('click', handler_click, false);
     handler();
 }
 function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
