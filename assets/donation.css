@@ -45,10 +45,9 @@
   }
 }
 
-.donation-myso { padding-bottom: 50px; }
-.donation-myso:after,
-.donation-myso .donation-myso-btn:after {
-  content: ''; cursor: pointer; display: block;
+.donation-myso { position: relative; }
+.donation-myso:before, .donation-myso:after {
+  content: ''; cursor: pointer; display: none;
   text-align: center; font-size: 14px;
   background-color: #dd4b39; color: #ffffff;
   animation-duration: 24s;
@@ -57,11 +56,5 @@
   animation-direction: alternate;
   width: 100%; height: 50px; line-height: 50px;
 }
-.donation-myso.donation-sticky-b:after,
-.donation-myso .donation-myso-btn.donation-btn-b:after {
-  position: fixed; left: 0; top: auto; right: 0; bottom: 0; margin: auto; z-index:10000000;
-}
-.donation-myso.donation-sticky-t:after,
-.donation-myso .donation-myso-btn.donation-btn-t:after {
-  position: fixed; left: 0; top: 0; right: 0; bottom: auto; margin: auto; z-index:10000000;
-}
+.donation-myso.donation-sticky-b:after { display: block; }
+.donation-myso.donation-sticky-t:before { display: block; }
