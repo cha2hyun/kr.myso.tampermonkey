@@ -1,0 +1,58 @@
+@keyframes donations {
+  0% {
+    background-color: #037ef3;
+    content: '네이버 맞팬 관리 도구 서비스 중';
+  }
+  10% {
+    background-color: #f85a40;
+    content: '맞팬 관리 도구를 주변에 알려주세요!';
+  }
+  20% {
+    background-color: #037ef3;
+    content: '카페오픈\! cafe.naver.com\/influencerz';
+  }
+  30% {
+    background-color: #037ef3;
+    content: '맞팬 3천명을 향해 손잡고 가자!';
+  }
+  40% {
+    background-color: #f48924;
+    content: '후원계좌: 최원 3333-04-6073417 카카오뱅크';
+  }
+  50% {
+    background-color: #f48924;
+    content: '후원해주신 모든 분들께 감사드립니다';
+  }
+  60% {
+    background-color: #f48924;
+    content: '카페오픈! https://cafe.naver.com/influencerz';
+  }
+  70% {
+    background-color: #037ef3;
+    content: '맞팬 오픈채팅방에서 자유롭게 소통해요!';
+  }
+  80% {
+    background-color: #037ef3;
+    content: '마케팅에 대한 정보도 공유하자! 맞팬오픈톡!';
+  }
+  90% {
+    background-color: #f85a40;
+    content: '네이버 인플루언서 상생 맞팬 문화 캠페인!';
+  }
+  100% {
+    background-color: #f85a40;
+    content: '어뷰징없는 그날까지 캠페인은 계속된다!';
+  }
+}
+
+.donation-myso {
+  content: ''; cursor: pointer; display: block;
+  position: fixed; left: 0; top: auto; right: 0; bottom: 0; margin: auto; z-index:10000000;
+  width: 100%; height: 50px; line-height: 50px;
+  text-align: center; font-size: 18px;
+  background-color: #dd4b39; color: #ffffff;
+  animation-duration: 24s;
+  animation-name: donations;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
