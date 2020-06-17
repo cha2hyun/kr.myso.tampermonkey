@@ -5,8 +5,7 @@
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-challenge-rank.user.js
 // @description  네이버 인플루언서 홈에서 키워드 챌린지 순위를 확인합니다.
 // @author       Won Choi
-// @match        https://in.naver.com/homi
-// @match        https://in.naver.com/homi*
+// @match        https://in.naver.com/*/challenge*
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 async function main() {
