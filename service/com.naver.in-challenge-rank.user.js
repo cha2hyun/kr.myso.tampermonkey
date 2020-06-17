@@ -9,7 +9,7 @@
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 async function main() {
-
+    const urlIdBase = location.pathname.split('/')[1];
     async function search_ranking_challenges(keyword, start = 1, display = 10, result = []) {
         const next = start + display;
         const uri = new URL('https://s.search.naver.com/p/influencer/search.naver?where=bridge&view=ranking&type=api'); uri.searchParams.set('query', keyword); uri.searchParams.set('start', start); uri.searchParams.set('display', display);
@@ -24,7 +24,7 @@ async function main() {
             const nums = el.querySelectorAll('em.num');
             return { spaceId, urlId, nickname, ranking: start + idx };
         }); result.push(...influencers);
-        const data = result.find(o=>o.urlId == 'homi');
+        const data = result.find(o=>o.urlId == urlIdBase);
         return (data || totalCount < next) ? data : search_ranking_challenges(keyword, next, display, result);
     }
     const elements = Array.from(document.querySelectorAll('[class^="ChallengeHistory__list_hashtag"] a'));
