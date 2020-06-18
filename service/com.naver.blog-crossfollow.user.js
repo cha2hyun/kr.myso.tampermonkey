@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 나만 이웃 자동 정리
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @author       Won Choi
@@ -84,6 +84,9 @@ async function delete_buddy(selfishes) {
 }
 async function main() {
     if(/\.nhn$/.test(location.pathname)) return;
+    const container = document.querySelector('#nav > div:nth-child(4)');
+    const container_title = container && container.querySelector('.lnb__title');
+    if(!container_title || container_title.innerText.trim() != '열린이웃') return;
     GM_donation('.l__container');
     GM_addStyle(`
         .automation-loading:before {
@@ -91,7 +94,7 @@ async function main() {
             background-color: rgba(0, 0, 0, 0.5);
         }
     `);
-    const menulist = document.querySelector('#nav > div:nth-child(4) > ul');
+    const menulist = container.querySelector('ul');
     const menuitem = menulist.querySelector('li.selfishes') || document.createElement('li');
     if(!menuitem.className) {
         menuitem.className = 'selfishes';
