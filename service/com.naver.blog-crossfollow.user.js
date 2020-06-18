@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 나만 이웃 자동 정리
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @author       Won Choi
@@ -10,7 +10,7 @@
 // @grant        GM_addStyle
 // ==/UserScript==
 async function search_buddy_me_page(page = 1, results = []) {
-    const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.replace('/', '');
+    const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.match(/^\/([^\/]+)/)[1];
     const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.nhn?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
     const doc = document.createElement('div'); doc.innerHTML = res;
     const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
@@ -31,7 +31,7 @@ async function search_buddy_me_page(page = 1, results = []) {
     return (has_next || has_next_valid) ? search_buddy_me_page(page+1, results) : results.filter((o,i)=>results.indexOf(o)==i);
 }
 async function search_buddy_page(page = 1, results = []) {
-    const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.replace('/', '');
+    const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.match(/^\/([^\/]+)/)[1];
     const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.nhn?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
     const doc = document.createElement('div'); doc.innerHTML = res;
     const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
