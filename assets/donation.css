@@ -1,35 +1,35 @@
 @keyframes donations {
   0% {
     background-color: #037ef3; color: #ffffff;
-    content: '네이버 맞팬 관리 도구 서비스 중';
+    content: '프로그램을 이용해주셔서 감사합니다.';
   }
   10% {
     background-color: #f85a40; color: #ffffff;
-    content: '맞팬 관리 도구를 주변에 알려주세요!';
+    content: '배너를 누르시면 개발자 블로그로 이동합니다';
   }
   20% {
     background-color: #037ef3; color: #ffffff;
-    content: '카페오픈\! cafe.naver.com\/influencerz';
+    content: '새로운 기능에 대한 아이디어를 제안해주세요';
   }
   30% {
     background-color: #037ef3; color: #ffffff;
-    content: '맞팬 3천명을 향해 손잡고 가자!';
+    content: '인플루언서를 위한 자동화 필수 프로그램';
   }
   40% {
     background-color: #f48924; color: #ffffff;
-    content: '후원계좌: 최원 3333-04-6073417 카카오뱅크';
+    content: '어뷰징없는 그날까지 캠페인은 계속된다!';
   }
   50% {
     background-color: #f48924; color: #ffffff;
-    content: '후원해주신 모든 분들께 감사드립니다';
+    content: '후원계좌: 최원 3333-04-6073417 카카오뱅크';
   }
   60% {
     background-color: #f48924; color: #ffffff;
-    content: '카페오픈! https://cafe.naver.com/influencerz';
+    content: '후원계좌: 최원 3333-04-6073417 카카오뱅크';
   }
   70% {
     background-color: #037ef3; color: #ffffff;
-    content: '맞팬 오픈채팅방에서 자유롭게 소통해요!';
+    content: '후원해주신 모든 분들께 감사드립니다';
   }
   80% {
     background-color: #037ef3; color: #ffffff;
@@ -37,7 +37,7 @@
   }
   90% {
     background-color: #f85a40; color: #ffffff;
-    content: '네이버 인플루언서 상생 맞팬 문화 캠페인!';
+    content: '이 프로그램은 어떠한 개인정보도 수집하지 않습니다';
   }
   100% {
     background-color: #f85a40; color: #ffffff;
