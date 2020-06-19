@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -15,8 +15,10 @@
 // @match        *://post.naver.com/viewer/postView.nhn?*
 // @match        *://m.post.naver.com/viewer/postView.nhn?*
 // @grant        GM_addStyle
+// @require      https://tampermonkey.myso.kr/assets/donation.js
 // ==/UserScript==
 async function main() {
+    GM_donation('#postListBody, .se-header', 1);
     GM_addStyle(`
 .se-toast-popup.content-length {
     position: fixed;
@@ -88,7 +90,13 @@ async function main() {
         const se_toast_popup_message = se_toast_popup_content.querySelector('.se-toast-popup-message') || document.createElement('p');
         if(!se_toast_popup.className) { se_toast_popup.className = 'se-toast-popup se-toast-interaction-enter content-length'; container.append(se_toast_popup); }
         if(!se_toast_popup_container.className) { se_toast_popup_container.className = 'se-toast-popup-contiainer'; se_toast_popup.append(se_toast_popup_container); }
-        if(!se_toast_popup_content.className) { se_toast_popup_content.className = 'se-toast-popup-content se-toast-popup-content-info'; se_toast_popup_container.append(se_toast_popup_content); }
+        if(!se_toast_popup_content.className) {
+            se_toast_popup_content.className = 'se-toast-popup-content se-toast-popup-content-info'; se_toast_popup_container.append(se_toast_popup_content);
+            se_toast_popup_content.addEventListener('click', () => {
+                const content = sections.reduce((r, o)=>(r.push(...o.data),r), []).join('\r\n');
+                prompt('', content.replace(/[\r\n\s\t]+/g, ''));
+            }, false);
+        }
         if(!se_toast_popup_message.className) { se_toast_popup_message.className = 'se-toast-popup-message'; se_toast_popup_message.setAttribute('role', 'alert'); se_toast_popup_content.append(se_toast_popup_message); }
         se_toast_popup_message.innerText = `글자수 : ${contentLength}자 (공백제외: ${contentLengthTrim}자)`;
         //container.__toast_timer = clearTimeout(container.__toast_timer);
