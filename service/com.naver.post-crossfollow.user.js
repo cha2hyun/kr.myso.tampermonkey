@@ -8,7 +8,7 @@
 // @match        *://post.naver.com/my/followingList.nhn?*
 // @match        *://m.post.naver.com/my/followingList.nhn?*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=1
 // ==/UserScript==
 async function search_followers(fromNo = 1, totalCount = 100000000, result = {}) {
     const loc = new URL(location.href);
