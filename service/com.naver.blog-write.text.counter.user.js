@@ -16,7 +16,7 @@
 // @match        *://post.naver.com/viewer/postView.nhn?*
 // @match        *://m.post.naver.com/viewer/postView.nhn?*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=1
 // ==/UserScript==
 async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
