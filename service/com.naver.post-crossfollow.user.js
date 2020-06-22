@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 포스트 맞구독 검증기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.post-crossfollow.user.js
 // @description  네이버 포스트에서 맞구독 상태를 검증합니다.
 // @author       Won Choi
