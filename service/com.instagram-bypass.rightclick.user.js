@@ -10,7 +10,7 @@
 // @match        *://www.instagram.com
 // @match        *://www.instagram.com/*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=1
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=2
 // ==/UserScript==
 async function main() {
     GM_donation('#react-root section', 1);
