@@ -6,6 +6,7 @@ window.GM_donation = function(container, bottom) {
         container.classList.add('donation-myso');
         container.classList.add(bottom ? 'donation-sticky-b' : 'donation-sticky-t');
         container.addEventListener('click', (e) => {
+            if(e.target != container) return;
             const rect = container.getBoundingClientRect();
             const hasT = (!bottom && e.clientY < rect.top + 50);
             const hasB = ( bottom && e.clientY > rect.bottom - 50);
