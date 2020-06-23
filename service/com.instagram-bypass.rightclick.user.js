@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         인스타그램 이미지 우클릭 제한 해제
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.instagram-bypass.rightclick.user.js
 // @description  인스타그램에서 이미지의 우클릭 기능이 활성화됩니다.
 // @author       Won Choi
@@ -10,7 +10,7 @@
 // @match        *://www.instagram.com
 // @match        *://www.instagram.com/*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=2
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
 // ==/UserScript==
 async function main() {
     GM_donation('#react-root section', 1);
