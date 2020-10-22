@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.15
+// @version      1.0.16
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -82,9 +82,15 @@ async function main() {
             const data = Array.from(component.querySelectorAll('.se_textarea, .se-text-paragraph')); section.data = data.map(el=>el.innerText);
             return section;
         });
+        const placeholders = Array.from(document.querySelectorAll('.se_textarea, .se-text-paragraph')).map((component) => {
+            const section = {};
+            const data = Array.from(component.querySelectorAll('.se-placeholder')); section.data = data.map(el=>el.innerText);
+            return section;
+        });
         if(!sections.length) return;
         const contentLength = sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         const contentLengthTrim = sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        const placeholderLengthTrim = placeholders.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         const container = document.querySelector('body');
         const se_toast_popup = container.querySelector('.se-toast-popup.content-length') || document.createElement('div');
         const se_toast_popup_container = se_toast_popup.querySelector('.se-toast-popup-contiainer') || document.createElement('div');
@@ -100,7 +106,7 @@ async function main() {
             }, false);
         }
         if(!se_toast_popup_message.className) { se_toast_popup_message.className = 'se-toast-popup-message'; se_toast_popup_message.setAttribute('role', 'alert'); se_toast_popup_content.append(se_toast_popup_message); }
-        se_toast_popup_message.innerText = `글자수 : ${contentLength}자 (공백제외: ${contentLengthTrim}자)`;
+        se_toast_popup_message.innerText = `글자수 : ${contentLength}자 (공백제외: ${contentLengthTrim-placeholderLengthTrim}자)`;
         //container.__toast_timer = clearTimeout(container.__toast_timer);
         //container.__toast_timer = setTimeout(() => container.removeChild(se_toast_popup), 3000);
     }
