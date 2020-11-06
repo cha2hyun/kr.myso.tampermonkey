@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.17
+// @version      1.0.18
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -16,6 +16,7 @@
 // @match        *://m.post.editor.naver.com/editor*
 // @match        *://post.naver.com/viewer/postView.nhn?*
 // @match        *://m.post.naver.com/viewer/postView.nhn?*
+// @match        *://blog.naver.com/lib/smarteditor2/*/smart_editor2_inputarea.html
 // @grant        GM_addStyle
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
 // ==/UserScript==
@@ -68,7 +69,7 @@ async function main() {
     padding-top: 1px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    line-height:37px;
+    line-height:37px !important;
 }
 
 .se-toast-popup.content-length .se-toast-popup-content-info .se-toast-popup-message {
@@ -77,7 +78,21 @@ async function main() {
     `);
 
     function handler(e) {
-        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
+        const sections_v2 = Array.from(document.querySelectorAll('#postViewArea, body.se2_inputarea')).map((component) => {
+            const filter = ['se-toast-popup', '__se_object', 'og', '_naverVideo'];
+            function textContents(output, element) {
+                if(filter.find(o=>element.className && element.className.includes(o))) return output;
+                const textNodes = Array.from(element.childNodes).filter(o=>o instanceof Text);
+                const selements = Array.from(element.childNodes).filter(o=>o instanceof HTMLElement);
+                output = selements.reduce(textContents, output);
+                output.push(...textNodes);
+                return output;
+            }
+            const section = {};
+            const data = Array.from(component.childNodes).reduce(textContents, []); section.data = data.map(el=>el.textContent);
+            return section;
+        });
+        const sections_v3 = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
             const section = {};
             const data = Array.from(component.querySelectorAll('.se_textarea, .se-text-paragraph')); section.data = data.map(el=>el.innerText);
             return section;
@@ -87,11 +102,20 @@ async function main() {
             const data = Array.from(component.querySelectorAll('.se-placeholder')); section.data = data.map(el=>el.innerText);
             return section;
         });
-        if(!sections.length) return;
-        const contentLength = Number(sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0));
-        const contentLengthTrim = Number(sections.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0));
+
+        const contentV2Length = Number(sections_v2.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0));
+        const contentV2LengthTrim = Number(sections_v2.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0));
+        const contentV3Length = Number(sections_v3.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0));
+        const contentV3LengthTrim = Number(sections_v3.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0));
+
+        const contentLength = contentV2Length + contentV3Length;
+        const contentLengthTrim = contentV2LengthTrim + contentV3LengthTrim;
         const placeholderLength = Number(placeholders.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.length, 0), 0));
         const placeholderLengthTrim = Number(placeholders.reduce((r, o)=>r + (o.data || []).reduce((r,l)=>r+=l.replace(/[\s]+/g, '').length, 0), 0));
+
+        if(!contentLength) return;
+
+        console.log(contentLength, contentLengthTrim);
 
         const contentLengthTxt = String(contentLength-placeholderLength).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         const contentLengthTrimTxt = String(contentLengthTrim-placeholderLengthTrim).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
