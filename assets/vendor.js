@@ -151,7 +151,7 @@
     if(element) {
       element = handleElement.apply(this, arguments);
       if(element.children) {
-        element.children.map((element)=>handleElementRecursive.apply(null, element));
+        element.children.map((element)=>handleElementRecursive.apply(element, null, element));
       }
     }
     return element;
