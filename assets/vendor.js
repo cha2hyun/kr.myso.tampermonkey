@@ -150,6 +150,7 @@
   function handleElementRecursive(handler, element, ...props) {
     if(element) {
       element = handleElement.apply(this, arguments);
+      if(window.handleElementRecursive) window.handleElementRecursive.apply(this, arguments);
       if(element.children) {
         element.children.map((child)=>handleElementRecursive.apply(element, null, child));
       }
