@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -58,9 +58,11 @@ async function main() {
                       const c = document.createElement('span'); b.append(c); c.classList.add('u_ni_info_txt', 'u_ni_ico_view');
                       const d = document.createElement('span'); b.append(d); d.classList.add('u_ni_info_txt');
                       const e = document.createElement('span'); b.append(e); e.classList.add('u_ni_info_txt');
+                      const f = document.createElement('span'); b.append(f); f.classList.add('u_ni_info_txt');
                       c.textContent = metricValue;
                       d.textContent = moment(createdAt).format('YYYY. MM. DD. HH:mm');
                       e.textContent = channelName;
+                      f.textContent = `${date} 기준`;
                       search_list.append(li);
                   })
               } else {
