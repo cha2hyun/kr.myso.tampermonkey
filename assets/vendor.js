@@ -153,19 +153,13 @@
   function handleElementRecursive(element, ...props) {
     if(!element) return;
     handleElement.call(element, null, element);
-    if(window.handleElementRecursive) {
-      element = window.handleElementRecursive.apply(this, arguments);
-    }
-    if(element && element.classList) {
-      element.children.map((element)=>handleElementRecursive(element));
-    }
+    if(window.handleElementRecursive) element = window.handleElementRecursive.apply(this, arguments);
+    if(element.children) element.children.map((element)=>handleElementRecursive(element));
     return element;
   }
   function handleElement(handler, element, ...props) {
     if(!element) return;
-    if(window.handleElement) {
-      element = window.handleElement.apply(this, arguments);
-    }
+    if(window.handleElement) element = window.handleElement.apply(this, arguments);
     return element;
   }
 })(window);
