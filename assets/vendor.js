@@ -156,6 +156,9 @@
     if(window.handleElementRecursive) {
       element = window.handleElementRecursive.apply(this, arguments);
     }
+    if(element && element.classList) {
+      element.children.map((element)=>handleElementRecursive(element));
+    }
     return element;
   }
   function handleElement(handler, element, ...props) {
