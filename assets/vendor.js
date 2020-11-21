@@ -143,7 +143,7 @@
   HTMLElement.prototype.appendChild = ((appendChild) => {
     return function() {
       appendChild.name = 'appendChild';
-      return handleElementRecursive.bind(appendChild).apply(this, arguments);
+      return handleElementRecursive.bind(this, appendChild).apply(this, arguments);
     }
   })(HTMLElement.prototype.appendChild$ = HTMLElement.prototype.appendChild$ || HTMLElement.prototype.appendChild);
 
