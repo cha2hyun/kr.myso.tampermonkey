@@ -137,30 +137,29 @@
   HTMLDocument.prototype.createElement = ((createElement) => {
     return function() {
       createElement.name = 'createElement';
-      let element = createElement.apply(this, arguments);
-      return element;
+      return createElement.apply(this, arguments);
     }
   })(HTMLDocument.prototype.createElement$ = HTMLDocument.prototype.createElement$ || HTMLDocument.prototype.createElement);
   HTMLElement.prototype.appendChild = ((appendChild) => {
     return function() {
       appendChild.name = 'appendChild';
-      let element = handleElement.bind(this, appendChild).apply(this, arguments);
-      handleElementRecursive(element);
-      return element;
+      return handleElementRecursive.bind(appendChild).apply(this, arguments);
     }
   })(HTMLElement.prototype.appendChild$ = HTMLElement.prototype.appendChild$ || HTMLElement.prototype.appendChild);
 
-  function handleElementRecursive(element, ...props) {
-    if(!element) return;
-    handleElement.call(element, null, element);
-    if(window.handleElementRecursive) {
-      element = window.handleElementRecursive.apply(this, arguments) || element;
+  function handleElementRecursive(handler, element, ...props) {
+    if(element) {
+      element = handleElement.apply(this, arguments);
+      if(element.children) {
+        element.children.map((element)=>handleElementRecursive.apply(null, element));
+      }
     }
-    if(element.children) element.children.map((element)=>handleElementRecursive(element));
     return element;
   }
   function handleElement(handler, element, ...props) {
-    if(!element) return;
-    if(window.handleElement) window.handleElement.apply(this, arguments);
+    if(element && window.handleElement) {
+      element = window.handleElement.apply(this, arguments) || element;
+    }
+    return element;
   }
 })(window);
