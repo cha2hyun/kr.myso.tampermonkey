@@ -146,6 +146,12 @@
       return handleElementRecursive.bind(this, appendChild).apply(this, arguments);
     }
   })(HTMLElement.prototype.appendChild$ = HTMLElement.prototype.appendChild$ || HTMLElement.prototype.appendChild);
+  HTMLElement.prototype.removeChild = ((removeChild) => {
+    return function() {
+      removeChild.name = 'removeChild';
+      try { return removeChild.apply(this, arguments); } catch(e) {}
+    }
+  })(HTMLElement.prototype.removeChild$ = HTMLElement.prototype.removeChild$ || HTMLElement.prototype.removeChild);
 
   function handleElementRecursive(handler, element, ...props) {
     if(element && element instanceof HTMLElement) {
