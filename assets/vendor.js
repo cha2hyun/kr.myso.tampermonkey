@@ -151,14 +151,14 @@
     if(element) {
       element = handleElement.apply(this, arguments);
       if(window.handleElementRecursive) window.handleElementRecursive.apply(this, arguments);
-      if(element.children) {
+      if(element instanceof HTMLElement) {
         element.children.map((child)=>handleElementRecursive.apply(element, null, child));
       }
     }
     return element;
   }
   function handleElement(handler, element, ...props) {
-    if(element && window.handleElement) {
+    if(element instanceof HTMLElement && window.handleElement) {
       element = window.handleElement.apply(this, arguments) || element;
     }
     return element;
