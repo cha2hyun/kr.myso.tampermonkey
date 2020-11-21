@@ -148,7 +148,7 @@
   })(HTMLElement.prototype.appendChild$ = HTMLElement.prototype.appendChild$ || HTMLElement.prototype.appendChild);
 
   function handleElementRecursive(handler, element, ...props) {
-    if(element) {
+    if(element && element instanceof HTMLElement) {
       element = handleElement.apply(this, arguments);
       if(window.handleElementRecursive) window.handleElementRecursive.apply(this, arguments);
       if(element instanceof HTMLElement && element.children) {
@@ -158,7 +158,7 @@
     return element;
   }
   function handleElement(handler, element, ...props) {
-    if(element instanceof HTMLElement && window.handleElement) {
+    if(element && element instanceof HTMLElement && window.handleElement) {
       element = window.handleElement.apply(this, arguments) || element;
     }
     return element;
