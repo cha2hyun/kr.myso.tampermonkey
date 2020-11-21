@@ -153,8 +153,11 @@
   function handleElementRecursive(element, ...props) {
     if(!element) return;
     handleElement.call(element, null, element);
-    if(window.handleElementRecursive) window.handleElementRecursive.apply(this, arguments);
+    if(window.handleElementRecursive) {
+      element = window.handleElementRecursive.apply(this, arguments) || element;
+    }
     if(element.children) element.children.map((element)=>handleElementRecursive(element));
+    return element;
   }
   function handleElement(handler, element, ...props) {
     if(!element) return;
