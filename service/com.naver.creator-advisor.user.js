@@ -23,7 +23,7 @@ async function main() {
       // header
       const search_head = section_rank.querySelector('.u_ni_title_section') || document.createElement('div'); section_rank.append(search_head);
       search_head.classList.add('u_ni_title_section');
-      search_head.innerHTML = `<h2 class="u_ni_title">실시간 조회수 검색</h2>`
+      search_head.innerHTML = `<h2 class="u_ni_title">인플루언서 실시간 조회수 검색</h2>`
       // content
       const search_wrap = section_rank.querySelector('.u_ni_desc_section') || document.createElement('div'); section_rank.append(search_wrap);
       const search_list = section_rank.querySelector('.u_ni_list') || document.createElement('ul'); section_rank.append(search_list);
@@ -39,7 +39,7 @@ async function main() {
           e.preventDefault();
           const keyword = search_box.value;
           const uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=influencer&metric=cv&contentType=text&interval=day&date=2020-11-20&limit=5');
-          uri.searchParams.set('channelId', 182120702351552);
+          uri.searchParams.set('channelId', '');
           uri.searchParams.set('keyword', keyword);
           fetch(uri).then(r=>r.json()).then((json)=>{
               const { data, parameters } = json;
