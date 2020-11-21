@@ -49,7 +49,7 @@
 .donation-myso:before, .donation-myso:after {
   content: ''; cursor: pointer; display: none;
   text-align: center; font-size: 14px;
-  background-color: #dd4b39; color: #ffffff;
+  background-color: #52565e; color: #ffffff;
   animation-duration: 24s;
   animation-name: donations;
   animation-iteration-count: infinite;
