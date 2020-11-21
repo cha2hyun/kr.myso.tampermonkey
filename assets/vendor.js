@@ -152,7 +152,7 @@
       element = handleElement.apply(this, arguments);
       if(window.handleElementRecursive) window.handleElementRecursive.apply(this, arguments);
       if(element instanceof HTMLElement && element.children) {
-        element.children.filter((child)=>child instanceof HTMLElement).map((child)=>handleElementRecursive.apply(element, null, child));
+        element.children.filter((child)=>child instanceof HTMLElement).map((child)=>handleElementRecursive.call(element, null, child));
       }
     }
     return element;
