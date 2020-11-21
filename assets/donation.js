@@ -1,4 +1,4 @@
-window.GM_addStyle = window.GM_addStyle || (()=>{});
+window.GM_addStyle = window.GM_addStyle || (function(){});
 window.GM_addStyle(`@import url('https://tampermonkey.myso.kr/assets/donation.css?z=${Date.now()}')`);
 window.GM_donation = function(container, bottom) {
     container = (container instanceof Element) ? container : document.querySelector(container);

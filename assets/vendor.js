@@ -1,5 +1,5 @@
 // ---------------------
-((window) => {
+(function(window) {
   window.__queueDelay = 1000 * 15;
   window.__queueTimer;
   window.__queues = [];
@@ -11,14 +11,14 @@
   }
   window.runTimeoutQueue = function() {
     window.__queueTimer = clearTimeout(window.__queueTimer);
-    window.__queueTimer = setTimeout(() => {
+    window.__queueTimer = setTimeout(function() {
       window.__queueTimer = clearTimeout(window.__queueTimer);
       let now = Date.now();
       let queue = window.__queues.shift();
       let timeout = queue ? (queue.timeout || window.__queueDelay) : window.__queueDelay;
       if(queue && queue.handler) { queue.handler.apply(this); }
       let dif = Date.now() - now;
-      let handle = setTimeout(() => {
+      let handle = setTimeout(function() {
           handle = clearTimeout(handle);
           window.runTimeoutQueue();
       }, Math.max(window.__queueDelay, timeout - dif));
@@ -27,67 +27,71 @@
   window.runTimeoutQueue();
 })(window);
 // ---------------------
-((window) => {
+(function(window) {
   window.inject_js = function inject_js(script) {
     const container = (document.head || document.body || document.documentElement);
     const element = document.createElement('script');
     element.setAttribute('type', 'text/javascript');
     element.textContent = `(${script})()`;
     container.append(element);
-    element.onload = () => container.removeChild(element);
-    setTimeout(()=>container.removeChild(element), 300);
+    element.onload = function() { container.removeChild(element); };
+    setTimeout(function(){ container.removeChild(element); }, 300);
   }
 })(window);
 // ---------------------
-((window) => {
+(function(window) {
   const delay = 300;
   const main = { timer: null };
-  history.pushState = ( f => function pushState(){
-    var ret = f.apply(this, arguments);
-    main.timer = clearTimeout(main.timer);
-    main.timer = setTimeout(() => {
-      window.dispatchEvent(new Event('pushstate'));
-      window.dispatchEvent(new Event('locationchange'));  
-    }, delay);
-    return ret;
+  history.pushState = (function (f) {
+    return function pushState(){
+      var ret = f.apply(this, arguments);
+      main.timer = clearTimeout(main.timer);
+      main.timer = setTimeout(function() {
+        window.dispatchEvent(new Event('pushstate'));
+        window.dispatchEvent(new Event('locationchange'));  
+      }, delay);
+      return ret;
+    }
   })(history.pushState);
-  history.replaceState = ( f => function replaceState(){
-    var ret = f.apply(this, arguments);
-    main.timer = clearTimeout(main.timer);
-    main.timer = setTimeout(() => {
-      window.dispatchEvent(new Event('replacestate'));
-      window.dispatchEvent(new Event('locationchange'));
-    }, delay);
-    return ret;
+  history.replaceState = (function (f) {
+    return function replaceState(){
+      var ret = f.apply(this, arguments);
+      main.timer = clearTimeout(main.timer);
+      main.timer = setTimeout(function() {
+        window.dispatchEvent(new Event('replacestate'));
+        window.dispatchEvent(new Event('locationchange'));
+      }, delay);
+      return ret;
+    }
   })(history.replaceState);
-  window.addEventListener('popstate',()=>{
+  window.addEventListener('popstate',function() {
     main.timer = clearTimeout(main.timer);
-    main.timer = setTimeout(() => {
+    main.timer = setTimeout(function() {
       window.dispatchEvent(new Event('locationchange'));
     }, delay);
   });
-  window.addEventListener('load',()=>{
+  window.addEventListener('load',function() {
     if(!window.__loaded__) {
       main.timer = clearTimeout(main.timer);
-      main.timer = setTimeout(() => {
+      main.timer = setTimeout(function() {
         window.dispatchEvent(new Event('locationchange'));
       }, delay);
     }
     window.__loaded__ = true;
   });
-  window.addEventListener('DOMContentLoaded',()=>{
+  window.addEventListener('DOMContentLoaded',function() {
     if(!window.__loaded__) {
       main.timer = clearTimeout(main.timer);
-      main.timer = setTimeout(() => {
+      main.timer = setTimeout(function() {
         window.dispatchEvent(new Event('locationchange'));
       }, delay);
     }
     window.__loaded__ = true;
   });
-  setTimeout(() => {
+  setTimeout(function() {
     if(!window.__loaded__) {
       main.timer = clearTimeout(main.timer);
-      main.timer = setTimeout(() => {
+      main.timer = setTimeout(function() {
         window.dispatchEvent(new Event('locationchange'));
       }, delay);
     }
