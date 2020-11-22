@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -23,27 +23,39 @@ async function main() {
         // header
         const search_head = section_rank.querySelector('.u_ni_title_section') || document.createElement('div'); section_rank.append(search_head);
         search_head.classList.add('u_ni_title_section');
-        search_head.innerHTML = `<h2 class="u_ni_title">인플루언서 실시간 조회수 검색</h2>`
+        search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색</h2>`
         // content
         const search_wrap = section_rank.querySelector('.u_ni_desc_section') || document.createElement('div'); section_rank.append(search_wrap);
         const search_list = section_rank.querySelector('.u_ni_list') || document.createElement('ul'); section_rank.append(search_list);
         search_wrap.classList.add('u_ni_desc_section');
         search_wrap.style.display = 'flex';
         search_list.classList.add('u_ni_list', 'u_ni_info', 'u_ni_ranking_main');
+
+        const search_service = search_wrap.querySelector('.u_ni_description_service') || document.createElement('select'); search_wrap.append(search_service);
+        search_service.classList.add('u_ni_description', 'u_ni_description_service');
+        search_service.setAttribute('style', 'padding: 2px; border: 1px solid #000; border-radius:5px; -moz-appearance: auto; appearance: auto; -webkit-appearance: auto;');
+        search_service.innerHTML = '';
+        search_service.innerHTML += `<option value="naver_blog">네이버 블로그</option>`;
+        search_service.innerHTML += `<option value="naver_post">네이버 포스트</option>`;
+        search_service.innerHTML += `<option value="influencer">네이버 인플루언서 검색</option>`;
+
         const search_box = search_wrap.querySelector('.u_ni_description_keyword') || document.createElement('input'); search_wrap.append(search_box);
         search_box.classList.add('u_ni_description', 'u_ni_description_keyword');
-        search_box.setAttribute('placeholder', '조회할 검색어를 입력해주세요.');
+        search_box.setAttribute('style', 'padding: 2px; border: 1px solid #000; border-radius:5px; margin: 0 4px;');
+        search_box.setAttribute('placeholder', '조회할 검색어를 입력한 뒤 엔터를 눌러주세요.');
         search_box.style.flex = 1;
+
         const search_date = search_wrap.querySelector('.u_ni_description_date') || document.createElement('input'); search_wrap.append(search_date);
         search_date.classList.add('u_ni_description', 'u_ni_description_date');
+        search_date.setAttribute('style', 'padding: 2px; border: 1px solid #000; border-radius:5px;');
         search_date.setAttribute('type', 'date');
         search_date.setAttribute('placeholder', '조회할 날짜를 입력해주세요. (YYYY-MM-DD)');
-        search_date.value = moment().subtract(1, 'days').format('YYYY-MM-DD');
-        search_date.style.flex = 1;
+        search_date.value = moment().subtract(2, 'days').format('YYYY-MM-DD');
         // ----------------
         section_rank.addEventListener('submit', function(e) {
             e.preventDefault();
-            const uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=influencer&metric=cv&contentType=text&interval=day&date=&limit=5');
+            const uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=&metric=cv&contentType=text&interval=day&date=&limit=5');
+            uri.searchParams.set('service', search_service.value);
             uri.searchParams.set('channelId', '');
             uri.searchParams.set('date', search_date.value);
             uri.searchParams.set('keyword', search_box.value);
