@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -52,15 +52,25 @@ async function main() {
         search_date.setAttribute('placeholder', '조회할 날짜를 입력해주세요. (YYYY-MM-DD)');
         search_date.value = moment().subtract(2, 'days').format('YYYY-MM-DD');
         // ----------------
-        section_rank.addEventListener('submit', function(e) {
+        section_rank.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=&metric=cv&contentType=text&interval=day&date=&limit=5');
-            uri.searchParams.set('service', search_service.value);
-            uri.searchParams.set('channelId', '');
-            uri.searchParams.set('date', search_date.value);
-            uri.searchParams.set('keyword', search_box.value);
-            fetch(uri).then(r=>r.json()).then((json)=>{
-                const { data, parameters } = json;
+            const analysis_uri = new URL('https://in.naverpp.com/extension/api/analysis/search');
+            analysis_uri.searchParams.set('date', search_date.value);
+            analysis_uri.searchParams.set('keyword', search_box.value);
+            const analysis = await fetch(analysis_uri).then(r=>r.json()).catch(e=>null);
+            if(analysis) {
+                search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- ${analysis.message || `"${analysis.keyword}" 일일 트래픽 ${analysis.data.search}건 (네이버광고 및 데이터랩 기준)`}</small></h2>`
+            }
+
+
+            const populars_uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=&metric=cv&contentType=text&interval=day&date=&limit=5');
+            populars_uri.searchParams.set('service', search_service.value);
+            populars_uri.searchParams.set('channelId', '');
+            populars_uri.searchParams.set('date', search_date.value);
+            populars_uri.searchParams.set('keyword', search_box.value);
+            const populars = await fetch(populars_uri).then(r=>r.json()).catch(e=>null);
+            if(populars) {
+                const { data, parameters } = populars;
                 const { date, keyword } = parameters;
                 search_list.innerHTML = '';
                 if(data && data.length) {
@@ -88,7 +98,7 @@ async function main() {
                     li.textContent = '검색결과가 없습니다';
                     search_list.append(li);
                 }
-            }).catch(console.error);
+            }
         });
     });
   }
