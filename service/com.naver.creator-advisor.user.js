@@ -62,7 +62,7 @@ async function main() {
                 if(analysis.error) {
                     search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- ${analysis.message}</small></h2>`
                 }else if(analysis.data) {
-                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 ${analysis.data.search||'(알 수 없음)'}건 (네이버광고 및 데이터랩 기준)</small></h2>`
+                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 ${analysis.data.search}건 (네이버광고 및 데이터랩 기준)</small></h2>`
                 }else{
                     search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 집계 안됨 (네이버광고 및 데이터랩 기준)</small></h2>`
                 }
