@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.2
+// @version      1.1.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -62,11 +62,10 @@ async function main() {
                 if(analysis.error) {
                     search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- ${analysis.message}</small></h2>`
                 }else if(analysis.data) {
-                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 ${analysis.data.search}건 (네이버광고 및 데이터랩 기준)</small></h2>`
+                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 ${analysis.data.search}건 (<a target="_blank" href="https://blog.naver.com/cw4196/222151868466">네이버광고 및 데이터랩 기준</a>)</small></h2>`
                 }else{
-                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 집계 안됨 (네이버광고 및 데이터랩 기준)</small></h2>`
+                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 집계 안됨 (<a target="_blank" href="https://blog.naver.com/cw4196/222151868466">네이버광고 및 데이터랩 기준</a>)</small></h2>`
                 }
-
             }
 
             const populars_uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=&metric=cv&contentType=text&interval=day&date=&limit=5');
@@ -110,4 +109,3 @@ async function main() {
   }
   function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
   requestIdleCallback(checkForDOM);
-  
