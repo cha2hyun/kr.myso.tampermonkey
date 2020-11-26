@@ -59,9 +59,15 @@ async function main() {
             analysis_uri.searchParams.set('keyword', search_box.value);
             const analysis = await fetch(analysis_uri).then(r=>r.json()).catch(e=>null);
             if(analysis) {
-                search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- ${analysis.message || `"${analysis.keyword}" 일일 트래픽 ${analysis.data.search}건 (네이버광고 및 데이터랩 기준)`}</small></h2>`
-            }
+                if(analysis.error) {
+                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- ${analysis.message}</small></h2>`
+                }else if(analysis.data) {
+                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 ${analysis.data.search||'(알 수 없음)'}건 (네이버광고 및 데이터랩 기준)</small></h2>`
+                }else{
+                    search_head.innerHTML = `<h2 class="u_ni_title">조회수 검색 <small>- "${analysis.keyword}" 일일 트래픽 집계 안됨 (네이버광고 및 데이터랩 기준)</small></h2>`
+                }
 
+            }
 
             const populars_uri = new URL('https://creator-advisor.naver.com/api/v2/inflow-analysis/popular-contents?service=&metric=cv&contentType=text&interval=day&date=&limit=5');
             populars_uri.searchParams.set('service', search_service.value);
