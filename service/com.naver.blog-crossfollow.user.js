@@ -105,6 +105,7 @@ async function main() {
             const following = await search_buddy();
             const followers = await search_buddy_me();
             const selfishes = following.filter(o=>Date.now() - o.createdAt > 1000 * 60 * 60 * 24 * 7).filter(o=>!followers.find(v=>v.nickname == o.nickname));
+            const selfishes_count = selfishes.length;
             if(selfishes.length && confirm(`${selfishes.length}명을 나만 이웃하고 있습니다.\n작업을 계속 하시겠습니까? 이 작업은 취소할 수 없습니다.`)) {
                 const groups = []; for(let i = 0; i < selfishes.length; i += 50) groups.push(selfishes.splice(0, 50));
                 for(let i = 0; i < groups.length; i++) {
@@ -114,7 +115,7 @@ async function main() {
                     formData.append('on', ''); formData.append('groupId', ''); formData.append('force', 'true');
                     await fetch(uri.toString(), { method: 'POST', body: formData });
                 }
-                alert(`${selfishes.length}명이 모두 정리 되었습니다.`);
+                alert(`${selfishes_count}명이 모두 정리 되었습니다.`);
             } else {
                 alert(`정리할 이웃이 없습니다.`);
             }
