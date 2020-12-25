@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 이웃,그룹 관리 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
 // @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @author       Won Choi
@@ -280,11 +280,17 @@ async function main() {
               }
             };
             $scope.cutout = async (user) => {
-              const blogId = new URL(window.opener.location.href).searchParams.get('blogId') || window.opener.location.pathname.split('/')[1];
-              const uri = new URL('https://admin.blog.naver.com/BuddyMultiBlockForm.nhn?relation=all&currentPage=1');
-              uri.searchParams.set('blogId', blogId);
-              uri.searchParams.append('targetBlogId', user.blogId);
-              window.open(uri.toString(), 'popupWindow', 'width=330, height=220');
+              if(confirm('정말로 이웃을 삭제하시겠습니까. 이 동작은 취소 할 수 없습니다.')) {
+                $scope.followers = $scope.followers.filter((o)=>o.blogId != user.blogId);
+                $scope.following = $scope.following.filter((o)=>o.blogId != user.blogId);
+                await window.opener.delete_buddy([user]);
+                // ---------------------
+                const blogId = new URL(window.opener.location.href).searchParams.get('blogId') || window.opener.location.pathname.split('/')[1];
+                const uri = new URL('https://admin.blog.naver.com/BuddyMultiBlockForm.nhn?relation=all&currentPage=1');
+                uri.searchParams.set('blogId', blogId);
+                uri.searchParams.append('targetBlogId', user.blogId);
+                window.open(uri.toString(), 'popupWindow', 'width=330, height=220');
+              }
             };
           });
           angular.bootstrap(document, ['app']);
