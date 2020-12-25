@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 나만 이웃 자동 정리
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @author       Won Choi
@@ -110,8 +110,8 @@ async function main() {
                 for(let i = 0; i < groups.length; i++) {
                     const uri = new URL('https://admin.blog.naver.com/BuddyDelete.nhn');
                     const formData = new FormData(); groups[i].map(o=>formData.append('buddyBlogNo', o.id));
-                    formData.append('blogId', location.pathname.replace('/', ''));
-                    formData.append('on', ''); formData.append('force', 'true');
+                    formData.append('blogId', location.pathname.split('/')[1]);
+                    formData.append('on', ''); formData.append('groupId', ''); formData.append('force', 'true');
                     await fetch(uri.toString(), { method: 'POST', body: formData });
                 }
                 alert(`${selfishes.length}명이 모두 정리 되었습니다.`);
