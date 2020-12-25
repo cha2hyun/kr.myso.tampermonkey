@@ -284,12 +284,16 @@ async function main() {
                 $scope.followers = $scope.followers.filter((o)=>o.blogId != user.blogId);
                 $scope.following = $scope.following.filter((o)=>o.blogId != user.blogId);
                 await window.opener.delete_buddy([user]);
-                // ---------------------
+                
                 const blogId = new URL(window.opener.location.href).searchParams.get('blogId') || window.opener.location.pathname.split('/')[1];
                 const uri = new URL('https://admin.blog.naver.com/BuddyMultiBlockForm.nhn?relation=all&currentPage=1');
                 uri.searchParams.set('blogId', blogId);
                 uri.searchParams.append('targetBlogId', user.blogId);
-                window.open(uri.toString(), 'popupWindow', 'width=330, height=220');
+                
+                const html = "<scri"+"pt>window.open('" + uri.toString() + "', 'popupWindow', 'width=330, height=220');</scr"+"ipt>";
+                const blob = new Blob([html], { type: 'text/html' });
+                const blob_url = URL.createObjectURL(blob);
+                window.open(blob_url, 'popupWindow', 'width=330, height=220');
               }
             };
           });
