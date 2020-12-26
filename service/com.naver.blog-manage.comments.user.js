@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name         네이버 블로그 공감수 순위 어드밴스드
+// @name         네이버 블로그 댓글수 순위 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
-// @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
+// @version      1.0.0
+// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.comments.user.js
+// @description  네이버 블로그의 댓글수 순위 기능을 확장합니다.
 // @author       Won Choi
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
-// @match        https://blog.stat.naver.com/blog/rank/like*
+// @match        https://blog.stat.naver.com/blog/rank/comment*
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
 // ==/UserScript==
 async function inject_js(opt) {
@@ -55,14 +55,14 @@ async function main() {
   await inject_js({ integrity: 'sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==', src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js' });
   await inject_js({ integrity: 'sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==', src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js' });
   await inject_js(() => {
-    async function rank_like(startDate, endDate) {
+    async function rank_comment(startDate, endDate) {
       const rangeDateStart = moment(startDate).toDate();
       const rangeDateLimit = moment(endDate || startDate).add(1, 'ms').toDate();
       const rangeDate = _.range(rangeDateStart, rangeDateLimit, 1000 * 60 * 60 * 24).map(ts=>moment(ts).toDate());
-      return Promise.reduce(rangeDate, async (r, date) => r.concat(await rank_like_per_date(date)), []);
+      return Promise.reduce(rangeDate, async (r, date) => r.concat(await rank_comment_per_date(date)), []);
     }
-    async function rank_like_per_date(startDate) {
-      const uri = new URL('https://blog.stat.naver.com/api/blog/rank/likePc?timeDimension=DATE&startDate=&exclude=');
+    async function rank_comment_per_date(startDate) {
+      const uri = new URL('https://blog.stat.naver.com/api/blog/rank/commentPc?timeDimension=DATE&startDate=&exclude=');
       uri.searchParams.set('startDate', moment(startDate).format('YYYY-MM-DD'));
       const res = await fetch(uri).then(r=>r.json());
       const statDataList = _.get(res, 'result.statDataList', []);
@@ -80,31 +80,53 @@ async function main() {
       }, []);
     }
 
-    window.rank_like = rank_like;
-    window.rank_like_per_date = rank_like_per_date;
+    window.rank_like = rank_comment;
+    window.rank_like_per_date = rank_comment_per_date;
   })
   await inject_js(() => {
-    async function likes(logNo, pageNo = 1, results = []) {
+    async function comments(logNo, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
-      
-      const ref = new URL('https://m.blog.naver.com/SympathyHistoryList.nhn?blogId=&logNo=&categoryId=POST');
-      ref.searchParams.set('blogId', blogId);
-      ref.searchParams.set('logNo', logNo);
 
-      const uri = new URL('https://m.blog.naver.com/rego/SympathyHistoryListJson.nhn?blogId=&logNo=&pageNo=&categoryId=POST');
-      uri.searchParams.set('blogId', blogId);
-      uri.searchParams.set('logNo', logNo);
-      uri.searchParams.set('pageNo', pageNo);
+      let blogCookies = {};
+      {
+        const uri = new URL('https://m.blog.naver.com/');
+        uri.pathname = `/${blogId}`;
+        const resp = await GM_xmlhttpRequest({ url: uri.toString(), headers: { 'cookie': document.cookie } });
+        console.log(resp)
+      }
 
-      const resp = await GM_xmlhttpRequest({ url: uri.toString(), headers: { 'referer': ref.toString() } });
-      const res = JSON.parse(resp.responseText.replace(/^[\]\)\]\}\'\,\s\r\n]+/, ''));
-      const totalPage = _.get(res, 'result.totalPage', 1);
-      const sympathyHistoryList = _.get(res, 'result.sympathyHistoryList', []);
-      results.push(...sympathyHistoryList);
-      return (totalPage > pageNo) ? likes(logNo, pageNo + 1, results) : results;
+      let blogInfo = {};
+      {
+        const ref = new URL('https://m.blog.naver.com/');
+        ref.pathname = `/${blogId}`;
+
+        const uri = new URL('https://m.blog.naver.com/rego/BlogInfo.nhn?blogId=')
+        uri.searchParams.set('blogId', blogId);
+        const resp = await GM_xmlhttpRequest({ url: uri.toString(), headers: { 'cookie': document.cookie, 'referer': ref.toString() } });
+        const res = JSON.parse(resp.responseText.replace(/^[\]\)\]\}\'\,\s\r\n]+/, ''));
+        blogInfo = _.get(res, 'result');
+      }
+      let commentInfo = {}
+      {
+        const ref = new URL('https://m.blog.naver.com/CommentList.nhn?blogId=&logNo=');
+        ref.searchParams.set('blogId', blogId);
+        ref.searchParams.set('logNo', logNo);
+        
+        const uri = new URL('https://apis.naver.com/commentBox/cbox/web_naver_list_jsonp.json?ticket=blog&templateId=default&pool=cbox9&_callback=_callback&lang=ko&country=&objectId=&categoryId=&pageSize=100&indexSize=10&groupId=&listType=OBJECT&pageType=more&page=1&initialize=true&userType=MANAGER&useAltSort=true&replyPageSize=10&showReply=true');
+        uri.searchParams.set('objectId', `${blogInfo.blogNo}_201_${logNo}`); // blogNo_201_logNo
+        uri.searchParams.set('groupId', blogInfo.blogNo); //blogNo
+        uri.searchParams.set('page', page);
+
+        const resp = await GM_xmlhttpRequest({ url: uri.toString(), headers: { 'cookie': document.cookie, 'referer': ref.toString() } });
+        const _callback = (res) => { commentInfo = _.get(res, 'result'); }
+        eval(resp.responseText);
+      }
+      const commentList = _.get(commentInfo, 'commentList', []); results.push(...commentList);
+      const totalPage = _.get(commentInfo, 'pageModel.lastPage', 1);
+      return (totalPage > page) ? comments(logNo, page + 1, results) : results;
     }
 
-    window.likes = likes;
+    window.comments = comments;
   })
   await inject_js(() => {
     const html = `
@@ -119,6 +141,7 @@ async function main() {
       </head>
       <body>
         <div ng-controller="main" class="container-fluid">
+          <div class="alert alert-info text-center">비공개 댓글은 표시되지 않습니다.</div>
           <div class="p-1">
             <div class="row p-1">
               <div class="col">
@@ -133,6 +156,21 @@ async function main() {
                 </div>
               </div>
             </div>
+            <div class="row p-1">
+              <div class="col-4">
+                <select ng-model="filter.keywordType" class="form-select" aria-label="키워드 필터 상세">
+                  <option value="profileUserId">아이디</option>
+                  <option value="userName">닉네임</option>
+                  <option value="contents">내용</option>
+                </select>
+              </div>
+              <div class="col">
+                <div class="input-group mb-3">
+                  <span class="input-group-text">필터링단어</span>
+                  <input type="text" ng-model="filter.keyword" placeholder="필터링 할 단어를 검색해주세요." class="form-control" aria-label="키워드 필터">
+                </div>
+              </div>
+            </div>
           </div>
           <div class="p-1">
             <table class="table table-striped" ng-class="{loading: loading}" ng-repeat="(date, rows) in articles">
@@ -143,7 +181,7 @@ async function main() {
                 <tr>
                   <th scope="col">순위</th>
                   <th scope="col">제목</th>
-                  <th scope="col">공감수</th>
+                  <th scope="col">댓글수</th>
                   <th scope="col">타입</th>
                   <th scope="col">작성일</th>
                   <th scope="col">기능</th>
@@ -152,32 +190,38 @@ async function main() {
               <tbody ng-repeat="row in rows">
                 <tr>
                   <td scope="col">{{ row.rank }}</td>
-                  <td>{{ row.title }}</td>
+                  <td><a target="_blank" ng-href="{{row.uri}}">{{ row.title }}</a></td>
                   <td>{{ row.event }}</td>
                   <td>{{ row.type }}</td>
                   <td>{{ row.createDate.substr(0, 10) }}</td>
                   <td>
                     <div class="d-grid">
-                      <button ng-click="likes(row)" class="btn btn-sm btn-info">목록보기</button>
+                      <button ng-click="comments(row)" class="btn btn-sm btn-info">목록보기</button>
                     </div>
                   </td>
                 </tr>
-                <tr ng-if="row.likes && row.likes.length">
+                <tr ng-if="row.comments && row.comments.length">
                   <td colspan="6">
                     <table class="table table-striped">
                       <thead>
                         <tr>
                           <th scope="col">닉네임 (아이디)</th>
+                          <th scope="col">수정일</th>
                           <th scope="col">등록일</th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr ng-repeat="like in row.likes | filterLikeDate:filter.start:filter.limit">
+                      <tbody ng-repeat="comment in row.comments | filterCommentDate:filter">
+                        <tr>
                           <td>
-                            <div>{{ like.userNickName }} ({{like.userId}})</div>
-                            <div><small><a target="_blank" ng-href="https://blog.naver.com/{{like.userId}}">{{like.userBlogName}}</a></small></div>
+                            <a target="_blank" ng-href="https://blog.naver.com/{{ comment.profileUserId }}">{{ comment.userName }} ({{ comment.profileUserId }})</a>
                           </td>
-                          <td>{{ like.addDate }}</td>
+                          <td>{{ comment.modTime }}</td>
+                          <td>{{ comment.regTime }}</td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <pre style="font-size:11px; resize: none;">{{ comment.contents }}</pre>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -200,11 +244,17 @@ async function main() {
             $rootScope._ = window._;
             $rootScope.moment = window.moment;
           })
-          app.filter('filterLikeDate', () => {
-            return function (likes, start, limit) {
-              return likes.filter((like) => {
-                const addDate = (/^[\\d\\.]+$/i.test(like.addDate) ? moment(like.addDate, 'YYYY.MM.DD.') : moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 })).toDate();
-                return start <= addDate && addDate <= limit;
+          app.filter('filterCommentDate', () => {
+            return function (comments, filter) {
+              return comments
+              .filter((o) => {
+                const regTime = moment(o.regTime).toDate();
+                return filter.start <= regTime && regTime < moment(filter.limit).add(1, 'days').toDate();
+              })
+              .filter((o) => {
+                // filter.keywordType && filter.keyword
+                const state = o[filter.keywordType];
+                return !state || state.includes(filter.keyword);
               })
             }
           })
@@ -214,6 +264,8 @@ async function main() {
             document.addEventListener('append.finish', (e)=>($scope.loading = false, $scope.$apply()), false);
 
             $scope.filter = $scope.filter || {};
+            $scope.filter.keywordType = 'contents';
+            $scope.filter.keyword = '';
             $scope.filter.start = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toDate();
             $scope.filter.limit = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toDate();
 
@@ -222,8 +274,9 @@ async function main() {
               $scope.articles = _.groupBy(await window.opener.rank_like($scope.filter.start, $scope.filter.limit), 'date');
               $scope.$apply();
             }
-            $scope.likes = async (row) => {
-              row.likes = await window.opener.likes(_.last(row.uri.split('/')));
+            $scope.comments = async (row) => {
+              row.comments = await window.opener.comments(_.last(row.uri.split('/')));
+              console.log(row.comments);
               $scope.$apply();
             }
           });
