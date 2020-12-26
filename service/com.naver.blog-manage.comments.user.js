@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 댓글수 순위 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.comments.user.js
 // @description  네이버 블로그의 댓글수 순위 기능을 확장합니다.
 // @author       Won Choi
@@ -129,7 +129,7 @@ async function main() {
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css" integrity="sha512-thoh2veB35ojlAhyYZC0eaztTAUhxLvSZlWrNtlV01njqs/UdY3421Jg7lX0Gq9SRdGVQeL8xeBp9x1IPyL1wQ==" crossorigin="anonymous" />
         <style>.loading { pointer-events: none; opacity: 0.5; }</style>
-        <title>네이버 블로그 공감수 순위 어드밴스드</title>
+        <title>네이버 블로그 댓글수 순위 어드밴스드</title>
       </head>
       <body>
         <div ng-controller="main" class="container-fluid">
