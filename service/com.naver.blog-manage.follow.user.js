@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 이웃,그룹 관리 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
 // @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @author       Won Choi
@@ -32,9 +32,9 @@ async function inject_js(opt) {
 }
 async function main() {
   GM_donation('.admin_set_buddy');
-  inject_js({ integrity: 'sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==', src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js' });
-  inject_js({ integrity: 'sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==', src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js' });
-  inject_js(() => {
+  await inject_js({ integrity: 'sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==', src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js' });
+  await inject_js({ integrity: 'sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==', src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js' });
+  await inject_js(() => {
     async function delete_buddy(selfishes) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
       const uri = new URL('https://admin.blog.naver.com/BuddyDelete.nhn');
@@ -45,7 +45,7 @@ async function main() {
     }
     window.delete_buddy = delete_buddy;
   })
-  inject_js(() => {
+  await inject_js(() => {
     async function search_buddy_page(callback, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
       const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.nhn?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
@@ -97,7 +97,7 @@ async function main() {
     }
     window.search_buddy = search_buddy_page;
   })
-  inject_js(() => {
+  await inject_js(() => {
     async function search_buddy_me_page(callback, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
       const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.nhn?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
@@ -142,7 +142,7 @@ async function main() {
     }
     window.search_buddy_me = search_buddy_me_page;
   })
-  inject_js(() => {
+  await inject_js(() => {
     const html = `
     <!DOCTYPE html>
     <html ng-app="app">
