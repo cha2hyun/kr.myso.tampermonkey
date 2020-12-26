@@ -87,14 +87,6 @@ async function main() {
     async function comments(logNo, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
 
-      let blogCookies = {};
-      {
-        const uri = new URL('https://m.blog.naver.com/');
-        uri.pathname = `/${blogId}`;
-        const resp = await GM_xmlhttpRequest({ url: uri.toString(), headers: { 'cookie': document.cookie } });
-        console.log(resp)
-      }
-
       let blogInfo = {};
       {
         const ref = new URL('https://m.blog.naver.com/');
