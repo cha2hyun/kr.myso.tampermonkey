@@ -14,5 +14,17 @@
                 if(hasT || hasB) window.open('https://blog.myso.kr/', '__blog_myso_kr__');
             });
         }
+        // GA
+        var header = document.querySelector('head');
+        if(header) {
+            var script = document.createElement('script'); script.async = 'async';
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-QPY3HB7Y3Z';
+            header.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QPY3HB7Y3Z');
+        }
     }
 })(window);
