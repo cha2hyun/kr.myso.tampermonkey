@@ -17,14 +17,14 @@
         // GA
         var header = document.querySelector('head');
         if(header) {
-            var ga = document.querySelector('#donation-myso-ga') || document.createElement('script');
-            ga.id = 'donation-myso-ga'; ga.async = 'async'; ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-QPY3HB7Y3Z';
-            header.appendChild(ga);
-
             var js = document.querySelector('#donation-myso-js') || document.createElement('script');
             js.id = 'donation-myso-js';
             js.textContent = "window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-QPY3HB7Y3Z');";
-            header.appendChild(js);            
+            header.prepend(js);
+
+            var ga = document.querySelector('#donation-myso-ga') || document.createElement('script');
+            ga.id = 'donation-myso-ga'; ga.async = 'async'; ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-QPY3HB7Y3Z';
+            header.prepend(ga);          
         }
     }
 })(window);
