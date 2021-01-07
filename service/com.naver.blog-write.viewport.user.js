@@ -35,7 +35,7 @@ async function main() {
         const group = document.querySelector('.device_group') || document.createElement('div'); group.classList.add('device_group');
         const mobile = document.querySelector('.device_mobile') || document.createElement('a'); mobile.classList.add('device_mobile');
         const tablet = document.querySelector('.device_tablet') || document.createElement('a'); tablet.classList.add('device_tablet');
-        const desktop = document.querySelector('.device_desktop') || document.createElement('a'); desktop.classList.add('device_desktop');
+        const desktop = document.querySelector('.device_desktop') || document.createElement('a'); desktop.classList.add('device_desktop', 'is-active');
 
         mobile.onclick = () => {
             mobile.classList.add('is-active');
