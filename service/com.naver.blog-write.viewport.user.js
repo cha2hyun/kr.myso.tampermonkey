@@ -1,0 +1,70 @@
+// ==UserScript==
+// @name         네이버 스마트에디터 ONE 뷰포트
+// @namespace    https://tampermonkey.myso.kr/
+// @version      1.0.0
+// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.viewport.user.js
+// @description  네이버 스마트에디터 ONE에서 다양한 단말기 해상도에 맞게 글을 작성하게 도와줍니다.
+// @author       Won Choi
+// @match        *://blog.naver.com/PostWriteForm.nhn?*
+// @match        *://blog.naver.com/PostUpdateForm.nhn?*
+// @match        *://blog.naver.com/*/postwrite*
+// @match        *://blog.editor.naver.com/editor*
+// @grant        GM_addStyle
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
+// ==/UserScript==
+async function main() {
+    GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame, body', 0);
+    GM_addStyle(`
+#root { position: relative !important; }
+.device_group { position: absolute; left:0; right:0; top:5px; bottom: auto; margin: auto; width: 200px; z-index: 1000000; display: block; }
+.device_group > a { display:inline-block; float: left; text-align: center; width: 52px; height: 34px; background-image: url(https://ssl.pstatic.net/static.editor/static/dist/editor/1608280975560/img/sp_editor.png); background-repeat: no-repeat; }
+.device_group > a.device_mobile { background-position: -653px -731px; margin-right: 7px; }
+.device_group > a.device_mobile.is-active { background-position: -963px -731px; }
+.device_group > a.device_tablet { background-position: -777px -731px; margin-right: 7px; }
+.device_group > a.device_tablet.is-active { background-position: -715px -731px; }
+.device_group > a.device_desktop { background-position: -901px -731px; }
+.device_group > a.device_desktop.is-active { background-position: -839px -731px; }
+.se-cover-attach-button-container { padding: 0 15px !important; }
+.viewport-mobile .se-title-text span { font-size: 26px !important; }
+.viewport-mobile .se-canvas > * { min-width: 425px !important; max-width: 425px !important; width: 425px !important; margin: auto !important; }
+.viewport-tablet .se-canvas > * { min-width: 750px !important; max-width: 750px !important; width: 750px !important; margin: auto !important; }
+
+    `);
+    function handler(e) {
+        const container = document.querySelector('#root');
+        const group = document.querySelector('.device_group') || document.createElement('div'); group.classList.add('device_group');
+        const mobile = document.querySelector('.device_mobile') || document.createElement('a'); mobile.classList.add('device_mobile');
+        const tablet = document.querySelector('.device_tablet') || document.createElement('a'); tablet.classList.add('device_tablet');
+        const desktop = document.querySelector('.device_desktop') || document.createElement('a'); desktop.classList.add('device_desktop');
+
+        mobile.onclick = () => {
+            mobile.classList.add('is-active');
+            tablet.classList.remove('is-active');
+            desktop.classList.remove('is-active');
+            container.classList.remove('viewport-tablet', 'viewport-desktop');
+            container.classList.add('viewport-mobile');
+        };
+        tablet.onclick = () => {
+            mobile.classList.remove('is-active');
+            tablet.classList.add('is-active');
+            desktop.classList.remove('is-active');
+            container.classList.remove('viewport-mobile', 'viewport-desktop');
+            container.classList.add('viewport-tablet');
+        };
+        desktop.onclick = () => {
+            mobile.classList.remove('is-active');
+            tablet.classList.remove('is-active');
+            desktop.classList.add('is-active');
+            container.classList.remove('viewport-mobile', 'viewport-tablet');
+            container.classList.add('viewport-desktop');
+        };
+
+        group.appendChild(mobile);
+        group.appendChild(tablet);
+        group.appendChild(desktop);
+        container.appendChild(group);
+    }
+    handler();
+}
+function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
+requestIdleCallback(checkForDOM);
