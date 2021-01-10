@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 모먼트 다운로더
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-moment.downloader.user.js
 // @description  네이버 블로그 모먼트 영상을 다운로드 합니다.
 // @author       Won Choi
@@ -36,14 +36,14 @@
   button.onclick = async (e) => {
       if(!cache.data) return alert('통신 오류가 발생하였습니다. 새로고침 후 다시 시도해주세요.');
       const items = _.get(cache.data, 'result.playInfo', []);
-      await Promise.map(items, async (item) => {
+      await Promise.map(items, async (item, offset) => {
           const videos = _.get(item, 'videos.list', []);
           const video = _.maxBy(videos, 'size');
           if(!video) return alert('통신 오류가 발생하였습니다. 새로고침 후 다시 시도해주세요.');
           const { encodingOption, source } = video;
           const prefix_a = _.get(item, 'meta.user.id', 'unknown');
           const prefix_b = _.get(item, 'tId', 'unknown');
-          const filename = `moment-${prefix_a}-${prefix_b}-${encodingOption.name}.mp4`;
+          const filename = `moment-${prefix_a}-${prefix_b}-${encodingOption.name}-${offset}.mp4`;
           download(source, filename, 'video/mp4');
       });
   }
