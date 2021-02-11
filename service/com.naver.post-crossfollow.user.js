@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 포스트 맞구독 검증기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.post-crossfollow.user.js
 // @description  네이버 포스트에서 맞구독 상태를 검증합니다.
 // @author       Won Choi
@@ -11,6 +11,7 @@
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
 // ==/UserScript==
 async function search_followers(fromNo = 1, totalCount = 100000000, result = {}) {
+    const list = document.getElementById('el_list_container'), ul = list.children[0];
     const loc = new URL(location.href);
     const uri = new URL('https://post.naver.com/my/followerListMore.nhn');
     uri.hostname = location.hostname;
@@ -29,7 +30,8 @@ async function search_followers(fromNo = 1, totalCount = 100000000, result = {})
     });
     result = Object.assign({}, result, json); delete result.html; result.data = result.data || [];
     result.data.push(...data);
-    return json.listCount <= fromNo ? result : search_followers(fromNo + 1, totalCount, result);
+    ul.dataset.total = result.data.length;
+    return (!json.listCount || !result.nextFromNo) ? result : search_followers(result.nextFromNo, totalCount, result);
 }
 async function draw(json) {
     draw.timer = clearTimeout(draw.timer);
@@ -46,9 +48,14 @@ async function draw(json) {
 }
 async function main() {
     GM_donation('#el_list_container');
-    GM_addStyle(`.selfishes { background: #ffd900; }`);
-    const json = await search_followers(); draw(json);
-    console.log(json);
+    GM_addStyle(`
+    .selfishes { background: #ffd900; }
+    .disabled ul { pointer-events: none; position: relative; }
+    .disabled ul li { opacity: 0.3; }
+    .disabled ul::before { content: '팔로워 목록을 불러오는 중... (총 ' attr(data-total) '명)'; display: block; background: rgba(0,0,0,0.9); color:#ff0; text-align:center; line-height:3rem; }
+    `);
+    const list = document.getElementById('el_list_container'); list.classList.add('disabled');
+    const json = await search_followers(); draw(json); list.classList.remove('disabled');
     document.__createElement = document.__createElement || document.createElement;
     document.createElement = (tagName) => {
         setTimeout(()=>draw(json));
