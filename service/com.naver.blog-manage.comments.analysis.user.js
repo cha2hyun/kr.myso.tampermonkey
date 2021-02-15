@@ -156,13 +156,6 @@ async function main() {
               </div>
             </div>
             <div class="row p-1">
-              <div class="col-4">
-                <select ng-model="filter.keywordType" class="form-select" aria-label="키워드 필터 상세">
-                  <option value="profileUserId">아이디</option>
-                  <option value="userName">닉네임</option>
-                  <option value="contents">내용</option>
-                </select>
-              </div>
               <div class="col">
                 <div class="input-group mb-3">
                   <span class="input-group-text">필터링단어</span>
