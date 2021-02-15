@@ -1,15 +1,64 @@
 // ==UserScript==
 // @name         네이버 블로그 PC 통계 플러스 - 통합검색 노출누락 여부 확인
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.omission.search.user.js
 // @description  네이버 블로그 통계에서 네이버 통합검색 노출 여부 확인이 가능한 버튼을 추가해줍니다.
 // @author       Won Choi
 // @match        https://blog.stat.naver.com/blog/article/*/cv
-// @grant        none
+// @grant        GM_addStyle
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=4
 // ==/UserScript==
 async function main() {
-    const container = document.querySelector('.u_ni_header_wrap > div > .u_ni_info_section > div');
+    GM_donation('#_root', 0);
+    GM_addStyle(`
+.u_ni_btn_group {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.u_ni_menu_list {
+    text-align: center;
+    border: 1px solid #ddd;
+    *zoom: 1;
+}
+.u_ni_menu_item {
+    float: left;
+    position: relative;
+    margin-left: -1px;
+    border-left: 1px solid #ddd;
+    background-color: #fff;
+}
+.u_ni_menu_item.u_ni_is_active:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    bottom: -1px;
+    left: -1px;
+    background-color: #00c73c;
+}
+.u_ni_menu_item a {
+    position: relative;
+    display: inline-block;
+    min-width: 48px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #888;
+    font-size: 12px;
+    line-height: 30px;
+    letter-spacing: -0.5px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.u_ni_menu_item.u_ni_is_active a {
+    color: #fff;
+}
+    `);
+
+    const container = document.querySelector('[class^="u_ni_info_section"] > div');
     const group = document.createElement('div'); group.className = 'u_ni_btn_group'; group.style.left = 0; group.style.right = 'auto'; container.appendChild(group);
     const group_inner = document.createElement('div'); group_inner.className = 'u_ni_menu_component u_ni_ext_group'; group.appendChild(group_inner);
     const group_list = document.createElement('ul'); group_list.className = 'u_ni_menu_list'; group_list.role = 'menu'; group_inner.appendChild(group_list);
