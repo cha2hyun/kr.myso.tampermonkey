@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 PC 통계 플러스 - 통합검색 노출누락 여부 확인
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.omission.search.user.js
 // @description  네이버 블로그 통계에서 네이버 통합검색 노출 여부 확인이 가능한 버튼을 추가해줍니다.
 // @author       Won Choi
@@ -67,8 +67,8 @@ async function main() {
     const button_a = document.createElement('a'); button_a.href = '#'; button_a.innerText = '누락확인'; button_wrap_a.appendChild(button_a);
     const button_b = document.createElement('a'); button_b.href = '#'; button_b.innerText = '유사확인'; button_wrap_b.appendChild(button_b);
     function post_info() {
-        const el_title = document.querySelector('h3.u_ni_title, span.u_ni_title');
-		const el_write = document.querySelector('.u_ni_date');
+        const el_title = document.querySelector('h3[class^="u_ni_title"], span[class^="u_ni_title"]');
+		const el_write = document.querySelector('[class^="u_ni_date"]');
 		const tx_title = el_title && el_title.innerText;
 		const tx_write = el_write && el_write.innerText;
 		const pt_write = /^([0-9]{4}).([0-9]{2}).([0-9]{2})/.exec(tx_write);
