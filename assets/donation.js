@@ -11,7 +11,8 @@
                 const rect = container.getBoundingClientRect();
                 const hasT = (!bottom && e.clientY < rect.top + 50);
                 const hasB = ( bottom && e.clientY > rect.bottom - 50);
-                if(hasT || hasB) window.open('https://blog.myso.kr/', '__blog_myso_kr__');
+                // if(hasT || hasB) window.open('https://blog.myso.kr/', '__blog_myso_kr__');
+                if(hasT || hasB) window.open('https://in.naverpp.com/donation', '__blog_myso_kr__');
             });
         }
         // GA
