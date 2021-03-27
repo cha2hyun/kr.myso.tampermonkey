@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      2.0.1
+// @version      2.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -11,9 +11,6 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js
-// @require      https://cdn.amcharts.com/lib/4/core.js
-// @require      https://cdn.amcharts.com/lib/4/charts.js
-// @require      https://cdn.amcharts.com/lib/4/themes/animated.js
 // @grant        GM_addStyle
 // @match        *://creator-advisor.naver.com/*
 // ==/UserScript==
@@ -69,7 +66,6 @@ async function main() {
         // ----------------
         section_rank.addEventListener('submit', async function(e) {
             e.preventDefault();
-            console.log(channels);
             const type = channels.find(o=>o.service == search_service.value);
             const date_range = _.range(new Date(search_date_start.value), new Date(search_date_limit.value), 1000 * 60 * 60 * 24).map((o)=>moment(o).format('YYYY-MM-DD')).concat([search_date_limit.value]);
             const contents = await Promise.map(date_range, async (date) => {
@@ -115,18 +111,8 @@ async function main() {
                     search_list.append(li);
                 }
             });
-            /*
-            const contents = await window.CreatorAdvisor.exec('popular-contents', { service: type.service, channelId: type.channelId, date: search_date.value, keyword: search_box.value });
-            if(!contents.data || !contents.data.length) {
-
-            } else {
-                const { data, parameters } = contents;
-                const { date, keyword } = parameters;
-                search_list.innerHTML = '';
-
-            }*/
         });
     });
-}
-function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+  }
+  function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
+  requestIdleCallback(checkForDOM);
