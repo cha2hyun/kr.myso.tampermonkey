@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.22
+// @version      1.0.23
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -90,17 +90,17 @@ head { display: block !important; }
                 return output;
             }
             const section = {};
-            const data = Array.from(component.childNodes).reduce(textContents, []); section.data = data.map(el=>el.textContent);
+            const data = Array.from(component.childNodes).reduce(textContents, []); section.data = data.map(el=>el.textContent || el.value || '');
             return section;
         });
         const sections_v3 = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map((component) => {
             const section = {};
-            const data = Array.from(component.querySelectorAll('.se_textarea, .se-text-paragraph')); section.data = data.map(el=>el.innerText);
+            const data = Array.from(component.querySelectorAll('.se_textarea, .se-text-paragraph')); section.data = data.map(el=>el.innerText || el.value || '');
             return section;
         });
         const placeholders = Array.from(document.querySelectorAll('.se_textarea, .se-text-paragraph')).map((component) => {
             const section = {};
-            const data = Array.from(component.querySelectorAll('.se-placeholder')); section.data = data.map(el=>el.innerText);
+            const data = Array.from(component.querySelectorAll('.se-placeholder')); section.data = data.map(el=>el.innerText || el.value || '');
             return section;
         });
 
@@ -140,6 +140,7 @@ head { display: block !important; }
     function handler_click(e) {
         const el = e.target;
         if(el.className.includes('se_cardThumb')) handler(e);
+        if(el.className.includes('se_textarea')) handler(e);
     }
     window.addEventListener('keyup', handler, false);
     window.addEventListener('keydown', handler, false);
