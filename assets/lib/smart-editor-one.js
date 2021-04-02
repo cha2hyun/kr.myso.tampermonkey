@@ -24656,7 +24656,7 @@
             , U = D.insertProducts
             , V = lh().isMarketSeller
             , z = Tw("market.write.visible")
-            , H = window.__SE_ONE_EDITOR__ = Object(M.useSEEditor)({
+            , H = Object(M.useSEEditor)({
               scriptInfo: {
                   version: "1.19.0",
                   buildEnv: E.f.seBuildEnv,
@@ -24721,6 +24721,7 @@
                   }
               })
           });
+          window.__SE_ONE_EDITOR__ = { S, x, H };
           console.info(window.__SE_ONE_EDITOR__);
           return Object(i.useEffect)((function() {
               if (d) {
