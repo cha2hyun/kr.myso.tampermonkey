@@ -24656,7 +24656,7 @@
             , U = D.insertProducts
             , V = lh().isMarketSeller
             , z = Tw("market.write.visible")
-            , H = Object(M.useSEEditor)({
+            , H = window.__SE_ONE_EDITOR__ = Object(M.useSEEditor)({
               scriptInfo: {
                   version: "1.19.0",
                   buildEnv: E.f.seBuildEnv,
@@ -24712,7 +24712,6 @@
                   },
                   events: {
                       ready: function() {
-                        console.info(window.__SE_ONE_EDITOR__ = H);
                           return document.domain = "naver.com"
                       },
                       click: function(e) {
@@ -24722,6 +24721,7 @@
                   }
               })
           });
+          console.info(window.__SE_ONE_EDITOR__);
           return Object(i.useEffect)((function() {
               if (d) {
                   var e = k || s;
