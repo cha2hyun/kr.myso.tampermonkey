@@ -24712,6 +24712,7 @@
                   },
                   events: {
                       ready: function() {
+                        console.info(window.__SE_ONE_EDITOR__ = H);
                           return document.domain = "naver.com"
                       },
                       click: function(e) {
@@ -24721,8 +24722,6 @@
                   }
               })
           });
-          window.__SE_ONE_EDITOR__ = { S, x, H };
-          console.info(window.__SE_ONE_EDITOR__);
           return Object(i.useEffect)((function() {
               if (d) {
                   var e = k || s;
