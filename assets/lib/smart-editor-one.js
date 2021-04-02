@@ -24656,7 +24656,7 @@
             , U = D.insertProducts
             , V = lh().isMarketSeller
             , z = Tw("market.write.visible")
-            , H = Object(M.useSEEditor)({
+            , H = window.__SEOneEditor__ = Object(M.useSEEditor)({
               scriptInfo: {
                   version: "1.19.0",
                   buildEnv: E.f.seBuildEnv,
