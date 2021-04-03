@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 나만 이웃 자동 정리
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @author       Won Choi
@@ -125,5 +125,9 @@ async function main() {
         menulist.append(menuitem);
     }
 }
-function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+function _requestIdleCallback(callback) {
+  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+  return requestIdleCallback(callback);
+}
+function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
+_requestIdleCallback(checkForDOM);

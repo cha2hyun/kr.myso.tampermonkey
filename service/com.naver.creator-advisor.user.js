@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      2.0.2
+// @version      2.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -114,5 +114,9 @@ async function main() {
         });
     });
   }
-  function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
-  requestIdleCallback(checkForDOM);
+  function _requestIdleCallback(callback) {
+    if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+    return requestIdleCallback(callback);
+  }
+  function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
+  _requestIdleCallback(checkForDOM);

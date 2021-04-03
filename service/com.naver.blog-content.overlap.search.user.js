@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 중복문서 검색
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-content.overlap.search.user.js
 // @description  네이버 블로그에서 내 글의 중복문서/짜집기문서를 쉽게 찾기위한 기능을 추가합니다.
 // @author       Won Choi
@@ -29,5 +29,9 @@ async function main() {
     }
     container.prepend(anchor);
 }
-function checkForDOM() { return (document.head && document.body) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+function _requestIdleCallback(callback) {
+  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+  return requestIdleCallback(callback);
+}
+function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
+_requestIdleCallback(checkForDOM);

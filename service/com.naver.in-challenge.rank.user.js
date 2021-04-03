@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 인플루언서 홈 키워드 챌린지 순위 확인
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-challenge.rank.user.js
 // @description  네이버 인플루언서 홈에서 키워드 챌린지 순위를 확인합니다.
 // @author       Won Choi
@@ -46,5 +46,9 @@ async function main() {
         });
     }, 300);
 }
-function checkForDOM() { return (document.head && document.body) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+function _requestIdleCallback(callback) {
+  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+  return requestIdleCallback(callback);
+}
+function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
+_requestIdleCallback(checkForDOM);

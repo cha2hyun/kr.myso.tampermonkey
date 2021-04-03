@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 검색결과 캡쳐도구
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-screenshot.search.user.js
 // @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
 // @author       Won Choi
@@ -110,5 +110,9 @@ async function main() {
         container.prepend(anchor);
     }
 }
-function checkForDOM() { return (document.head) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+function _requestIdleCallback(callback) {
+    if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+    return requestIdleCallback(callback);
+}
+function checkForDOM() { return (document.head) ? main() : _requestIdleCallback(checkForDOM); }
+_requestIdleCallback(checkForDOM);

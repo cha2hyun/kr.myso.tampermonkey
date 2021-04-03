@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 공감수 순위 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
 // @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
 // @author       Won Choi
@@ -242,5 +242,9 @@ async function main() {
     }, 300);
   })
 }
-function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+function _requestIdleCallback(callback) {
+  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+  return requestIdleCallback(callback);
+}
+function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
+_requestIdleCallback(checkForDOM);
