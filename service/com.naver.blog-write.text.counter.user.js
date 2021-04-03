@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.23
+// @version      1.0.24
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -148,5 +148,9 @@ head { display: block !important; }
     // document.addEventListener('click', handler_click, false);
     handler();
 }
-function checkForDOM() { return (document.body) ? main() : requestIdleCallback(checkForDOM); }
-requestIdleCallback(checkForDOM);
+function _requestIdleCallback(callback) {
+    if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+    return requestIdleCallback(callback);
+}
+function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
+_requestIdleCallback(checkForDOM);
