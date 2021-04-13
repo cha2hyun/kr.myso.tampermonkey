@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         네이버 블로그 검색결과 캡쳐도구
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-screenshot.search.user.js
 // @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
 // @author       Won Choi
+// @match        https://blog.naver.com/PostList.nhn?*
 // @match        https://blog.naver.com/PostView.nhn?*
 // @match        https://search.naver.com/search.naver?*
 // @match        https://m.search.naver.com/search.naver?*
@@ -33,82 +34,88 @@ async function inject_js(opt) {
         if(typeof opt === 'function') resolved();
     });
 }
-async function main() {
-    if(location.hostname.endsWith('search.naver.com')) {
-        if(window.name !== 'nblog_screenshot') return;
-        document.title = '스크린샷 촬영 중입니다. 종료하지 말아주세요.';
-        const uri = new URL(location.href), highlight = uri.searchParams.get('highlight'), query = uri.searchParams.get('query');
-        const matches = /^\/([a-z0-9\-\_\.]+)\/([\d]+)/.exec(highlight);
-        GM_addStyle(`
+async function main_search() {
+    if(window.name !== 'nblog_screenshot') return;
+    document.title = '스크린샷 촬영 중입니다. 종료하지 말아주세요.';
+    const uri = new URL(location.href), highlight = uri.searchParams.get('highlight'), query = uri.searchParams.get('query');
+    const dst = new URL(highlight), logNo = dst.searchParams.get('logNo') || /^\/([a-z0-9\-\_\.]+)\/([\d]+)/.exec(dst.pathname)[2];
+    GM_addStyle(`
             a[href*="${highlight}"],
-            a[href*="logNo=${matches[2]}"] {
+            a[href*="logNo=${logNo}"] {
                 display:block; position: relative;
             }
             a[href*="${highlight}"]:after,
-            a[href*="logNo=${matches[2]}"]:after {
+            a[href*="logNo=${logNo}"]:after {
                 content:''; position: absolute; z-index: 1; background: rgba(255, 0, 0, 0.3); border: 3px solid red; margin: auto; left: 0; top: 0; right: 0; bottom: 0;
             }
         `);
-        async function screenshot() {
-            screenshot.timer = clearTimeout(screenshot.timer);
-            screenshot.timer = setTimeout(async () => {
-                if(!document.querySelector('#naver-splugin-wrap, #wrap')) return screenshot();
-                await inject_js({ src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js', integrity: 'sha256-c3RzsUWg+y2XljunEQS0LqWdQ04X1D3j22fd/8JCAKw=' });
-                await inject_js(async function () {
-                    async function screenshot() { return new Promise((resolve)=>html2canvas(document.body, { allowTaint: false, onrendered: resolve })); }
-                    const canvas = await screenshot(), dataURL = canvas.toDataURL("image/png");
-                    postMessage({ action:'screenshot.dataURL', dataURL });
-                });
-            }, 1000);
-        }
-        window.addEventListener('message', (e)=>{
-            const { action, dataURL } = e.data;
-            if(action === 'screenshot.dataURL') {
-                const uri = new URL(location.href);
-                GM_download(dataURL, `screenshot_${query}_${Date.now()}_${location.hostname}_${uri.searchParams.get('where') || 'all'}.png`);
+    async function screenshot() {
+        screenshot.timer = clearTimeout(screenshot.timer);
+        screenshot.timer = setTimeout(async () => {
+            if(!document.querySelector('#naver-splugin-wrap, #wrap')) return screenshot();
+            await inject_js(async function () { window.alert = function(){}; });
+            await inject_js({ src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js', integrity: 'sha256-c3RzsUWg+y2XljunEQS0LqWdQ04X1D3j22fd/8JCAKw=' });
+            await inject_js(async function () {
+                async function screenshot() { return new Promise((resolve)=>html2canvas(document.body, { allowTaint: false, onrendered: resolve })); }
+                const canvas = await screenshot(), dataURL = canvas.toDataURL("image/png");
+                const uri = new URL(location.href), query = uri.searchParams.get('query');
+                const filename = `screenshot_${query}_${Date.now()}_${location.hostname}_${uri.searchParams.get('where') || 'all'}.png`
                 window.close();
-            }
-        });
-        screenshot();
-    } else {
-        async function screenshot(url) {
-            return new Promise((resolve)=>{
-                const win = window.open(url, 'nblog_screenshot', 'width=640, height=1');
-                (function delay() {
-                    screenshot.timer = clearTimeout(screenshot);
-                    screenshot.timer = setTimeout(() => {
-                        if(!win.closed) return delay();
-                        resolve();
-                    }, 100);
-                })();
+                window.opener.focus();
+                window.opener.postMessage({ action:'screenshot.dataURL', dataURL, filename }, 'https://blog.naver.com');
             });
+        }, 1000);
+    }
+    screenshot();
+}
+async function main_article() {
+    window.addEventListener('message', (e)=>{
+        const { action, dataURL, filename } = e.data;
+        if(action === 'screenshot.dataURL') {
+            GM_download(dataURL, filename);
         }
-        const container = document.querySelector('.blog2_post_function');
+    });
+    async function screenshot(url) {
+        return new Promise((resolve)=>{
+            const win = window.open(url, 'nblog_screenshot', 'width=640, height=1');
+            (function delay() {
+                screenshot.timer = clearTimeout(screenshot);
+                screenshot.timer = setTimeout(() => {
+                    if(!win.closed) return delay();
+                    setTimeout(() => resolve(), 1000);
+                }, 100);
+            })();
+        });
+    }
+    const wrappers = Array.from(document.querySelectorAll('[data-post-editor-version]'));
+    wrappers.map((wrapper) => {
+        const container = wrapper.querySelector('.lyr_overflow_menu');
+        const target = wrapper.querySelector('.copyTargetUrl').value;
         const anchor = document.createElement('a'); anchor.href = '#';
-        anchor.className = 'url pcol2 _returnFalse _transPosition _se3screenshotbtn';
-        anchor.style.cursor = 'pointer';
-        anchor.style.marginRight = '11px';
         anchor.innerText = '상위노출 캡처';
         anchor.onclick = async function(e) {
             e.preventDefault();
             const query = prompt('검색 할 키워드를 입력하세요.'); if(!query) return;
             const uri_m = new URL('https://m.search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
-            uri_m.searchParams.set('query', query); uri_m.searchParams.set('highlight', window.top.location.pathname);
+            uri_m.searchParams.set('query', query); uri_m.searchParams.set('highlight', target);
             await screenshot(uri_m.toString());
             const uri_mv = new URL('https://m.search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
-            uri_mv.searchParams.set('query', query); uri_mv.searchParams.set('highlight', window.top.location.pathname);
+            uri_mv.searchParams.set('query', query); uri_mv.searchParams.set('highlight', target);
             uri_mv.searchParams.set('where', 'm_view');
             await screenshot(uri_mv.toString());
             const uri_d = new URL('https://search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
-            uri_d.searchParams.set('query', query); uri_d.searchParams.set('highlight', window.top.location.pathname);
+            uri_d.searchParams.set('query', query); uri_d.searchParams.set('highlight', target);
             await screenshot(uri_d.toString());
             const uri_dv = new URL('https://search.naver.com/search.naver?ie=UTF-8&sm=chr_hty');
-            uri_dv.searchParams.set('query', query); uri_dv.searchParams.set('highlight', window.top.location.pathname);
+            uri_dv.searchParams.set('query', query); uri_dv.searchParams.set('highlight', target);
             uri_dv.searchParams.set('where', 'post');
             await screenshot(uri_dv.toString());
         }
         container.prepend(anchor);
-    }
+    });
+}
+async function main() {
+    if(location.hostname.endsWith('search.naver.com')) { await main_search(); } else { await main_article(); }
 }
 function _requestIdleCallback(callback) {
     if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
