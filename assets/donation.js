@@ -12,12 +12,11 @@
                 let hasT = e.clientY < rect.top + 50;
                 if(hasT) window.open('https://in.naverpp.com/donation', '__blog_myso_kr__');
             });
-            setTimeout(() => {
-                let iframe = document.querySelector('donation-myso-frame') || document.createElement('iframe');
-                iframe.classList.add('donation-myso-frame');
-                iframe.setAttribute('src', 'https://in.naverpp.com/ad/randomize?display');
-                container.prepend(iframe);
-            })
+            
+            let iframe = document.querySelector('.donation-myso-frame') || document.createElement('iframe');
+            iframe.classList.add('donation-myso-frame');
+            iframe.setAttribute('src', 'https://in.naverpp.com/ad/randomize?display');
+            container.prepend(iframe);
         }
         // GA
         let header = document.querySelector('head');
