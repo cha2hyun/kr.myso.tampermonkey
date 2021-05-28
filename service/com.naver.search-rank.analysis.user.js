@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 지수 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @author       Won Choi
@@ -44,7 +44,7 @@ async function request(keyword, start = 1) {
 async function update_unknown() {
   let items = Array.from(document.querySelectorAll('[data-cr-rank]:not([data-cr-score-a])'));
   await Promise.map(items, async (item) => {
-      let title = item.querySelector('.total_tit');
+      let title = item.querySelector('.total_tit'); if(!title) return;
       await update(title.textContent, 1, true);
   });
 }
