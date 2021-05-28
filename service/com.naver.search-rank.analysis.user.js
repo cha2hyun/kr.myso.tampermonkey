@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 지수 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @author       Won Choi
@@ -76,16 +76,16 @@ async function update(keyword, start = 1, crUnknown) {
 async function main() {
   GM_donation('#container', 0);
   GM_addStyle(`
-  [data-cr-rank]::after { display: block; margin: 0px 15px 15px; padding: 0.5rem 1rem; font-size: 14px; color: #000; font-weight: bold;  border-radius: 8px; }
-  [data-cr-rank][data-cr-score-a][data-cr-score-b][data-cr-score-c][data-cr-score-d][data-cr-score-e]::after {
+  [data-cr-rank][data-cr-area*="rvw"]::after { display: block; margin: 0px 15px 15px; padding: 0.5rem 1rem; font-size: 14px; color: #000; font-weight: bold;  border-radius: 8px; }
+  [data-cr-rank][data-cr-area*="rvw"][data-cr-score-a][data-cr-score-b][data-cr-score-c][data-cr-score-d][data-cr-score-e]::after {
     background-color: #ffdd00;
     content: '전문성: ' attr(data-cr-score-a) ' / 신뢰성: ' attr(data-cr-score-b) ' / 관련성: ' attr(data-cr-score-c) ' / 최신성: ' attr(data-cr-score-d);
   }
-  [data-cr-rank][data-cr-score-a][data-cr-score-b][data-cr-score-c][data-cr-score-d][data-cr-score-e][data-cr-unknown="true"]::after {
+  [data-cr-rank][data-cr-area*="rvw"][data-cr-score-a][data-cr-score-b][data-cr-score-c][data-cr-score-d][data-cr-score-e][data-cr-unknown="true"]::after {
     background-color: #f48924; color: #fff;
     content: '전문성: ' attr(data-cr-score-a) ' / 신뢰성: ' attr(data-cr-score-b) ' - 주의: 제목으로 점수를 가져옴';
   }
-  [data-cr-rank]:not([data-cr-score-a])::after {
+  [data-cr-rank][data-cr-area*="rvw"]:not([data-cr-score-a])::after {
     background-color: #e4002b; color: #fff;
     content: '오류 : 분석 결과를 알 수 없음.';
   }
