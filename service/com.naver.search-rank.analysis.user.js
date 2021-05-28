@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 지수 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @author       Won Choi
@@ -35,6 +35,8 @@ async function request(keyword, start = 1) {
   uri.searchParams.set('main_q', keyword);
   uri.searchParams.set('start', start);
   uri.searchParams.set('prank', start);
+  uri.searchParams.delete('api_type');
+  uri.searchParams.delete('mobile_more');
   return new Promise((resolve, reject) => {
       GM_xmlhttpRequest({ method: 'GET', url: uri.toString(), onerror: reject, onload: resolve, });
   });
