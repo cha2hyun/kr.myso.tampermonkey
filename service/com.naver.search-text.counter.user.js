@@ -1,17 +1,26 @@
 // ==UserScript==
 // @name         네이버 검색결과 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
 // @match        *://m.search.naver.com/search.naver?*
+// @connect      naver.com
 // @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // ==/UserScript==
+async function request(url) {
+  return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({ method: 'GET', url, onerror: reject, onload: resolve, });
+  });
+}
 async function contentLength(target) {
+  const clipContent = target.querySelector('#__clipContent');
+  if(clipContent) { target = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
   const sections_v2 = Array.from(target.querySelectorAll('#postViewArea, body.se2_inputarea')).map((component) => {
       const filter = ['se-toast-popup', '__se_object', 'og', '_naverVideo'];
       function textContents(output, element) {
@@ -56,16 +65,16 @@ async function contentLength(target) {
 }
 async function parse(target) {
   if(!target || !target.querySelector) return;
-  const anchor = target.querySelector('a.total_tit[href*="blog.naver.com"]'); if(!anchor) return;
-  const uri = new URL(anchor.href); uri.hostname = 'm.blog.naver.com';
-  const res = await fetch(uri.toString()).then(r=>r.text());
-  const dom = document.createElement('div'); dom.innerHTML = res;
-  const len = await contentLength(dom);
+  const anchor = target.querySelector('a.total_tit[href*="blog.naver.com"], a.total_tit[href*="post.naver.com"]'); if(!anchor) return;
+  const uri = new URL(anchor.href);
+  if(uri.hostname.includes('blog.naver.com')) { uri.hostname = 'm.blog.naver.com'; }
+  const res = await request(uri.toString());
+  const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+  const len = await contentLength(doc);
   Object.assign(target.dataset, len);
 }
 async function observe(target) {
   const observer = new MutationObserver(function(mutations) {
-      console.log(mutations);
       mutations.map(function(mutation) {
           const { type, addedNodes } = mutation;
           if(type == 'childList' && addedNodes.length) {
@@ -80,9 +89,9 @@ async function main() {
   GM_donation('#container', 0);
   GM_addStyle(`
   [data-content-length-txt][data-content-length-trim-txt]::before {
-  display: block; margin: 15px 15px 0px; padding: 3px 5px; font-size: 12px; color: #000;
-  background-color: #efefef; border-radius: 8px;
-  content: '글자수 : ' attr(data-content-length-txt) '자 (공백제외: ' attr(data-content-length-trim-txt) '자)';
+    display: block; margin: 15px 15px 0px; padding: 0.5rem 1rem; font-size: 12px; color: #000;
+    background-color: #efefef; border-radius: 8px;
+    content: '글자수 : ' attr(data-content-length-txt) '자 (공백제외: ' attr(data-content-length-trim-txt) '자)';
   }
   `);
   const views = document.querySelector('ul.lst_total'); observe(views);
