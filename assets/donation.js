@@ -15,6 +15,7 @@
             
             let iframe = document.querySelector('.donation-myso-frame') || document.createElement('iframe');
             iframe.classList.add('donation-myso-frame');
+            iframe.setAttribute('sandbox', 'allow-forms allow-scripts');
             iframe.setAttribute('src', 'https://in.naverpp.com/ad/randomize?display');
             container.prepend(iframe);
         }
