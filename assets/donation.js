@@ -11,8 +11,7 @@
             // fullscreen
             key.fullscreen_timestamp = 'donation-myso-fullscreen-timestamp';
             let fullscreen_timestamp = parseInt(localStorage.getItem(key.fullscreen_timestamp) || 0);
-            let fullscreen = fullscreen_timestamp < time_ref;
-            container.classList.toggle('donation-myso-fullscreen', fullscreen);
+            container.classList.toggle('donation-myso-fullscreen', fullscreen_timestamp < time_ref);
             // events
             container.addEventListener('click', (e) => {
                 if(e.target != container) return;
