@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -103,7 +103,7 @@ async function parse(target) {
     const map = _.flattenDeep(nx.terms).map((keyword) =>({ keyword, count: obj.contentTrim.split(keyword).length - 1 }));
     const keywordCounts = _.orderBy(map, 'count', 'desc').map((info)=>`${info.keyword}: ${info.count}회`).join(', ');
     Object.assign(target.dataset, {
-        keywordCounts,
+        keywordCounts: keywordCounts ? `\n\n${keywordCounts}` : '',
         contentLengthTxt: obj.contentLengthTxt,
         contentLengthTrimTxt: obj.contentLengthTrimTxt,
     });
@@ -126,7 +126,7 @@ async function main() {
     [data-content-length-txt][data-content-length-trim-txt][data-keyword-counts]::before {
       display: block; margin: 15px 15px 0px; padding: 0.5rem 1rem; font-size: 12px; color: #000; white-space: pre-wrap;
       background-color: #efefef; border-radius: 8px;
-      content: '글자수 : ' attr(data-content-length-txt) '자 (공백제외: ' attr(data-content-length-trim-txt) '자)\\A\\A' attr(data-keyword-counts);
+      content: '글자수 : ' attr(data-content-length-txt) '자 (공백제외: ' attr(data-content-length-trim-txt) '자)' attr(data-keyword-counts);
     }
     `);
     // keyword NX
