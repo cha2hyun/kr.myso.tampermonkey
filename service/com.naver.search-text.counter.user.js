@@ -100,7 +100,7 @@ async function parse(target) {
     const res = await request(uri.toString());
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
     const obj = await contentLength(doc);
-    const map = _.flattenDeep(nx.terms).map((keyword) =>({ keyword, count: obj.content.split(keyword).length }));
+    const map = _.flattenDeep(nx.terms).map((keyword) =>({ keyword, count: obj.content.split(keyword).length - 1 }));
     const keywordCounts = _.orderBy(map, 'count', 'desc').map((info)=>`${info.keyword}: ${info.count}회`).join(', ');
     Object.assign(target.dataset, {
         keywordCounts,
