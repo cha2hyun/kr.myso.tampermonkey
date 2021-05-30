@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -16,15 +16,14 @@
 // ==/UserScript==
 const nx = {};
 async function nx_request_xhr(keyword) {
-    let dom = document.querySelector('.review_loading[data-api], [data-loading-class="u_pg_new_loading"][data-api]');
-    let url = (dom && dom.dataset && dom.dataset.api) || ('https://s.search.naver.com/p/review/search.naver?where=m_view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0');
-    let uri = new URL(url); uri.search = location.search;
+    let uri = new URL('https://s.search.naver.com/p/blog/search.naver?where=m_view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0'); uri.search = location.search;
     uri.searchParams.set('where', 'm_blog');
     uri.searchParams.set('query', keyword);
     uri.searchParams.set('main_q', keyword);
     uri.searchParams.set('mode', 'normal');
     uri.searchParams.delete('api_type');
     uri.searchParams.delete('mobile_more');
+    console.log(uri.toString());
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({ method: 'GET', url: uri.toString(), onerror: reject, onload: resolve, });
     });
