@@ -31,6 +31,6 @@
   position: fixed; z-index: 10000001;
   margin:auto; left: 0; top:0; right:0; bottom: 0; height: 100vh;
   animation: none;
-  content: '(광고)\A개발자 최원의 프로그램을 이용해주셔서 감사합니다.\A프로그램이 마음에 드셨다면, 개발자 최원을 후원해주세요.\A후원해주신 분들께 감사드립니다.\A\A이 화면을 누르시면, 3일간 등장하지 않습니다.\A\A\Ahttps://blog.naver.com/cw4196\A후원계좌 : 최원 3333-04-6073417 카카오뱅크';
+  content: '(광고)\A개발자 최원의 프로그램을 이용해주셔서 감사합니다.\A프로그램이 마음에 드셨다면, 개발자 최원을 후원해주세요.\A후원해주신 분들께 감사드립니다.\A\A이 화면을 누르시면, 3일간 등장하지 않습니다.\A\A\A---\Ahttps://blog.naver.com/cw4196\A후원계좌 : 최원 3333-04-6073417 카카오뱅크';
   background-color: rgba(0, 0, 0, 0.8); color: #fff; text-shadow: 1px 1px 2px black;
 }
