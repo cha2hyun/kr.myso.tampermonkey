@@ -32,7 +32,6 @@
                 let full = false;
                 full = full || container.classList.contains('donation-myso-fullscreen');
                 full = full || container.classList.contains('donation-myso-adblock');
-
                 let rect = container.getBoundingClientRect();
                 let size = 50, over = e.clientY < rect.top + size;
                 if(full || over) window.open('https://in.naverpp.com/donation', '__blog_myso_kr__');
