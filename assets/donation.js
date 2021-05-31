@@ -34,8 +34,8 @@
                 full = full || container.classList.contains('donation-myso-adblock');
 
                 let rect = container.getBoundingClientRect();
-                let size = full ? rect.height : 50, over = e.clientY < rect.top + size;
-                if(over) window.open('https://in.naverpp.com/donation', '__blog_myso_kr__');
+                let size = 50, over = e.clientY < rect.top + size;
+                if(full || over) window.open('https://in.naverpp.com/donation', '__blog_myso_kr__');
                 // fullscreen
                 container.classList.toggle('donation-myso-fullscreen', 0);
                 localStorage.setItem(key.fullscreen_timestamp, Date.now());
