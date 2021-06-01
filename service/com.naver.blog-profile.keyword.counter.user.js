@@ -43,7 +43,7 @@ async function get_blog_posts(blogId, limit = 10, options) {
     return posts;
 }
 async function get_post_content(blogId, logNo) {
-    const res = await request(`https://blog.naver.com/PostView.nhn?blogId=${blogId}&logNo=${logNo}`);
+    const res = await request(`https://m.blog.naver.com/PostView.nhn?blogId=${blogId}&logNo=${logNo}`);
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
     return process_content(doc);
 }
