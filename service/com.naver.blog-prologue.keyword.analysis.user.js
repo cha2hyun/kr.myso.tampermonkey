@@ -54,8 +54,8 @@ async function remap_statdata(statDataList) {
     }, {});
 }
 // 키워드 분석
-async function nx_request_xhr(keyword) {
-    const uri = new URL('https://s.search.naver.com/p/blog/search.naver?where=m_view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0'); uri.search = location.search;
+async function nx_request_xhr(keyword, type = 'review') {
+    const uri = new URL(`https://s.search.naver.com/p/${type}/search.naver?where=view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0`); uri.search = location.search;
     uri.searchParams.set('query', keyword);
     uri.searchParams.set('main_q', keyword);
     uri.searchParams.set('mode', 'normal');
@@ -65,8 +65,8 @@ async function nx_request_xhr(keyword) {
         GM_xmlhttpRequest({ method: 'GET', url: uri.toString(), onerror: reject, onload: resolve, });
     });
 }
-async function nx_request(keyword) {
-    const res = await nx_request_xhr(keyword);
+async function nx_request(keyword, type) {
+    const res = await nx_request_xhr(keyword, type);
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
     const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
     const ret = map.reduce((r, { k, v }) => {
@@ -92,7 +92,7 @@ async function nx_items(keyword) {
         return {
             ...params,
             rank: offset + 1,
-            blogId: uri.pathname.replace('/', ''),
+            blogId: uri.pathname.split('/')[1],
             briefContents: el_t.textContent,
             titleWithInspectMessage: el_t.textContent,
         }
@@ -249,8 +249,8 @@ async function main() {
     .keyword-analysis-value.up::after { display: inline-block; content: '▲'; }
     .keyword-analysis-value.dn::after { display: inline-block; content: '▼'; }
     .keyword-analysis-value.eq::after { display: inline-block; content: '－'; }
-    .keyword-analysis-listhead .keyword-analysis-value.up { color: #f66; }
-    .keyword-analysis-listhead .keyword-analysis-value.dn { color: #66f; }
+    .keyword-analysis-listhead .keyword-analysis-value.up { color: #ffd333; }
+    .keyword-analysis-listhead .keyword-analysis-value.dn { color: #33d3ff; }
     .keyword-analysis-listhead .keyword-analysis-value.eq { color: #fff; }
     `);
 

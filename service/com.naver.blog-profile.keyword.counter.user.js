@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 보유키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-profile.keyword.counter.user.js
 // @description  네이버 블로그 프로필에서 보유키워드를 확인할 수 있습니다.
 // @author       Won Choi
@@ -94,8 +94,8 @@ async function process_content(target) {
     return { section, content, contentTrim, contentLengthTxt, contentLengthTrimTxt }
 }
 // 키워드 분석
-async function nx_request_xhr(keyword) {
-    const uri = new URL('https://s.search.naver.com/p/blog/search.naver?where=m_view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0'); uri.search = location.search;
+async function nx_request_xhr(keyword, type = 'blog') {
+    const uri = new URL(`https://s.search.naver.com/p/${type}/search.naver?where=m_view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0`); uri.search = location.search;
     uri.searchParams.set('query', keyword);
     uri.searchParams.set('main_q', keyword);
     uri.searchParams.set('mode', 'normal');
@@ -105,8 +105,8 @@ async function nx_request_xhr(keyword) {
         GM_xmlhttpRequest({ method: 'GET', url: uri.toString(), onerror: reject, onload: resolve, });
     });
 }
-async function nx_request(keyword) {
-    const res = await nx_request_xhr(keyword);
+async function nx_request(keyword, type) {
+    const res = await nx_request_xhr(keyword, type);
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
     const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
     const ret = map.reduce((r, { k, v }) => {
@@ -119,11 +119,11 @@ async function nx_request(keyword) {
     return ret;
 }
 async function nx_terms(keyword) {
-    const res = await nx_request(keyword).catch(e=>null);
+    const res = await nx_request(keyword, 'blog').catch(e=>null);
     return _.flattenDeep(_.get(res, 'terms', []));
 }
 async function nx_items(keyword) {
-    const res = await nx_request_xhr(keyword);
+    const res = await nx_request_xhr(keyword, 'review');
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
     const listview = doc.querySelectorAll('.lst_total > li');
     return _.map(listview, (listitem, offset) => {
@@ -136,7 +136,7 @@ async function nx_items(keyword) {
         return {
             ...params,
             rank: offset + 1,
-            blogId: uri.pathname.replace('/', ''),
+            blogId: uri.pathname.split('/')[1],
             briefContents: el_t.textContent,
             titleWithInspectMessage: el_t.textContent,
         }
