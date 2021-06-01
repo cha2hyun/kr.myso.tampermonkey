@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.keyword.counter.user.js
 // @description  네이버 블로그&포스트 작성 중 포함된 키워드를 분석합니다.
 // @author       Won Choi
@@ -119,6 +119,7 @@ async function main() {
             const wrp = mnu.querySelector('.se-utils-item.se-utils-item-keywords') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-keywords'); mnu.prepend(wrp);
             const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-keywords'); btn.innerHTML = '<span class="se-utils-text">키워드 분석</span>'; wrp.append(btn);
             if(!window.__processing_content) {
+                wrp.dataset.processKeywordInfo = '[분석진행중]\n키워드 추출 및 분석 작업이 진행중입니다...\n아이콘의 회전이 멈출때까지 잠시 기다려 주세요.';
                 wrp.classList.toggle('se-utils-item-keywords-loading', window.__processing_content = true);
                 const { section } = await process_content(document);
                 const lines = _.reduce(section, (r,o)=>r.concat(o.data), []);
@@ -126,9 +127,9 @@ async function main() {
                 const chunk = _.chunk(block, 5);
                 const parse = await Promise.map(chunk, (block) => nx_terms(block.join(' ')), { concurrency: 10 });
                 const words = _.flattenDeep(parse), uniqs = _.uniq(words);
-                const count = _.orderBy(_.map(uniqs, (keyword)=>({ keyword, count: words.filter(v=>v==keyword).length })), 'count', 'desc');
-                const valid = _.filter(count, (o)=>o.count > 1);
-                wrp.dataset.processKeywordInfo = _.map(valid, o=>`${o.keyword} (${o.count})`).join('\n');
+                const count = _.orderBy(_.map(uniqs, (keyword)=>({ keyword, size: keyword.length, count: words.filter(v=>v==keyword).length })), ['count', 'size', 'keyword'], ['desc', 'asc', 'asc']);
+                const valid = _.filter(count, (o)=>o.count > 0);
+                wrp.dataset.processKeywordInfo = _.map(valid, o=>`${o.keyword} (${o.count})`).join('\n') || '[오류]\n키워드 본문이 너무 짧거나, 분석 결과를 산출 할 수 없습니다.';
                 wrp.classList.toggle('se-utils-item-keywords-loading', window.__processing_content = false);
             }
         }
