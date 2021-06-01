@@ -237,8 +237,8 @@ async function main() {
     .keyword-analysis-listview {}
     .keyword-analysis-listview li { display: flex; font-size:12px; height: 30px; padding: 5px 15px; align-items: center; justify-content: center; }
     .keyword-analysis-listview li > * {  }
-    .keyword-analysis-listview li > *:nth-child(1) { flex-grow:1; }
-    .keyword-analysis-listview li > *:nth-child(2) { display: flex; flex-direction: column; text-align: right; line-height: auto; }
+    .keyword-analysis-listview li > *:nth-child(1) { flex-grow:1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .keyword-analysis-listview li > *:nth-child(2) { min-width: 90px; display: flex; flex-direction: column; text-align: right; line-height: auto;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .keyword-analysis-listitem { }
     .keyword-analysis-listitem:hover { background: #efefef; }
     .keyword-analysis-listhead { background: #279b37; color:#fff; font-weight:bold; position: sticky; top: 40px;  }
