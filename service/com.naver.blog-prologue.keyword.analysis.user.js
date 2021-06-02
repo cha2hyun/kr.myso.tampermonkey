@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.10
+// @version      1.1.11
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -176,6 +176,7 @@ async function stat_data(blogId, step) {
         const resp = _.assign({}, item_prev, item);
         resp.d_cv_total = map_changes(resp.cv_total, resp.cv_total_prev);
         resp.d_rank = map_changes(resp.rank_prev, resp.rank);
+        resp.stats_group = _.map(resp.stats_group, (o)=>({ ..._.find(resp.ranks_group, _.pick(o, 'keyword')), ...o }));
         return resp;
     });
     return resp;
@@ -196,12 +197,18 @@ async function draw(blogId) {
           <li class="keyword-analysis-listhead keyword-analysis-rank keyword-analysis-rank{{rank}}">
             <h4>그룹:{{keygroup}}</h4>
             <a href="https://search.naver.com/search.naver?where=view&sm=tab_viw.blog&query={{keyword}}&mode={{mode}}" target="_blank" rel="noopener noreferrer">
-              <span class="keyword-analysis-value {{d_rank}} keyword-analysis-icon-{{mode}}">{{mode}} {{rank}}위</span>
+              <span class="keyword-analysis-value {{d_rank}}">{{mode}} {{rank}}위</span>
               <small class="keyword-analysis-value {{d_cv_total}}">누적 {{cv_total}}</small>
             </a>
           </li>
             {{#each stats_group}}
-            <li class="keyword-analysis-listhead keyword-analysis-listhead-sub"><h4>{{keyword}}</h4><div>누적 {{cv}}</div></li>
+            <li class="keyword-analysis-listhead keyword-analysis-listhead-sub">
+              <h4>{{keyword}}</h4>
+              <a href="https://search.naver.com/search.naver?where=view&sm=tab_viw.blog&query={{keyword}}&mode={{mode}}" target="_blank" rel="noopener noreferrer">
+                <span class="keyword-analysis-value">{{mode}} {{rank}}위</span>
+                <small class="keyword-analysis-value">누적 {{cv}}</small>
+              </a>
+            </li>
               {{#each stats}}
               <li class="keyword-analysis-listitem">
                 <h4>{{date}}</h4>
@@ -242,12 +249,13 @@ async function main() {
     .keyword-analysis-listview {}
     .keyword-analysis-listview li { display: flex; font-size:12px; height: 30px; padding: 5px 15px; align-items: center; justify-content: center; }
     .keyword-analysis-listview li > * {  }
-    .keyword-analysis-listview li > *:nth-child(1) { flex-grow:1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .keyword-analysis-listview li > *:nth-child(2) { min-width: 90px; display: flex; flex-direction: column; text-align: right; line-height: auto;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .keyword-analysis-listview li > *:nth-child(1) { flex-grow:1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; }
+    .keyword-analysis-listview li > *:nth-child(2) { min-width: 90px; display: flex; flex-direction: column; text-align: right; line-height: auto;  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: none; }
     .keyword-analysis-listitem { }
     .keyword-analysis-listitem:hover { background: #efefef; }
     .keyword-analysis-listhead { background: #279b37; color:#fff; font-weight:bold; position: sticky; top: 40px;  }
     .keyword-analysis-listhead-sub { background: #0abf53; color:#fff; font-weight:bold; position: sticky; top: 80px; }
+    .keyword-analysis-listhead-sub a { color: #fff; }
     .keyword-analysis-icon-image::before { display: none; content: '\\1F5BC\\FE0F'; margin-right: 0.5rem; }
     .keyword-analysis-icon-normal::before { display: none; content: '\\1F4DD'; margin-right: 0.5rem; }
     .keyword-analysis-icon-timeline::before { display: none; content: '\\1F551'; margin-right: 0.5rem; }
@@ -257,7 +265,7 @@ async function main() {
     .keyword-analysis-value.up::after { display: inline-block; content: '▲'; }
     .keyword-analysis-value.dn::after { display: inline-block; content: '▼'; }
     .keyword-analysis-value.eq::after { display: inline-block; content: '－'; }
-    .keyword-analysis-rank > *:nth-child(2) { background: #f3f4f7; padding: 0.3rem; text-decoration: none; }
+    .keyword-analysis-rank > *:nth-child(2) { background: #f3f4f7; padding: 0.3rem; }
     .keyword-analysis-rank { background-color: #021e2f !important; font-weight: bold; }
     .keyword-analysis-rank1 { background-color: #0097dc !important; }
     .keyword-analysis-rank2 { background-color: #005abb !important; }
