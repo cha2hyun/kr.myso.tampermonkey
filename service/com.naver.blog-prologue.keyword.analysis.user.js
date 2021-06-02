@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.0
+// @version      1.1.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -138,25 +138,20 @@ async function stat(blogId, step = 3) {
         const ranks_group = await Promise.map(items, async (keyword) => {
             Toastify({ text: `"${keyword}" 키워드 종합 순위 가져오는 중...` }).showToast();
             const items_search_n = await nx_items(keyword, 'review', 'normal');
-            const items_search_t = await nx_items(keyword, 'review', 'timeline');
             const items_search_i = await nx_items(keyword, 'review', 'image');
-            const items_search = _.concat([], items_search_n, items_search_t, items_search_i);
+            const items_search = _.concat([], items_search_n, items_search_i);
             const items = _.filter(items_search, { blogId });
-            const item = _.minBy(items, 'rank');
-            const rank = _.get(item, 'rank', 0);
-            const type = _.get(item, 'type', '');
-            const mode = _.get(item, 'mode', '');
+            const item = _.minBy(items.filter(o=>o.rank), 'rank');
+            const data = _.assign({ rank: 0, type: 'review', mode: 'normal' }, _.pick(item, 'rank', 'type', 'mode'));
             const date = dateNowISO;
-            return { date, keyword, item, type, mode, rank };
+            return { date, keyword, item, ...data };
         });
-        const rank_item = _.minBy(ranks_group.filter(o=>!!o.rank), 'rank');
-        const keyword = _.get(rank_item, 'keyword', '');
-        const rank = _.get(rank_item, 'rank', 0);
-        const type = _.get(rank_item, 'type', '');
-        const mode = _.get(rank_item, 'mode', '');
+        const rank_null = _.minBy(ranks_group, 'rank');
+        const rank_item = _.minBy(ranks_group.filter(o=>o.rank), 'rank');
+        const rank_data = _.assign({ keyword: (rank_null ? rank_null.keyword : ''), rank: 0, type: 'review', mode: 'normal' }, _.pick(rank_item, 'keyword', 'rank', 'type', 'mode'));
         const cv = _.mapValues(_.groupBy(stats, 'date'), (items)=>_.sumBy(items, 'cv'));
         const cv_total = _.reduce(cv, (r, v)=>r+v, 0);
-        return { keygroup, cv, cv_total, type, mode, rank, keyword, rank_item, ranks_group, stats_group }
+        return { keygroup, cv, cv_total, rank_item, ranks_group, stats_group, ...rank_data }
     }, { concurrency: 3 });
     const cv = _.reduce(dates, (cv, date)=>(cv[date] = _.sumBy(keywords_map, (item)=>_.get(item.cv, date, 0)), cv), {});
     const cv_total = _.sumBy(keywords_map, 'cv_total');
