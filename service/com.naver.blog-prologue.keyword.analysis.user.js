@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -144,7 +144,7 @@ async function stat(blogId, step = 3) {
             const date = dateNowISO;
             return { date, keyword, item, rank };
         });
-        const rank_item = _.minBy(ranks_group, 'rank');
+        const rank_item = _.minBy(ranks_group.filter(o=>!!o.rank), 'rank');
         const rank = _.get(rank_item, 'rank', 0);
         const cv = _.mapValues(_.groupBy(stats, 'date'), (items)=>_.sumBy(items, 'cv'));
         const cv_total = _.reduce(cv, (r, v)=>r+v, 0);
