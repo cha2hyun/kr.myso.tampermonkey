@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.1
+// @version      1.1.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -137,9 +137,7 @@ async function stat(blogId, step = 3) {
         const items = _.uniq(_.map(stats, o=>o.searchQuery));
         const ranks_group = await Promise.map(items, async (keyword) => {
             Toastify({ text: `"${keyword}" 키워드 종합 순위 가져오는 중...` }).showToast();
-            const items_search_n = await nx_items(keyword, 'review', 'normal');
-            const items_search_i = await nx_items(keyword, 'review', 'image');
-            const items_search = _.concat([], items_search_n, items_search_i);
+            const items_search = await nx_items(keyword, 'blog', 'normal');
             const items = _.filter(items_search, { blogId });
             const item = _.minBy(items.filter(o=>o.rank), 'rank');
             const data = _.assign({ rank: 0, type: 'review', mode: 'normal' }, _.pick(item, 'rank', 'type', 'mode'));
@@ -193,8 +191,8 @@ async function draw(blogId) {
           {{#each keywords}}
           <li class="keyword-analysis-listhead keyword-analysis-rank keyword-analysis-rank{{rank}}">
             <h4>그룹:{{keygroup}}</h4>
-            <a href="https://search.naver.com/search.naver?where=view&query={{keyword}}&mode={{mode}}" target="_blank" rel="noopener noreferrer">
-              <span class="keyword-analysis-value {{d_rank}} keyword-analysis-icon-{{mode}}">{{mode}} {{rank}}위</span>
+            <a href="https://search.naver.com/search.naver?where=blog&query={{keyword}}" target="_blank" rel="noopener noreferrer">
+              <span class="keyword-analysis-value {{d_rank}} keyword-analysis-icon-{{mode}}">{{type}} {{rank}}위</span>
               <small class="keyword-analysis-value {{d_cv_total}}">누적 {{cv_total}}</small>
             </a>
           </li>
