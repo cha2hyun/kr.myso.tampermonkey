@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.11
+// @version      1.1.20
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -19,6 +19,7 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/localforage/1.9.0/localforage.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js
 // ==/UserScript==
+let keyword_analysis_toast;
 moment.tz.setDefault("Asia/Seoul");
 
 async function request(url, options = { method: 'GET' }) { return new Promise((resolve, reject) => { GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options)); }); }
@@ -110,7 +111,7 @@ async function stat(blogId, step = 3) {
     const dateNowISO = moment().toISOString(true);
     const dates = _.map(range, (offset)=>moment().subtract(offset, 'days').format('YYYY-MM-DD'));
     const stats = await Promise.map(dates, async (date) => {
-        Toastify({ text: `${date} 키워드 유입 통계 가져오는 중...` }).showToast();
+        if(keyword_analysis_toast) keyword_analysis_toast.textContent = `${date} 키워드 유입 통계 가져오는 중...`;
         const data = await request_stat(blogId, date);
         const maps = await remap_statdata(data && data.statDataList);
         return maps;
@@ -137,7 +138,7 @@ async function stat(blogId, step = 3) {
         });
         const items = _.uniq(_.map(stats, o=>o.searchQuery));
         const ranks_group = await Promise.map(items, async (keyword) => {
-            Toastify({ text: `"${keyword}" 키워드 종합 순위 가져오는 중...` }).showToast();
+            if(keyword_analysis_toast) keyword_analysis_toast.textContent = `"${keyword}" 키워드 종합 순위 가져오는 중...`;
             const items_search_n = await nx_items(keyword, 'review', 'normal');
             const items_search_t = await nx_items(keyword, 'review', 'timeline');
             const items_search_i = await nx_items(keyword, 'review', 'image');
@@ -159,7 +160,7 @@ async function stat(blogId, step = 3) {
     const cv_total = _.sumBy(keywords_map, 'cv_total');
     const keywords = _.orderBy(keywords_map, ['cv_total', 'rank'], ['desc', 'asc']);
     const data = { cv, cv_total, keywords };
-    Toastify({ text: `${keywords_map.length}개의 키워드 그룹 순위 가져오기 완료` }).showToast();
+    if(keyword_analysis_toast) keyword_analysis_toast.textContent = `${keywords_map.length}개의 키워드 그룹 순위 가져오기 완료`;
     return data;
 }
 async function stat_data(blogId, step) {
@@ -183,6 +184,7 @@ async function stat_data(blogId, step) {
 }
 async function draw(blogId) {
     const wrap = document.querySelector('#keyword-analysis') || document.createElement('div'); wrap.id = 'keyword-analysis'; document.body.prepend(wrap);
+    const msgs = keyword_analysis_toast = wrap.querySelector('.keyword-analysis-toast') || document.createElement('div'); msgs.classList.add('keyword-analysis-toast'); wrap.append(msgs);
     const step = 30; // 범위 고정
     const data = await stat_data(blogId, step); data.step = step;
     const tmpl = Handlebars.compile(`
@@ -244,6 +246,14 @@ async function main() {
     .keyword-analysis:hover { width: 480px; }
     .keyword-analysis-body {
       flex-grow: 1; overflow-y: auto;
+    }
+    .keyword-analysis-toast {
+      position: fixed; z-index: 100001;
+      margin:auto; left: 0; top: 5rem; right: 0; bottom: auto;
+      width:50%; height: 1.5rem; font-size: 1rem; background: #fff; color: #333;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
     }
     .keyword-analysis-subhead { background: #52565e; color:#fff; font-weight:bold; position: sticky; top: 0; font-size:12px; height: 30px; padding: 5px 15px; display: flex; align-items: center; justify-content: center; }
     .keyword-analysis-listview {}
