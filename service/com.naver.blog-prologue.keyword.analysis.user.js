@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -188,7 +188,7 @@ async function draw(blogId) {
         </h3>
         <ul class="keyword-analysis-listview">
           {{#each keywords}}
-          <li class="keyword-analysis-listhead">
+          <li class="keyword-analysis-listhead keyword-analysis-rank keyword-analysis-rank{{rank}}">
             <h4>그룹:{{keygroup}}</h4>
             <div>
               <span class="keyword-analysis-value {{d_rank}}">{{rank}}위</span>
@@ -249,9 +249,14 @@ async function main() {
     .keyword-analysis-value.up::after { display: inline-block; content: '▲'; }
     .keyword-analysis-value.dn::after { display: inline-block; content: '▼'; }
     .keyword-analysis-value.eq::after { display: inline-block; content: '－'; }
-    .keyword-analysis-listhead .keyword-analysis-value.up { color: #ffd333; }
-    .keyword-analysis-listhead .keyword-analysis-value.dn { color: #33d3ff; }
-    .keyword-analysis-listhead .keyword-analysis-value.eq { color: #fff; }
+    .keyword-analysis-rank > *:nth-child(2) { background: #f3f4f7; padding: 0.3rem; }
+    .keyword-analysis-rank { background-color: #021e2f !important; font-weight: bold; }
+    .keyword-analysis-rank1 { background-color: #0097dc !important; }
+    .keyword-analysis-rank2 { background-color: #005abb !important; }
+    .keyword-analysis-rank3 { background-color: #00539f !important; }
+    .keyword-analysis-rank4 { background-color: #003b6a !important; }
+    .keyword-analysis-rank5 { background-color: #002b46 !important; }
+    .keyword-analysis-rank0 { background-color: #343735; !important }
     `);
 
     Handlebars.registerHelper('toFixed_2', (v) => v.toFixed(2));
