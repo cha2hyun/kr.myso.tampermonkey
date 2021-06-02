@@ -195,7 +195,7 @@ async function draw(blogId) {
           {{#each keywords}}
           <li class="keyword-analysis-listhead keyword-analysis-rank keyword-analysis-rank{{rank}}">
             <h4>그룹:{{keygroup}}</h4>
-            <a href="https://search.naver.com/search.naver?where=view&sm=tab_viw.blog&query={{keyword}}" target="_blank" rel="noopener noreferrer">
+            <a href="https://search.naver.com/search.naver?where=view&sm=tab_viw.blog&query={{keyword}}&mode={{mode}}" target="_blank" rel="noopener noreferrer">
               <span class="keyword-analysis-value {{d_rank}} keyword-analysis-icon-{{mode}}">{{mode}} {{rank}}위</span>
               <small class="keyword-analysis-value {{d_cv_total}}">누적 {{cv_total}}</small>
             </a>
