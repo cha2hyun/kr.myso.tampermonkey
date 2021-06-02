@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
@@ -54,19 +54,19 @@ async function remap_statdata(statDataList) {
     }, {});
 }
 // 키워드 분석
-async function nx_request_xhr(keyword, type = 'review') {
-    const uri = new URL(`https://s.search.naver.com/p/${type}/search.naver?where=view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0`); uri.search = location.search;
+async function nx_request_xhr(keyword, type = 'review', mode = 'normal') {
+    const uri = new URL(`https://s.search.naver.com/p/${type}/search.naver?where=view&query=&main_q=&mode=normal&ac=1&aq=0&spq=0`);
     uri.searchParams.set('query', keyword);
     uri.searchParams.set('main_q', keyword);
-    uri.searchParams.set('mode', 'normal');
+    uri.searchParams.set('mode', mode);
     uri.searchParams.delete('api_type');
     uri.searchParams.delete('mobile_more');
     return new Promise((resolve, reject) => {
         GM_xmlhttpRequest({ method: 'GET', url: uri.toString(), onerror: reject, onload: resolve, });
     });
 }
-async function nx_request(keyword, type) {
-    const res = await nx_request_xhr(keyword, type);
+async function nx_request(keyword, type = 'review', mode = 'normal') {
+    const res = await nx_request_xhr(keyword, type, mode);
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
     const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
     const ret = map.reduce((r, { k, v }) => {
@@ -78,19 +78,19 @@ async function nx_request(keyword, type) {
     }, {});
     return ret;
 }
-async function nx_items(keyword) {
-    const res = await nx_request_xhr(keyword);
+async function nx_items(keyword, type = 'review', mode = 'normal') {
+    const res = await nx_request_xhr(keyword, type, mode);
     const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
-    const listview = doc.querySelectorAll('.lst_total > li');
+    const listview = doc.querySelectorAll('.lst_total > li, .timeline_list > li, .media_list > li');
     return _.map(listview, (listitem, offset) => {
-        const el_n = listitem.querySelector('.sub_name');
         const el_t = listitem.querySelector('.total_tit');
         const el_d = listitem.querySelector('.dsc_txt');
-        if(!el_n || !el_t || !el_d) return;
+        if(!el_t || !el_d) return;
         const uri = new URL(el_t.href), params = Object.fromEntries(uri.searchParams.entries());
         if(!uri.hostname.includes('blog.naver.com')) return;
         return {
             ...params,
+            keyword, type, mode,
             rank: offset + 1,
             blogId: uri.pathname.split('/')[1],
             briefContents: el_t.textContent,
@@ -136,19 +136,27 @@ async function stat(blogId, step = 3) {
         });
         const items = _.uniq(_.map(stats, o=>o.searchQuery));
         const ranks_group = await Promise.map(items, async (keyword) => {
-            Toastify({ text: `"${keyword}" 키워드 순위 가져오는 중...` }).showToast();
-            const items_search = await nx_items(keyword);
+            Toastify({ text: `"${keyword}" 키워드 종합 순위 가져오는 중...` }).showToast();
+            const items_search_n = await nx_items(keyword, 'review', 'normal');
+            const items_search_t = await nx_items(keyword, 'review', 'timeline');
+            const items_search_i = await nx_items(keyword, 'review', 'image');
+            const items_search = _.concat([], items_search_n, items_search_t, items_search_i);
             const items = _.filter(items_search, { blogId });
             const item = _.minBy(items, 'rank');
             const rank = _.get(item, 'rank', 0);
+            const type = _.get(item, 'type', '');
+            const mode = _.get(item, 'mode', '');
             const date = dateNowISO;
-            return { date, keyword, item, rank };
+            return { date, keyword, item, type, mode, rank };
         });
         const rank_item = _.minBy(ranks_group.filter(o=>!!o.rank), 'rank');
+        const keyword = _.get(rank_item, 'keyword', '');
         const rank = _.get(rank_item, 'rank', 0);
+        const type = _.get(rank_item, 'type', '');
+        const mode = _.get(rank_item, 'mode', '');
         const cv = _.mapValues(_.groupBy(stats, 'date'), (items)=>_.sumBy(items, 'cv'));
         const cv_total = _.reduce(cv, (r, v)=>r+v, 0);
-        return { keygroup, cv, cv_total, rank, rank_item, ranks_group, stats_group }
+        return { keygroup, cv, cv_total, type, mode, rank, keyword, rank_item, ranks_group, stats_group }
     }, { concurrency: 3 });
     const cv = _.reduce(dates, (cv, date)=>(cv[date] = _.sumBy(keywords_map, (item)=>_.get(item.cv, date, 0)), cv), {});
     const cv_total = _.sumBy(keywords_map, 'cv_total');
@@ -190,10 +198,10 @@ async function draw(blogId) {
           {{#each keywords}}
           <li class="keyword-analysis-listhead keyword-analysis-rank keyword-analysis-rank{{rank}}">
             <h4>그룹:{{keygroup}}</h4>
-            <div>
-              <span class="keyword-analysis-value {{d_rank}}">{{rank}}위</span>
+            <a href="https://search.naver.com/search.naver?where=view&query={{keyword}}&mode={{mode}}" target="_blank" rel="noopener noreferrer">
+              <span class="keyword-analysis-value {{d_rank}} keyword-analysis-icon-{{mode}}">{{mode}} {{rank}}위</span>
               <small class="keyword-analysis-value {{d_cv_total}}">누적 {{cv_total}}</small>
-            </div>
+            </a>
           </li>
             {{#each stats_group}}
             <li class="keyword-analysis-listhead keyword-analysis-listhead-sub"><h4>{{keyword}}</h4><div>누적 {{cv}}</div></li>
@@ -243,13 +251,16 @@ async function main() {
     .keyword-analysis-listitem:hover { background: #efefef; }
     .keyword-analysis-listhead { background: #279b37; color:#fff; font-weight:bold; position: sticky; top: 40px;  }
     .keyword-analysis-listhead-sub { background: #0abf53; color:#fff; font-weight:bold; position: sticky; top: 80px; }
+    .keyword-analysis-icon-image::before { display: none; content: '\\1F5BC\\FE0F'; margin-right: 0.5rem; }
+    .keyword-analysis-icon-normal::before { display: none; content: '\\1F4DD'; margin-right: 0.5rem; }
+    .keyword-analysis-icon-timeline::before { display: none; content: '\\1F551'; margin-right: 0.5rem; }
     .keyword-analysis-value.up { color: #f00; }
     .keyword-analysis-value.dn { color: #00f; }
     .keyword-analysis-value.eq { color: #333; }
     .keyword-analysis-value.up::after { display: inline-block; content: '▲'; }
     .keyword-analysis-value.dn::after { display: inline-block; content: '▼'; }
     .keyword-analysis-value.eq::after { display: inline-block; content: '－'; }
-    .keyword-analysis-rank > *:nth-child(2) { background: #f3f4f7; padding: 0.3rem; }
+    .keyword-analysis-rank > *:nth-child(2) { background: #f3f4f7; padding: 0.3rem; text-decoration: none; }
     .keyword-analysis-rank { background-color: #021e2f !important; font-weight: bold; }
     .keyword-analysis-rank1 { background-color: #0097dc !important; }
     .keyword-analysis-rank2 { background-color: #005abb !important; }
