@@ -32,7 +32,7 @@
     const container = (document.head || document.body || document.documentElement);
     const element = document.createElement('script');
     element.setAttribute('type', 'text/javascript');
-    const remote = (()=>{ try { new URL(script); return true; } catch(e) { return false; } })();
+    const remote = (()=>{ try { return !!new URL(script); } catch(e) { return !1; } })();
     if(remote) { element.setAttribute('src', script); } else { element.textContent = `(${script})()`; }
     container.append(element);
     element.onload = function() { container.removeChild(element); };
