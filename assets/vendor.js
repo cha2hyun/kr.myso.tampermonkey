@@ -33,11 +33,7 @@
     const element = document.createElement('script');
     element.setAttribute('type', 'text/javascript');
     const remote = (()=>{ try { new URL(script); return true; } catch(e) { return false; } })();
-    if(remote) {
-      element.setAttribute('src', script);
-    } else {
-      element.textContent = `(${script})()`;
-    }
+    if(remote) { element.setAttribute('src', script); } else { element.textContent = `(${script})()`; }
     container.append(element);
     element.onload = function() { container.removeChild(element); };
     setTimeout(function(){ container.removeChild(element); }, 300);
