@@ -36,7 +36,7 @@
     if(remote) { element.setAttribute('src', script); } else { element.textContent = `(${script})()`; }
     container.append(element);
     element.onload = function() { container.removeChild(element); };
-    setTimeout(function(){ container.removeChild(element); }, 300);
+    setTimeout(function(){ try{ container.removeChild(element); } catch(e) {} }, 300);
   }
   window.GM_addScript = window.GM_addScript || window.inject_js;
 })(window);
