@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         스마트에디터ONE Word문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 Word문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
@@ -33,12 +33,12 @@ window.addEventListener("message", async ({ data, origin }) => {
     const from = (!window.GM_xmlhttpRequest) ? 'foreground' : 'background';
     if(!data || origin != location.origin || from == data.from) return;
     if(from == 'background' && data.from == 'foreground' && data.type == 'xhr') {
-        const req = request(data.url, data.options);
+        const req = GM_xmlhttpRequestCORS(data.url, data.options);
         req.then ((v)=>window.postMessage({ from, type: 'xhr.resolve', token: data.token, data: v }, location.origin));
         req.catch((e)=>window.postMessage({ from, type: 'xhr.reject' , token: data.token, data: e }, location.origin));
     }
 }, false);
-async function request(url, options = { method: 'GET' }) {
+async function GM_xmlhttpRequestCORS(url, options = { method: 'GET' }) {
     const from = (!window.GM_xmlhttpRequest) ? 'foreground' : 'background';
     if(from == 'foreground') {
         return new Promise((resolve, reject) => {
@@ -226,7 +226,7 @@ async function transformDocument(content) {
             const match = /^data:(?<mime>[\w/\-\.\+]+);(?<encoding>\w+),(?<data>.*)$/.exec(image);
             return b64toBlob(match.groups.data, match.groups.mime);
         }else{
-            return request(image, { responseType: 'blob' });
+            return GM_xmlhttpRequestCORS(image, { responseType: 'blob' });
         }
     }
     const container_image = async (image, ratio = 1) => {
@@ -458,7 +458,7 @@ async function main() {
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js');
-    GM_addScript(`()=>{ window.request = ${request}; }`);
+    GM_addScript(`()=>{ window.GM_xmlhttpRequestCORS = ${GM_xmlhttpRequestCORS}; }`);
     GM_addStyle(`
     @keyframes spin1 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
     .se-utils > ul > li > button { margin-top: 14px !important; }
