@@ -491,7 +491,7 @@ async function main() {
                         if(cfrm) window.open('https://in.naverpp.com/donation');
                         return;
                     }
-                    if(randomize < 5) { window.open('https://in.naverpp.com/donation', 'width=600, height=800'); }
+                    if(randomize < 5) { window.open('https://in.naverpp.com/donation', 'naverpp_donation', 'width=600, height=800'); }
                     let imgs;
                     do {
                         const cnt = document.querySelector('.se-content');
