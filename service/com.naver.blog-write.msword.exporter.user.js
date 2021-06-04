@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         스마트에디터ONE Word문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 Word문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
@@ -264,14 +264,18 @@ async function transformDocument(content) {
             children.push(...convs.flat());
         }
         if(item.type == 'image') {
-            const items = _.zip(item.image, item.description);
-            const convs = await Promise.map(items, async ([ image, description ]) => {
+            const image = await Promise.map(item.image, async (image) => {
                 return [
                     await container_image(image),
+                ];
+            });
+            children.push(...image.flat());
+            const description = await Promise.map(item.description, async (description) => {
+                return [
                     new docx.Paragraph({ children: [ new docx.TextRun({ text: description }) ], alignment: docx.AlignmentType.CENTER, }),
                 ];
             });
-            children.push(...convs.flat());
+            children.push(...description.flat());
         }
         if(item.type == 'video') {
             const items = _.zip(item.image, item.title, item.description, item.time);
