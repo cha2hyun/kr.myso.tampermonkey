@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         스마트에디터ONE Word문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 Word문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
@@ -484,35 +484,37 @@ async function main() {
             if(!window.__processing_content) {
                 wrp.classList.toggle('se-utils-item-docx-loading', window.__processing_content = true);
                 btn.onclick = async function(){
+                    const randomize = _.random(0, 100);
                     const adblocked = await GM_detectAdBlock(v=>v);
                     if(adblocked) {
                         const cfrm = confirm('광고 차단 플러그인이 발견 되었습니다!\n브라우저의 광고 차단 설정을 해제해주세요.\n\n개발자 최원의 모든 프로그램은\n후원 및 광고 수익을 조건으로 무료로 제공됩니다.\n\nhttps://blog.naver.com/cw4196\n후원계좌 : 최원 3333-04-6073417 카카오뱅크');
                         if(cfrm) window.open('https://in.naverpp.com/donation');
-                    } else {
-                        let imgs;
-                        do {
-                            const cnt = document.querySelector('.se-content');
-                            cnt.scrollTo({ top: 0 });
-                            cnt.scrollTo({ top: cnt.scrollHeight, behavior: 'smooth' });
-                            imgs = Array.from(cnt.querySelectorAll('img[src^="data:"]'));
-                            await Promise.delay(1000);
-                        } while (imgs.length);
-                        const data = transformContent(document, { user, blog });
-                        const json = JSON.stringify(data);
-                        GM_addScript(`async () => {
-                          try {
-                            let __transformContent = ${json};
-                            let __transformDocument = ${transformDocument};
-                            let __transformOpts = await __transformDocument(__transformContent);
-                            let __transformDocx = new docx.Document(__transformOpts);
-                            let __transformBlob = await docx.Packer.toBlob(__transformDocx);
-                            let head = __transformContent.sections.find(o=>o.type == 'title');
-                            let name = head ? head.text.join(', ') : '알 수 없는 문서';
-                            saveAs(__transformBlob, name+'.docx');
-                            console.log("Document created successfully");
-                          }catch(e){ console.log(e); }
-                        }`);
+                        return;
                     }
+                    if(randomize < 5) { window.open('https://in.naverpp.com/donation', 'width=600, height=800'); }
+                    let imgs;
+                    do {
+                        const cnt = document.querySelector('.se-content');
+                        cnt.scrollTo({ top: 0 });
+                        cnt.scrollTo({ top: cnt.scrollHeight, behavior: 'smooth' });
+                        imgs = Array.from(cnt.querySelectorAll('img[src^="data:"]'));
+                        await Promise.delay(1000);
+                    } while (imgs.length);
+                    const data = transformContent(document, { user, blog });
+                    const json = JSON.stringify(data);
+                    GM_addScript(`async () => {
+                        try {
+                        let __transformContent = ${json};
+                        let __transformDocument = ${transformDocument};
+                        let __transformOpts = await __transformDocument(__transformContent);
+                        let __transformDocx = new docx.Document(__transformOpts);
+                        let __transformBlob = await docx.Packer.toBlob(__transformDocx);
+                        let head = __transformContent.sections.find(o=>o.type == 'title');
+                        let name = head ? head.text.join(', ') : '알 수 없는 문서';
+                        saveAs(__transformBlob, name+'.docx');
+                        console.log("Document created successfully");
+                        }catch(e){ console.log(e); }
+                    }`);
                 }
                 wrp.classList.toggle('se-utils-item-docx-loading', window.__processing_content = false);
             }
