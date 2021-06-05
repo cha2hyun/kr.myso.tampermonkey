@@ -28,7 +28,7 @@
     window.NB_blogStat = async function NB_blogStat(blogId, date = Date.now()) {
         const referer = `https://m.blog.naver.com/${blogId}`;
         const uri = new URL(`https://blog.stat.naver.com/api/blog/user/referer/search?timeDimension=DATE&startDate=${date_format(date)}&exclude=&_=${Date.now()}`);
-        const res = await request(uri.toString(), { headers: { referer } });
+        const res = await GM_xmlhttpRequestCORSAsync(uri.toString(), { headers: { referer } });
         const data = eval(`(${res.responseText})`);
         return data && data.result;
     }
