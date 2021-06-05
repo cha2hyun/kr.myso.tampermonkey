@@ -1,5 +1,16 @@
 // ---------------------
 (function(window) {
+  window.GM_App = function(callback) {
+    function _requestIdleCallback(callback) {
+        if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
+        return requestIdleCallback(callback);
+    }
+    function checkForDOM() { return (document.body) ? callback() : _requestIdleCallback(checkForDOM); }
+    _requestIdleCallback(checkForDOM);
+  }
+})(window);
+// ---------------------
+(function(window) {
   window.__queueDelay = 1000 * 15;
   window.__queueTimer;
   window.__queues = [];
