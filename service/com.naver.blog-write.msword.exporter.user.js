@@ -1,14 +1,13 @@
 // ==UserScript==
 // @name         스마트에디터ONE MSWord문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.1
+// @version      1.1.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/*/postwrite
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
-// @match        *://blog.naver.com/PostView.nhn?*
 // @match        *://blog.editor.naver.com/editor*
 // @connect      naver.com
 // @connect      pstatic.net
@@ -303,12 +302,10 @@ async function transformDocument(content) {
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addScript('https://unpkg.com/docx@6.0.3/build/index.js');
-    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js');
     GM_addStyle(`
-    @keyframes spin1 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
     .se-utils > ul > li > button { margin-top: 14px !important; }
     .se-util-button-docx::before {
       display: inline-block; width: 37px; height: 37px;
