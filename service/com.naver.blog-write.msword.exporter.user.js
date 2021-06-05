@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         스마트에디터ONE MSWord문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.0
+// @version      1.1.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
@@ -17,7 +17,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor.js?v=8
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=2
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
@@ -268,6 +268,22 @@ async function transformDocument(content) {
                 ];
             });
             children.push(...convs.flat());
+        }
+        if(item.type == 'material') {
+            const items = _.zip(item.image, item.title);
+            const convs = await Promise.map(items, async ([ image, title ]) => {
+                return [
+                    await container_image(image),
+                    new docx.Paragraph({ alignment: docx.AlignmentType.CENTER, children: [ new docx.TextRun({ text: title, bold: 1 }) ] }),
+                ];
+            });
+            children.push(...convs.flat());
+            const description = await Promise.map(item.description, async (description) => {
+                return [
+                    new docx.Paragraph({ alignment: docx.AlignmentType.CENTER, children: [ new docx.TextRun({ text: description }) ] }),
+                ];
+            });
+            children.push(...description.flat());
         }
         return children.length && container(children.flat());
     });
