@@ -1,198 +1,27 @@
 // ==UserScript==
-// @name         스마트에디터ONE Word문서(*.docx) 내보내기
+// @name         스마트에디터ONE MSWord문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
-// @description  네이버 블로그 스마트에디터ONE의 편집 내용을 Word문서(*.docx)로 내보낼 수 있습니다.
+// @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
-// @match        *://blog.naver.com/*/*
-// @match        *://m.blog.naver.com/*/*
+// @match        *://blog.naver.com/*/postwrite
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
 // @match        *://blog.naver.com/PostView.nhn?*
-// @match        *://m.blog.naver.com/PostView.nhn?*
 // @match        *://blog.editor.naver.com/editor*
-// @match        *://post.editor.naver.com/editor*
-// @match        *://m.post.editor.naver.com/editor*
-// @match        *://post.naver.com/viewer/postView.nhn?*
-// @match        *://m.post.naver.com/viewer/postView.nhn?*
-// @match        *://blog.naver.com/lib/smarteditor2/*/smart_editor2_inputarea.html
 // @connect      naver.com
 // @connect      pstatic.net
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://tampermonkey.myso.kr/assets/vendor.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/vendor.js?v=8
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
-// @require      https://unpkg.com/docx@6.0.3/build/index.js
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js
 // ==/UserScript==
-window.addEventListener("message", async ({ data, origin }) => {
-    const from = (!window.GM_xmlhttpRequest) ? 'foreground' : 'background';
-    if(!data || origin != location.origin || from == data.from) return;
-    if(from == 'background' && data.from == 'foreground' && data.type == 'xhr') {
-        const req = GM_xmlhttpRequestCORS(data.url, data.options);
-        req.then ((v)=>window.postMessage({ from, type: 'xhr.resolve', token: data.token, data: v }, location.origin));
-        req.catch((e)=>window.postMessage({ from, type: 'xhr.reject' , token: data.token, data: e }, location.origin));
-    }
-}, false);
-async function GM_xmlhttpRequestCORS(url, options = { method: 'GET' }) {
-    const from = (!window.GM_xmlhttpRequest) ? 'foreground' : 'background';
-    if(from == 'foreground') {
-        return new Promise((resolve, reject) => {
-            const token = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-            function callback({ data, origin }) {
-                if(!data || origin != location.origin || from == data.uuid || token != data.token) return;
-                if(from == 'foreground' && data.from == 'background' && data.type == 'xhr.resolve') {
-                    window.removeEventListener("message", callback); resolve(data.data);
-                }
-                if(from == 'foreground' && data.from == 'background' && data.type == 'xhr.reject') {
-                    window.removeEventListener("message", callback); reject(data.data);
-                }
-            }
-            window.addEventListener("message", callback, false);
-            window.postMessage({ type: 'xhr', token, from, url, options }, location.origin);
-        });
-    }
-    if(from == 'background') {
-        const resp = await new Promise((resolve, reject) => { GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options)); });
-        return resp && resp.response;
-    }
-}
-// 블로그분석
-async function request2(url, options = { method: 'GET' }) { return new Promise((resolve, reject) => { GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options)); }); }
-async function request2_blog(blogId, action, params = {}) {
-    const referer = `https://m.blog.naver.com/${blogId}`;
-    const uri = new URL(`https://m.blog.naver.com/rego/${action}.naver?blogId=${blogId}`); _.map(params, (v, k) => uri.searchParams.set(k, v));
-    const res = await request2(uri.toString(), { headers: { referer } });
-    const data = eval(`('${res.responseText})`);
-    return data && data.result;
-}
-// ------------------------------------
-function transformComponent(component) {
-    const section = {};
-    if(component.classList.contains('se-documentTitle')) {
-        section.type = 'title';
-        section.text = Array.from(component.querySelectorAll('.se-text-paragraph')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-text')) {
-        section.type = 'text';
-        section.text = Array.from(component.querySelectorAll('.se-text-paragraph')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-image')) {
-        section.type = 'image';
-        section.image = Array.from(component.querySelectorAll('.se-image-resource')).map(el=>el.src || '');
-        section.description = Array.from(component.querySelectorAll('.se-text-paragraph')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-imageStrip')) {
-        section.type = 'image';
-        section.image = Array.from(component.querySelectorAll('.se-image-resource')).map(el=>el.src || '');
-        section.description = Array.from(component.querySelectorAll('.se-text-paragraph')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-video')) {
-        section.type = 'video';
-        section.image = Array.from(component.querySelectorAll('.se-video-thumbnail-resource')).map(el=>el.src || '');
-        section.time = Array.from(component.querySelectorAll('.se-video-time')).map(el=>el.innerText || el.value || '');
-        section.title = Array.from(component.querySelectorAll('.se-video-title-text')).map(el=>el.innerText || el.value || '');
-        section.description = Array.from(component.querySelectorAll('.se-video-description')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-horizontalLine')) {
-        section.type = 'line';
-    }
-    if(component.classList.contains('se-sticker')) {
-        section.type = 'sticker';
-        section.image = Array.from(component.querySelectorAll('.se-sticker-image')).map(el=>el.src || '');
-    }
-    if(component.classList.contains('se-quotation')) {
-        section.type = 'quotation';
-        section.title = Array.from(component.querySelectorAll('.se-quote .se-text-paragraph')).map(el=>el.innerText || el.value || '');
-        section.description = Array.from(component.querySelectorAll('.se-cite .se-text-paragraph')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-placesMap')) {
-        section.type = 'places';
-        section.image = Array.from(component.querySelectorAll('.se-map-image')).map(el=>el.src || '');
-        section.location = Array.from(component.querySelectorAll('.se-map-info')).map(el=>{
-            const name = Array.from(el.querySelectorAll('.se-map-title')).map(el=>el.innerText || el.value || '');
-            const addr = Array.from(el.querySelectorAll('.se-map-address')).map(el=>el.innerText || el.value || '');
-            return { name, addr }
-        });
-    }
-    if(component.classList.contains('se-oglink')) {
-        section.type = 'link';
-        section.image = Array.from(component.querySelectorAll('.se-oglink-thumbnail-resource')).map(el=>el.src || '');
-        section.title = Array.from(component.querySelectorAll('.se-oglink-title')).map(el=>el.innerText || el.value || '');
-        section.description = Array.from(component.querySelectorAll('.se-oglink-summary')).map(el=>el.innerText || el.value || '');
-        section.hostname = Array.from(component.querySelectorAll('.se-oglink-url')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-file')) {
-        section.type = 'file';
-        section.name = Array.from(component.querySelectorAll('.se-file-name')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-schedule')) {
-        section.type = 'schedule';
-        section.title = Array.from(component.querySelectorAll('.se-schedule-title')).map(el=>el.innerText || el.value || '');
-        section.sdate = Array.from(component.querySelectorAll('.se-schedule-duration-start')).map(el=>el.childNodes[0].nodeValue);
-        section.edate = Array.from(component.querySelectorAll('.se-schedule-duration-end')).map(el=>el.childNodes[0].nodeValue);
-        section.image = Array.from(component.querySelectorAll('.se-map-image')).map(el=>el.src || '');
-        section.location = Array.from(component.querySelectorAll('.se-map-info')).map(el=>{
-            const name = Array.from(el.querySelectorAll('.se-map-title')).map(el=>el.innerText || el.value || '');
-            const addr = Array.from(el.querySelectorAll('.se-map-address')).map(el=>el.innerText || el.value || '');
-            return { name, addr }
-        });
-        section.url = Array.from(component.querySelectorAll('.se-schedule-url')).map(el=>el.innerText || el.value || '');
-        section.description = Array.from(component.querySelectorAll('.se-schedule-description')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-code')) {
-        section.type = 'code';
-        section.text = Array.from(component.querySelectorAll('.se-code-source')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-table')) {
-        section.type = 'table';
-        section.table = Array.from(component.querySelectorAll('.se-table-content')).map(el=>{
-            function parseTable(el) {
-                const rows = Array.from(el.querySelectorAll('tr')).map(el=>{
-                    const cols = Array.from(el.querySelectorAll('td, th')).map(el=>{
-                        const colspan = el.colspan || 1, rowspan = el.rowspan || 1;
-                        const content = Array.from(el.querySelectorAll('.se-inline-image-resource, .se-text-paragraph')).map(el=>{
-                            const item = {};
-                            if(el.classList.contains('se-inline-image-resource')) {
-                                item.type = 'image';
-                                item.image = el.src || '';
-                            }
-                            if(el.classList.contains('se-text-paragraph')) {
-                                item.type = 'text';
-                                item.text = el.innerText || el.value || '';
-                            }
-                            return item;
-                        });
-                        return { colspan, rowspan, content };
-                    });
-                    return cols;
-                });
-                return rows;
-            }
-            const thead = Array.from(el.querySelectorAll('thead')).map(parseTable)[0];
-            const tbody = Array.from(el.querySelectorAll('tbody')).map(parseTable)[0];
-            return { thead, tbody };
-        })[0];
-    }
-    if(component.classList.contains('se-formula')) {
-        section.type = 'formula';
-        section.text = Array.from(component.querySelectorAll('.mq-selectable')).map(el=>el.innerText || el.value || '');
-    }
-    if(component.classList.contains('se-talktalk')) {
-        section.type = 'talktalk';
-        section.text = Array.from(component.querySelectorAll('.se-talktalk-banner-text')).map(el=>el.innerText || el.value || '');
-    }
-    return section;
-}
-function transformContent(target, info) {
-    const clipContent = target.querySelector('#__clipContent'); if(clipContent) { target = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
-    const sections = Array.from(target.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map(transformComponent);
-    return { info, sections }
-}
 async function transformDocument(content) {
     const container = (children) => {
         const width = { size: 9010, type: docx.WidthType.DXA };
@@ -455,14 +284,13 @@ async function transformDocument(content) {
     meta.sections = [ { children, properties } ];
     return meta;
 }
-async function main() {
+GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addScript('https://unpkg.com/docx@6.0.3/build/index.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js');
     GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js');
-    GM_addScript(`()=>{ window.GM_xmlhttpRequestCORS = ${GM_xmlhttpRequestCORS}; }`);
     GM_addStyle(`
     @keyframes spin1 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
     .se-utils > ul > li > button { margin-top: 14px !important; }
@@ -481,8 +309,8 @@ async function main() {
     .se-utils-item-docx[data-process-keyword-info]:hover::after { display: block; }
     `);
     const uri = new URL(location.href), params = Object.fromEntries(uri.searchParams.entries());
-    const user = await request2_blog('', 'BlogUserInfo'); if(!user) return;
-    const blog = await request2_blog(user.userId, 'BlogInfo'); if(!blog) return;
+    const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
+    const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog) return;
     async function handler(e) {
         const mnu = document.querySelector('.se-ultils-list');
         if(mnu) {
@@ -491,37 +319,35 @@ async function main() {
             if(!window.__processing_content) {
                 wrp.classList.toggle('se-utils-item-docx-loading', window.__processing_content = true);
                 btn.onclick = async function(){
-                    const randomize = _.random(0, 100);
                     const adblocked = await GM_detectAdBlock(v=>v);
                     if(adblocked) {
                         const cfrm = confirm('광고 차단 플러그인이 발견 되었습니다!\n브라우저의 광고 차단 설정을 해제해주세요.\n\n개발자 최원의 모든 프로그램은\n후원 및 광고 수익을 조건으로 무료로 제공됩니다.\n\nhttps://blog.naver.com/cw4196\n후원계좌 : 최원 3333-04-6073417 카카오뱅크');
                         if(cfrm) window.open('https://in.naverpp.com/donation');
-                        return;
+                    } else {
+                        let imgs;
+                        do {
+                            const cnt = document.querySelector('.se-content');
+                            cnt.scrollTo({ top: 0 });
+                            cnt.scrollTo({ top: cnt.scrollHeight, behavior: 'smooth' });
+                            imgs = Array.from(cnt.querySelectorAll('img[src^="data:"]'));
+                            await Promise.delay(1000);
+                        } while (imgs.length);
+                        const data = SE_parse(document, { user, blog });
+                        const json = JSON.stringify(data);
+                        GM_addScript(`async () => {
+                          try {
+                            let __transformContent = ${json};
+                            let __transformDocument = ${transformDocument};
+                            let __transformOpts = await __transformDocument(__transformContent);
+                            let __transformDocx = new docx.Document(__transformOpts);
+                            let __transformBlob = await docx.Packer.toBlob(__transformDocx);
+                            let head = __transformContent.sections.find(o=>o.type == 'title');
+                            let name = head ? head.text.join(', ') : '알 수 없는 문서';
+                            saveAs(__transformBlob, name+'.docx');
+                            console.log("Document created successfully");
+                          }catch(e){ console.log(e); }
+                        }`);
                     }
-                    if(randomize < 5) { window.open('https://in.naverpp.com/donation', 'naverpp_donation', 'width=600, height=800'); }
-                    let imgs;
-                    do {
-                        const cnt = document.querySelector('.se-content');
-                        cnt.scrollTo({ top: 0 });
-                        cnt.scrollTo({ top: cnt.scrollHeight, behavior: 'smooth' });
-                        imgs = Array.from(cnt.querySelectorAll('img[src^="data:"]'));
-                        await Promise.delay(1000);
-                    } while (imgs.length);
-                    const data = transformContent(document, { user, blog });
-                    const json = JSON.stringify(data);
-                    GM_addScript(`async () => {
-                        try {
-                        let __transformContent = ${json};
-                        let __transformDocument = ${transformDocument};
-                        let __transformOpts = await __transformDocument(__transformContent);
-                        let __transformDocx = new docx.Document(__transformOpts);
-                        let __transformBlob = await docx.Packer.toBlob(__transformDocx);
-                        let head = __transformContent.sections.find(o=>o.type == 'title');
-                        let name = head ? head.text.join(', ') : '알 수 없는 문서';
-                        saveAs(__transformBlob, name+'.docx');
-                        console.log("Document created successfully");
-                        }catch(e){ console.log(e); }
-                    }`);
                 }
                 wrp.classList.toggle('se-utils-item-docx-loading', window.__processing_content = false);
             }
@@ -531,10 +357,4 @@ async function main() {
     window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
     handler();
-}
-function _requestIdleCallback(callback) {
-    if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-    return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
