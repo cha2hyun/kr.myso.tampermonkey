@@ -134,6 +134,13 @@
             section.text = Array.from(component.querySelectorAll('.se-talktalk-banner-text')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
+        if(component.classList.contains('se-material')) {
+            section.type = 'material';
+            section.image = Array.from(component.querySelectorAll('.se-sidebar-material-thumbnail-resource')).map(el=>el.src || '');
+            section.title = Array.from(component.querySelectorAll('.se-material-title')).map(get_text_without_placeholder);
+            section.description = Array.from(component.querySelectorAll('.se-material-detail-title, .se-material-detail-description')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
+        }
         return section;
     }
     window.SE_parse = function(document, info) {
