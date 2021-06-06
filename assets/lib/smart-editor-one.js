@@ -10,12 +10,17 @@
             section.text = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
-        if(component.classList.contains('se-text')) {
+        if(component.classList.contains('se-wrappingParagraph')) {
+            const section1 = SE_parseComponent(component.querySelector('.se-component-slot.se-component-slot-float .se-section'));
+            const section2 = SE_parseComponent(component.querySelector('.se-component-slot:not(.se-component-slot-float) .se-section'));
+            return [section1, section2];
+        }
+        if(component.classList.contains('se-text') || component.classList.contains('se-section-text')) {
             section.type = 'text';
             section.text = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
-        if(component.classList.contains('se-image')) {
+        if(component.classList.contains('se-image') || component.classList.contains('se-section-image')) {
             section.type = 'image';
             section.image = Array.from(component.querySelectorAll('.se-image-resource')).map(el=>el.src || '');
             section.description = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
@@ -44,7 +49,7 @@
             section.image = Array.from(component.querySelectorAll('.se-sticker-image')).map(el=>el.src || '');
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
-        if(component.classList.contains('se-quotation')) {
+        if(component.classList.contains('se-quotation') || component.classList.contains('se-section-quotation')) {
             section.type = 'quotation';
             section.title = Array.from(component.querySelectorAll('.se-quote .se-text-paragraph')).map(get_text_without_placeholder);
             section.description = Array.from(component.querySelectorAll('.se-cite .se-text-paragraph')).map(get_text_without_placeholder);
@@ -156,7 +161,7 @@
     }
     window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
-        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map(window.SE_parseComponent);
+        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map(window.SE_parseComponent).flat();
         const content = SE_componentContent(sections);
         const contentLength = content.replace(/[\r\n]+/g, '').length;
         const contentLengthTrim = content.replace(/[\s\r\n]+/g, '').length;
