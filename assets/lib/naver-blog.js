@@ -1,6 +1,6 @@
 // ---------------------
 (function(window) {
-    window.GM_xmlhttpRequestCORSAsync = function(url, options) {
+    window.GM_xmlhttpRequestAsync = function(url, options) {
         return new Promise((resolve, reject) => {
             GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options));
         });
@@ -11,7 +11,7 @@
     window.NB_blogInfo = async function SE_blogInfo(blogId, action, params = {}) {
         const referer = `https://m.blog.naver.com/${blogId}`;
         const uri = new URL(`https://m.blog.naver.com/rego/${action}.naver?blogId=${blogId}&_=${Date.now()}`); _.map(params, (v, k) => uri.searchParams.set(k, v));
-        const res = await GM_xmlhttpRequestCORSAsync(uri.toString(), { headers: { referer } });
+        const res = await GM_xmlhttpRequestAsync(uri.toString(), { headers: { referer } });
         const data = eval(`('${res.responseText})`);
         return data && data.result;
     }
@@ -28,7 +28,7 @@
     window.NB_blogStat = async function NB_blogStat(blogId, date = Date.now()) {
         const referer = `https://m.blog.naver.com/${blogId}`;
         const uri = new URL(`https://blog.stat.naver.com/api/blog/user/referer/search?timeDimension=DATE&startDate=${date_format(date)}&exclude=&_=${Date.now()}`);
-        const res = await GM_xmlhttpRequestCORSAsync(uri.toString(), { headers: { referer } });
+        const res = await GM_xmlhttpRequestAsync(uri.toString(), { headers: { referer } });
         const data = eval(`(${res.responseText})`);
         return data && data.result;
     }
