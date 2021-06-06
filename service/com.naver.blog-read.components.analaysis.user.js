@@ -16,7 +16,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=8
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=9
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
@@ -72,7 +72,7 @@ GM_App(async function main() {
     to { opacity: 0.3; outline: 1px solid #f00; }
   }
   .content-analysis-highlight {
-    animation: blinker 0.3s linear infinite;
+    animation: blinker 0.3s linear 5;
   }
   `);
   const se = SE_parse(document); if(!se.content) return;
