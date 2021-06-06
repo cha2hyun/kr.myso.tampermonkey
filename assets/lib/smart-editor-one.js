@@ -3,8 +3,8 @@
     function get_text(el) { return el.innerText || el.value || ''; }
     function get_placeholder(el) { return Array.from(el.querySelectorAll('.se-placeholder')).map((el)=>el.innerText || el.value || '').join(''); }
     function get_text_without_placeholder(el) { return get_text(el).replace(new RegExp(`${get_placeholder(el)}$`), ''); }
-    window.SE_parseComponent = function SE_parseComponent(component) {
-        const section = {};
+    window.SE_parseComponent = function SE_parseComponent(component, offset = 0) {
+        const section = { type: 'unknown', offset };
         if(component.classList.contains('se-documentTitle')) {
             section.type = 'title';
             section.text = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
@@ -13,6 +13,8 @@
         if(component.classList.contains('se-wrappingParagraph')) {
             const section1 = SE_parseComponent(component.querySelector('.se-component-slot.se-component-slot-float .se-section'));
             const section2 = SE_parseComponent(component.querySelector('.se-component-slot:not(.se-component-slot-float) .se-section'));
+            if(section1) section1.offset = offset;
+            if(section2) section2.offset = offset;
             return [section1, section2];
         }
         if(component.classList.contains('se-text') || component.classList.contains('se-section-text')) {
