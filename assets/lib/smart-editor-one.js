@@ -3,7 +3,7 @@
     function get_text(el) { return el.innerText || el.value || ''; }
     function get_placeholder(el) { return Array.from(el.querySelectorAll('.se-placeholder')).map((el)=>el.innerText || el.value || '').join(''); }
     function get_text_without_placeholder(el) { return get_text(el).replace(new RegExp(`${get_placeholder(el)}$`), ''); }
-    window.SE_parseComponent = function(component) {
+    window.SE_parseComponent = function SE_parseComponent(component) {
         const section = {};
         if(component.classList.contains('se-documentTitle')) {
             section.type = 'title';
@@ -143,10 +143,21 @@
         }
         return section;
     }
-    window.SE_parse = function(document, info) {
+    window.SE_componentContent = function SE_componentContent(sections) {
+        return sections.filter((section)=>['title', 'text', 'quotation', 'image', 'table'].includes(section.type)).map((section) => {
+            if(section.type == 'table') {
+                const thead = section.thead && section.thead.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
+                const tbody = section.tbody && section.tbody.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
+                return [thead, tbody].flat().filter(v=>!!v).join('\n');
+            } else {
+                return [section.text, section.description, section.title].flat().filter(v=>!!v).join('\n');
+            }
+        }).join("\n");
+    }
+    window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
         const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map(window.SE_parseComponent);
-        const content = sections.filter((section)=>['title', 'text'].includes(section.type)).map((section) => section.text.join(' ')).join("\n");
+        const content = SE_componentContent(sections);
         const contentLength = content.replace(/[\r\n]+/g, '').length;
         const contentLengthTrim = content.replace(/[\s\r\n]+/g, '').length;
         return {
