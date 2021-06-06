@@ -16,7 +16,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=9
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=11
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
@@ -103,7 +103,7 @@ GM_App(async function main() {
       </h3>
       <ul class="content-analysis-listview">
         {{#each sections}}
-        <li class="content-analysis-listhead content-analysis-listhead-{{type}} cursor-help" onmouseover="content_analysis_focus({{@index}})" onmouseout="content_analysis_focusout({{@index}})">
+        <li class="content-analysis-listhead content-analysis-listhead-{{type}} cursor-help" onmouseover="content_analysis_focus({{offset}})" onmouseout="content_analysis_focusout({{offset}})">
           <h4>{{type}}</h4>
           <div>
             <span class="content-analysis-value">글자수: {{length this}}자 (공백제외: {{lengthTrim this}}자)</span>
