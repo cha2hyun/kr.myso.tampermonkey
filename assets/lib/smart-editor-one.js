@@ -146,13 +146,13 @@
     window.SE_componentContent = function SE_componentContent(sections) {
         return sections.filter((section)=>['title', 'text', 'quotation', 'image', 'table'].includes(section.type)).map((section) => {
             if(section.type == 'table') {
-                const thead = section.thead && section.thead.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
-                const tbody = section.tbody && section.tbody.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
+                const thead = section.table && section.table.thead && section.table.thead.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
+                const tbody = section.table && section.table.tbody && section.table.tbody.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
                 return [thead, tbody].flat().filter(v=>!!v).join('\n');
             } else {
                 return [section.text, section.description, section.title].flat().filter(v=>!!v).join('\n');
             }
-        }).join("\n");
+        }).join("\n\n");
     }
     window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
