@@ -150,7 +150,7 @@
                 const tbody = section.table && section.table.tbody && section.table.tbody.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
                 return [thead, tbody].flat().filter(v=>!!v).join('\n');
             } else {
-                return [section.text, section.description, section.title].flat().filter(v=>!!v).join('\n');
+                return [section.title, section.text, section.description].flat().filter(v=>!!v).join('\n');
             }
         }).join("\n\n");
     }
