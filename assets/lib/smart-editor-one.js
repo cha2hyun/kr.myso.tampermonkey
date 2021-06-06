@@ -163,12 +163,14 @@
     }
     window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
-        const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component')).map(window.SE_parseComponent).flat();
+        const elements = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component'));
+        const sections = elements.map(window.SE_parseComponent).flat();
         const content = SE_componentContent(sections);
         const contentLength = content.replace(/[\r\n]+/g, '').length;
         const contentLengthTrim = content.replace(/[\s\r\n]+/g, '').length;
         return {
             info,
+            elements,
             sections,
             content,
             contentLength,
