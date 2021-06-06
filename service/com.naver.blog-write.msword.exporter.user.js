@@ -240,7 +240,6 @@ async function transformDocument(content) {
             };
             rows.push(...await rows_appends(item.table.thead));
             rows.push(...await rows_appends(item.table.tbody));
-            console.log(rows);
             const table = new docx.Table({ columnWidths: [9010], rows });
             children.push(table);
         }
@@ -349,7 +348,7 @@ GM_App(async function main() {
                             imgs = Array.from(cnt.querySelectorAll('img[src^="data:"]'));
                             await Promise.delay(1000);
                         } while (imgs.length);
-                        const data = SE_parse(document, { user, blog }); console.log(data);
+                        const data = SE_parse(document, { user, blog });
                         const json = JSON.stringify(data);
                         GM_addScript(`async () => {
                           try {
