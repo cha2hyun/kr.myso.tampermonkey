@@ -170,7 +170,6 @@
         const contentLengthTrim = content.replace(/[\s\r\n]+/g, '').length;
         return {
             info,
-            elements,
             sections,
             content,
             contentLength,
