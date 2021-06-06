@@ -144,7 +144,7 @@
         return section;
     }
     window.SE_componentContent = function SE_componentContent(sections) {
-        return sections.filter((section)=>['title', 'text', 'quotation', 'image', 'table'].includes(section.type)).map((section) => {
+        return sections.filter((section)=>['title', 'text', 'quotation', 'image', 'table', 'code'].includes(section.type)).map((section) => {
             if(section.type == 'table') {
                 const thead = section.table && section.table.thead && section.table.thead.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
                 const tbody = section.table && section.table.tbody && section.table.tbody.map(tr=>tr.map(td=>SE_componentContent(td.content)).flat()).flat();
