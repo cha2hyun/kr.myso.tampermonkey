@@ -1,5 +1,5 @@
 (function(window) {
-    let time_dif = (1000*60*60*24*3), time_now = Date.now(), time_ref = time_now - time_dif;
+    let time_dif = (1000*60*60*24*30), time_now = Date.now(), time_ref = time_now - time_dif;
     let key = {};
     window.GM_addStyle = window.GM_addStyle || (function(){});
     window.GM_xmlhttpRequest = window.GM_xmlhttpRequest || (function(){});
