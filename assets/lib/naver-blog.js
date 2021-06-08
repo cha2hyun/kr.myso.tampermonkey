@@ -42,7 +42,7 @@
         const data = eval(`(${res.responseText})`);
         return data && data.result && data.result.statDataList;
     }
-    window.NB_blogStatFuncGroup = function(defaultDate, dimensionDefault, defaults = {}) {
+    function NB_blogStatFuncGroup(defaultDate, dimensionDefault, defaults = {}) {
         const group = async function(blogId, date = defaultDate, dimension = dimensionDefault, params) {
             const data = {};
             if(dimensionDefault == 'WEEK'  && dimension == 'DATE') dimension = dimensionDefault;
@@ -53,7 +53,7 @@
         }
         return group;
     }
-    window.NB_blogStatFunc = function(action, defaultDate, dimensionDefault, defaults = {}) {
+    function NB_blogStatFunc(action, defaultDate, dimensionDefault, defaults = {}) {
         return async function(blogId, date = defaultDate, dimension = dimensionDefault, params) {
             return window.NB_blogStat(blogId, action, date, dimension, Object.assign({}, defaults, params));
         }
