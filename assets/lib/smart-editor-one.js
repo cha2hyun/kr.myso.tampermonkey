@@ -1,20 +1,163 @@
-// ---------------------
 (function(window) {
-    function get_text(el) { return el.innerText || el.value || ''; }
-    function get_placeholder(el) { return Array.from(el.querySelectorAll('.se-placeholder')).map((el)=>el.innerText || el.value || '').join(''); }
+    function get_text(el) { return el.innerText || el.value || el.nodeValue || ''; }
+    function get_placeholder(el) { return el.placeholder || (el.querySelectorAll ? Array.from(el.querySelectorAll('.se-placeholder, se_editable.is-empty')).map(get_text).join('') : ''); }
     function get_text_without_placeholder(el) { return get_text(el).replace(new RegExp(`${get_placeholder(el)}$`), ''); }
-    window.SE_parseComponent = function SE_parseComponent(component, offset = 0) {
-        const section = { type: 'unknown', offset };
+    window.SE_componentParseV2 = function SE_componentParseV2(component, offset = 0) {
+        // SE 2.0
+        function decodeJSON(json) { try { return eval(`(${json})`); } catch(e) {} }
+        function componentTypeOf(component, ...types) {
+            return types.reduce((r, T)=>r || (component instanceof T), false);
+        }
+        function componentParse(component, root) {
+            if(root || (component.childNodes && component.childNodes.length)) {
+                return Array.from(component.childNodes).map((component)=>componentParse(component)).filter(v=>!!v).flat();
+            }
+            const section = { type: '', offset, version: 2 };
+            if(component.classList && component.classList.contains('__se_object')) {
+                const json = decodeURIComponent(component.getAttribute('jsonvalue') || '');
+                const data = decodeJSON(json);
+                Object.assign(section, data);
+                if(component instanceof HTMLImageElement) {
+                    section.type = 'image';
+                    section.image = [component.src || ''];
+                }
+            } else if(component instanceof HTMLHRElement) {
+                section.type = 'line';
+            } else if(componentTypeOf(component, Text)){
+                section.type = 'text';
+                section.text = [get_text_without_placeholder(component)];
+            }
+            return section;
+        }
+        return componentParse(component, true);
+    }
+    window.SE_componentParseV3 = function SE_componentParseV3(component, offset = 0) {
+        const section = { type: '', offset, version: 3 };
+        // SE 3.0
+        if(component.classList.contains('se_documentTitle')) {
+            section.type = 'title';
+            section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
+        }
+        if(component.classList.contains('se_paragraph') || component.classList.contains('se_textarea')) {
+            section.type = 'text';
+            if(component.classList.contains('se_textarea')) {
+                section.text = [get_text_without_placeholder(component)];
+            } else if(component.classList.contains('paragraph_wrapping')) {
+                const section1 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot .se_subComponent'), offset));
+                const section2 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot + .se_textarea'), offset));
+                return [section1, section2];
+            } else {
+                section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
+            }
+        }
+        if(component.classList.contains('se_image') || component.classList.contains('se_subComponent_image')) {
+            section.type = 'image';
+            section.image = Array.from(component.querySelectorAll('.se_mediaImage')).map(el=>el.src || '');
+            section.description = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
+        }
+        if(component.classList.contains('se_video')) {
+            section.type = 'video';
+            section.image = Array.from(component.querySelectorAll('.se_mediaArea > img')).map(el=>el.src || '');
+            section.description = Array.from(component.querySelectorAll('.se-video-description')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
+        }
+        if(component.classList.contains('se_horizontalLine')) {
+            section.type = 'line';
+        }
+        if(component.classList.contains('se_sticker')) {
+            section.type = 'sticker';
+            section.image = Array.from(component.querySelectorAll('.se_sticker_area > img')).map(el=>el.src || '');;
+        }
+        if(component.classList.contains('se_quotation') || component.classList.contains('se_subComponent_quotation')) {
+            section.type = 'quotation';
+            section.title = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
+        }
+        if(component.classList.contains('se_map')) {
+            section.type = 'places';
+            section.image = Array.from(component.querySelectorAll('.se_mapImage')).map(el=>el.src || '');
+            section.location = Array.from(component.querySelectorAll('.se_map_article')).map(el=>{
+                const name = Array.from(el.querySelectorAll('.se_title')).map(get_text_without_placeholder);
+                const addr = Array.from(el.querySelectorAll('.se_address')).map(get_text_without_placeholder);
+                return { name, addr }
+            });
+        }
+        if(component.classList.contains('se_oglink')) {
+            section.type = 'link';
+            section.image = Array.from(component.querySelectorAll('.se_og_thumb > img')).map(el=>el.src || '');
+            section.title = Array.from(component.querySelectorAll('.se_og_tit')).map(get_text_without_placeholder);
+            section.description = Array.from(component.querySelectorAll('.se_og_desc')).map(get_text_without_placeholder);
+            section.hostname = Array.from(component.querySelectorAll('.se_og_cp')).map(get_text_without_placeholder);
+        }
+        if(component.classList.contains('se_audio')) {
+            section.type = 'file';
+            section.name = Array.from(component.querySelectorAll('.se_audio_name')).map(get_text_without_placeholder);
+        }
+        if(component.classList.contains('se_schedule')) {
+            section.type = 'schedule';
+            section.title = Array.from(component.querySelectorAll('.se_schedule_titWrap')).map(get_text_without_placeholder);
+            section.sdate = Array.from(component.querySelectorAll('.se_schedule_dateGroup')).map((el)=>get_text(el).split('~')[0]);
+            section.edate = Array.from(component.querySelectorAll('.se_schedule_dateGroup')).map((el)=>get_text(el).split('~')[1]);
+            section.image = Array.from(component.querySelectorAll('.se_mapImage')).map(el=>el.src || '');
+            section.location = Array.from(component.querySelectorAll('.se_schedule_place')).map(el=>{
+                const name = get_text_without_placeholder(el);
+                const addr = '(알 수 없음)';
+                return { name, addr }
+            });
+            section.url = Array.from(component.querySelectorAll('.se_schedule_link')).map(get_text_without_placeholder);
+            section.description = Array.from(component.querySelectorAll('.se_schedule_detailTxt')).map(get_text_without_placeholder);
+        }
+        if(component.classList.contains('se_code')) {
+            section.type = 'code';
+            section.text = Array.from(component.querySelectorAll('.se_textarea.se_code')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se_textarea.se_code')).map(get_placeholder);
+        }
+        if(component.classList.contains('se_table')) {
+            section.type = 'table';
+            section.table = Array.from(component.querySelectorAll('.se_table_col')).map(el=>{
+                function parseTable(el) {
+                    const rows = Array.from(el.querySelectorAll('tr')).map(el=>{
+                        const cols = Array.from(el.querySelectorAll('td, th')).map(el=>{
+                            const colspan = parseInt(el.getAttribute('colspan') || 1), rowspan = parseInt(el.getAttribute('rowspan') || 1);
+                            const content = Array.from(el.querySelectorAll('.se_cellArea')).map(el=>{
+                                const item = {};
+                                item.type = 'text';
+                                item.text = el.innerText || el.value || '';
+                                return item;
+                            });
+                            return { colspan, rowspan, content };
+                        });
+                        return cols;
+                    });
+                    return rows;
+                }
+                const thead = Array.from(el.querySelectorAll('thead')).map(parseTable)[0];
+                const tbody = Array.from(el.querySelectorAll('tbody')).map(parseTable)[0];
+                return { thead, tbody };
+            })[0];
+            section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
+        }
+        if(component.classList.contains('se_subjectMatter')) {
+            section.type = 'material';
+            section.image = Array.from(component.querySelectorAll('.subjectMatter_thumb > img')).map(el=>el.src || '');
+            section.title = Array.from(component.querySelectorAll('.subjectMatter_title')).map(get_text_without_placeholder);
+            section.description = Array.from(component.querySelectorAll('.subjectMatter_info_title, .subjectMatter_info_text')).map(get_text_without_placeholder);
+        }
+        return section;
+    }
+    window.SE_componentParseV4 = function SE_componentParseV4(component, offset = 0) {
+        const section = { type: '', offset, version: 4 };
+        // SE 4.0
         if(component.classList.contains('se-documentTitle')) {
             section.type = 'title';
             section.text = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
         if(component.classList.contains('se-wrappingParagraph')) {
-            const section1 = SE_parseComponent(component.querySelector('.se-component-slot.se-component-slot-float .se-section'));
-            const section2 = SE_parseComponent(component.querySelector('.se-component-slot:not(.se-component-slot-float) .se-section'));
-            if(section1) section1.offset = offset;
-            if(section2) section2.offset = offset;
+            const section1 = Object.assign({}, section, SE_componentParse4(component.querySelector('.se-component-slot.se-component-slot-float .se-section'), offset));
+            const section2 = Object.assign({}, section, SE_componentParse4(component.querySelector('.se-component-slot:not(.se-component-slot-float) .se-section'), offset));
             return [section1, section2];
         }
         if(component.classList.contains('se-text') || component.classList.contains('se-section-text')) {
@@ -44,7 +187,6 @@
         }
         if(component.classList.contains('se-horizontalLine')) {
             section.type = 'line';
-            section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
         if(component.classList.contains('se-sticker')) {
             section.type = 'sticker';
@@ -106,7 +248,7 @@
                 function parseTable(el) {
                     const rows = Array.from(el.querySelectorAll('tr')).map(el=>{
                         const cols = Array.from(el.querySelectorAll('td, th')).map(el=>{
-                            const colspan = el.colspan || 1, rowspan = el.rowspan || 1;
+                            const colspan = parseInt(el.getAttribute('colspan') || 1), rowspan = parseInt(el.getAttribute('rowspan') || 1);
                             const content = Array.from(el.querySelectorAll('.se-inline-image-resource, .se-text-paragraph')).map(el=>{
                                 const item = {};
                                 if(el.classList.contains('se-inline-image-resource')) {
@@ -163,8 +305,12 @@
     }
     window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
-        const elements = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component'));
-        const sections = elements.map(window.SE_parseComponent).flat();
+        const sectionsV2 = Array.from(document.querySelectorAll('#postViewArea > *, body.se2_inputarea > *')).map(SE_componentParseV2).flat();
+        const sectionsV3 = Array.from(document.querySelectorAll('#se_canvas_wrapper .se_component')).map(SE_componentParseV3).flat();
+        const sectionsV4 = Array.from(document.querySelectorAll('.se-main-container .se-component, .se-container .se-component')).map(SE_componentParseV4).flat();
+        const sections = [sectionsV2, sectionsV3, sectionsV4].flat().filter(v=>!!v && v.type); if(!sections.length) return;
+        //const elements = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component, '));
+        //const sections = elements.map(window.SE_componentParse).flat();
         const content = SE_componentContent(sections);
         const contentLength = content.replace(/[\r\n]+/g, '').length;
         const contentLengthTrim = content.replace(/[\s\r\n]+/g, '').length;
