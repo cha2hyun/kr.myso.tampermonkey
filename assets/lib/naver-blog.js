@@ -37,7 +37,6 @@
         uri.searchParams.set('exclude', '');
         Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
         uri.searchParams.set('_', Date.now());
-        console.log(uri.toString());
         const res = await GM_xmlhttpRequestAsync(uri.toString(), { headers: { referer } });
         const data = eval(`(${res.responseText})`);
         return data && data.result && data.result.statDataList;
