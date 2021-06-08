@@ -55,8 +55,18 @@
     }
     function NB_blogStatFunc(action, defaultDate, dimensionDefault, defaults = {}) {
         return async function(blogId, date = defaultDate, dimension = dimensionDefault, params) {
-            return window.NB_blogStat(blogId, action, date, dimension, Object.assign({}, defaults, params));
+            return NB_blogStatObject(await NB_blogStat(blogId, action, date, dimension, Object.assign({}, defaults, params)));
         }
+    }
+    function NB_blogStatObject(resp) {
+        resp.map((item)=>{
+            const data = item.data || {};
+            const rows = data.rows || {};
+            const cols = Object.keys(rows);
+            const head = cols[0], headdata = rows[head];
+            resp[item.dataId] = headdata ? headdata.map((nil, idx) => cols.reduce((r, key)=>(r[key] = rows[key][idx], r), {})) : data;
+        });
+        return resp;
     }
     // 요약
     window.NB_blogStat['요약'] = NB_blogStatFunc('daily/weekAndMonthAnalysis');
