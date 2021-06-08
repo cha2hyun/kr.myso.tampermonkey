@@ -100,18 +100,18 @@
     window.NB_blogStat['시간대분석'] = NB_blogStatFuncGroup(prev, 'DATE');
     window.NB_blogStat['시간대분석']['조회수분포'] = NB_blogStatFunc('user/hour/cv', prev, undefined, { hour: '12' });
     window.NB_blogStat['시간대분석']['조회수'] = NB_blogStatFuncGroup(prev);
-    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['조회수'][hour] =  NB_blogStatFunc('user/hour/hourCv', prev, undefined, { hour })));
+    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['조회수'][hour] = NB_blogStatFunc('user/hour/hourCv', prev, undefined, { hour })));
     window.NB_blogStat['시간대분석']['유입경로'] = NB_blogStatFuncGroup(prev);
     window.NB_blogStat['시간대분석']['유입경로']['전체'] = NB_blogStatFuncGroup(prev);
     window.NB_blogStat['시간대분석']['유입경로']['검색'] = NB_blogStatFuncGroup(prev);
     window.NB_blogStat['시간대분석']['유입경로']['사이트'] = NB_blogStatFuncGroup(prev);
-    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['유입경로']['전체'][hour] =  NB_blogStatFunc('user/hour/referer/total', prev, undefined, { hour })));
-    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['유입경로']['검색'][hour] =  NB_blogStatFunc('user/hour/referer/search', prev, undefined, { hour })));
-    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['유입경로']['사이트'][hour] =  NB_blogStatFunc('user/hour/referer/site', prev, undefined, { hour })));
+    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['유입경로']['전체'][hour] = NB_blogStatFunc('user/hour/referer/total', prev, undefined, { hour })));
+    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['유입경로']['검색'][hour] = NB_blogStatFunc('user/hour/referer/search', prev, undefined, { hour })));
+    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['유입경로']['사이트'][hour] = NB_blogStatFunc('user/hour/referer/site', prev, undefined, { hour })));
     window.NB_blogStat['시간대분석']['성별연령별분포'] = NB_blogStatFuncGroup(prev);
-    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['성별연령별분포'][hour] =  NB_blogStatFunc('user/hour/demo', prev, undefined, { hour })));
+    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['성별연령별분포'][hour] = NB_blogStatFunc('user/hour/demo', prev, undefined, { hour })));
     window.NB_blogStat['시간대분석']['조회수순위'] = NB_blogStatFuncGroup(prev);
-    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['조회수순위'][hour] =  NB_blogStatFunc('user/hour/rankCv', prev, undefined, { hour })));
+    Array(24).fill(null).map((nil, idx, arr, hour) => (hour = `00${idx}`.substr(-2), window.NB_blogStat['시간대분석']['조회수순위'][hour] = NB_blogStatFunc('user/hour/rankCv', prev, undefined, { hour })));
     // 순위
     window.NB_blogStat['순위'] = NB_blogStatFuncGroup(prev);
     window.NB_blogStat['순위']['조회수'] = NB_blogStatFuncGroup(prev);
