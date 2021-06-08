@@ -59,7 +59,7 @@
         }
     }
     function NB_blogStatObject(resp) {
-        resp.map((item)=>{
+        resp && resp.map((item)=>{
             const data = item.data || {};
             const rows = data.rows || {};
             const cols = Object.keys(rows);
