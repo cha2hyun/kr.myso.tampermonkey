@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 통계 지표 다운로드 플러스
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.msexcel.exporter.user.js
 // @description  네이버 블로그 통계의 지표 다운로드 기능을 개선하여 줍니다.
 // @author       Won Choi
@@ -20,9 +20,11 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
 // ==/UserScript==
 GM_App(async function main() {
     GM_donation('.l__container');
+    GM_addStyle("@import url('https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css')");
     moment.tz.setDefault("Asia/Seoul");
     async function download() {
         const edate = moment().subtract(8, 'days').toDate();
@@ -35,6 +37,7 @@ GM_App(async function main() {
         const xlsx_name = `블로그통계분석_${user.nickname}_${user.userId}_${moment(sdate).format('YYYY-MM-DD')}~${moment(edate).format('YYYY-MM-DD')}.xlsx`
         // 방문분석
         {
+            Toastify({ text: `방문 통계 데이터 가져오는 중...`, }).showToast();
             const xlsx_sheet_name = `방문`;
             const xlsx_sheet_data = [];
             {
@@ -78,6 +81,7 @@ GM_App(async function main() {
         }
         // 사용자분석
         {
+            Toastify({ text: `이웃 통계 데이터 가져오는 중...`, }).showToast();
             const xlsx_sheet_name = `이웃`;
             const xlsx_sheet_data = [];
             {
@@ -125,6 +129,7 @@ GM_App(async function main() {
                     return uri.searchParams.get('query') || uri.searchParams.get('q');
                 } catch(e) {}
             }
+            Toastify({ text: `유입 통계 데이터 가져오는 중...`, }).showToast();
             const xlsx_sheet_name = `유입`;
             const xlsx_sheet_data = [];
             {
@@ -148,6 +153,7 @@ GM_App(async function main() {
         }
         // 순위분석
         {
+            Toastify({ text: `게시물 통계 데이터 가져오는 중...`, }).showToast();
             const xlsx_sheet_name = `게시물`;
             const xlsx_sheet_data = [];
             const data_rank = await Promise.map(range, async (date) => { const resp = await NB_blogStat['순위']['조회수']['게시물'](user.userId, date, 'WEEK'); return resp.rankCv; });
@@ -178,9 +184,15 @@ GM_App(async function main() {
         const xlsx_opts = { bookType:'xlsx', bookSST:false, type:'array' };
         const xlsx_blob = XLSX.write(xlsx, xlsx_opts);
         saveAs(new Blob([xlsx_blob],{type:"application/octet-stream"}), xlsx_name);
+        Toastify({ text: `저장 완료`, }).showToast();
     }
     const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
     const wrap = document.querySelector('#nav.lnb__local-menu'); if(!wrap) return;
     const cont = wrap.querySelector('.lnb__download') || document.createElement('div'); cont.classList.add('lnb__depth1', 'lnb__download'); wrap.append(cont);
-    const link = cont.querySelector('.lnb__title') || document.createElement('a'); link.classList.add('lnb__title'); link.textContent = '지표 다운로드 플러스'; link.onclick = ()=>download(); cont.append(link);
+    const link = cont.querySelector('.lnb__title') || document.createElement('a'); link.classList.add('lnb__title'); link.textContent = '지표 다운로드 플러스'; cont.append(link);
+    cont.addEventListener('click', (event)=>{
+        event.preventDefault();
+        event.stopPropagation();
+        download();
+    });
 });
