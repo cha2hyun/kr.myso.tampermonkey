@@ -89,7 +89,7 @@
     window.NB_blogStat['사용자분석'] = NB_blogStatFuncGroup(prev_week, 'WEEK');
     window.NB_blogStat['사용자분석']['유입분석'] = NB_blogStatFuncGroup(prev_week, 'DATE');
     window.NB_blogStat['사용자분석']['유입분석']['전체'] = NB_blogStatFunc('user/referer/total', prev_week, 'DATE');
-    window.NB_blogStat['사용자분석']['유입상세']['전체']['상세'] = NB_blogStatFunc('user/referer/total/detail', prev_week, 'DATE');
+    window.NB_blogStat['사용자분석']['유입분석']['전체']['상세'] = NB_blogStatFunc('user/referer/total/detail', prev_week, 'DATE');
     window.NB_blogStat['사용자분석']['유입분석']['검색'] = NB_blogStatFunc('user/referer/search', prev_week, 'DATE');
     window.NB_blogStat['사용자분석']['유입분석']['사이트'] = NB_blogStatFunc('user/referer/site', prev_week, 'DATE');
     window.NB_blogStat['사용자분석']['성별연령별분포'] = NB_blogStatFuncGroup(prev_week, 'DATE');
