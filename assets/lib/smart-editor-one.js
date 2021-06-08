@@ -1,5 +1,5 @@
 (function(window) {
-    function get_text(el) { return el.innerText || el.value || el.nodeValue || ''; }
+    function get_text(el) { return el.value || el.innerText || el.nodeValue || ''; }
     function get_placeholder(el) { return el.placeholder || (el.querySelectorAll ? Array.from(el.querySelectorAll('.se-placeholder, se_editable.is-empty')).map(get_text).join('') : ''); }
     function get_text_without_placeholder(el) { return get_text(el).replace(new RegExp(`${get_placeholder(el)}$`), ''); }
     window.SE_componentParseV2 = function SE_componentParseV2(component, offset = 0) {
