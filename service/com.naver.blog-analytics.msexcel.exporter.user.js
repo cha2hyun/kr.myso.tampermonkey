@@ -24,11 +24,7 @@
 GM_App(async function main() {
   GM_donation('.l__container');
   moment.tz.setDefault("Asia/Seoul");
-  const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
-  const wrap = document.querySelector('#nav.lnb__local-menu'); if(!wrap) return;
-  const cont = wrap.querySelector('.lnb__download') || document.createElement('div'); cont.classList.add('lnb__depth1', 'lnb__download'); wrap.append(cont);
-  const link = cont.querySelector('.lnb__title') || document.createElement('a'); link.classList.add('lnb__title'); link.textContent = '지표 다운로드 플러스'; cont.append(link);
-  link.onclick = async function download() {
+  async function download() {
       const edate = moment().subtract(8, 'days').toDate();
       const sdate = moment().subtract(8 + 7 * 14, 'days').toDate();
       const range = _.range(sdate, edate, 1000 * 60 * 60 * 24 * 7).map(o=>moment(o).toISOString(true));
@@ -183,4 +179,8 @@ GM_App(async function main() {
       const xlsx_blob = XLSX.write(xlsx, xlsx_opts);
       saveAs(new Blob([xlsx_blob],{type:"application/octet-stream"}), xlsx_name);
   }
+  const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
+  const wrap = document.querySelector('#nav.lnb__local-menu'); if(!wrap) return;
+  const cont = wrap.querySelector('.lnb__download') || document.createElement('div'); cont.classList.add('lnb__depth1', 'lnb__download'); wrap.append(cont);
+  const link = cont.querySelector('.lnb__title') || document.createElement('a'); link.classList.add('lnb__title'); link.textContent = '지표 다운로드 플러스'; link.onclick = ()=>download(); cont.append(link);
 });
