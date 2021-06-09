@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         네이버 블로그 문서 구성 요약
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.components.analaysis.user.js
 // @description  네이버 블로그로 작성된 문서 구성을 간략하게 확인할 수 있습니다.
 // @author       Won Choi
-// @match        *://blog.naver.com/PostView.nhn?*
+// @match        *://blog.naver.com/PostView*
 // @connect      naver.com
 // @connect      pstatic.net
 // @grant        GM_addStyle

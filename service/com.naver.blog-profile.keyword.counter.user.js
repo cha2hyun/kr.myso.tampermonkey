@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         네이버 블로그 보유키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-profile.keyword.counter.user.js
 // @description  네이버 블로그 프로필에서 보유키워드를 확인할 수 있습니다.
 // @author       Won Choi
-// @match        *://blog.naver.com/profile/intro.nhn?blogId=*
+// @match        *://blog.naver.com/profile/intro*
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
