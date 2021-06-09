@@ -6,7 +6,7 @@
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/*/*
-// @match        *://blog.naver.com/*?Redirect=Write
+// @match        *://blog.naver.com/*?Redirect=Write*
 // @match        *://m.blog.naver.com/*/*
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
