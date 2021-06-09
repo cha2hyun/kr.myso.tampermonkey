@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 통계 지표 다운로드 플러스
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.msexcel.exporter.user.js
 // @description  네이버 블로그 통계의 지표 다운로드 기능을 개선하여 줍니다.
 // @author       Won Choi
@@ -28,7 +28,7 @@ GM_App(async function main() {
     moment.tz.setDefault("Asia/Seoul");
     async function download() {
         const edate = moment().subtract(1 + 7, 'days').toDate();
-        const sdate = moment(edate).subtract(1 + 7 * 15, 'days').toDate();
+        const sdate = moment(edate).subtract(1 + 7 * 14, 'days').toDate();
         const range = _.range(sdate, edate, 1000 * 60 * 60 * 24 * 7).map(o=>moment(o).toISOString(true));
         const range_date = _.range(sdate, moment().toDate(), 1000 * 60 * 60 * 24).map(o=>moment(o).toISOString(true));
         const xlsx = XLSX.utils.book_new();
