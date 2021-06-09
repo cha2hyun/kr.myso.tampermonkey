@@ -41,6 +41,7 @@
             });
             let iframe = document.querySelector('.donation-myso-frame') || document.createElement('iframe');
             iframe.classList.add('donation-myso-frame');
+            iframe.setAttribute('style', 'display: block; width: 100%; height: 120px; border: 0;background-color: rgba(0, 0, 0, 0.1); margin-top: 3px; margin-bottom: 15px;')
             iframe.setAttribute('src', 'https://in.naverpp.com/ad/randomize?display');
             container.prepend(iframe);
             window.GM_detectAdBlock((adBlockEnabled) => {
