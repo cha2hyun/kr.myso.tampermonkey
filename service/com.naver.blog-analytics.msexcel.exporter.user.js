@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 통계 지표 다운로드 플러스
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.msexcel.exporter.user.js
 // @description  네이버 블로그 통계의 지표 다운로드 기능을 개선하여 줍니다.
 // @author       Won Choi
@@ -27,10 +27,10 @@ GM_App(async function main() {
     GM_addStyle("@import url('https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css')");
     moment.tz.setDefault("Asia/Seoul");
     async function download() {
-        const edate = moment().subtract(1 + 7, 'days').toDate();
-        const sdate = moment(edate).subtract(1 + 7 * 14, 'days').toDate();
-        const range = _.range(sdate, edate, 1000 * 60 * 60 * 24 * 7).map(o=>moment(o).toISOString(true));
-        const range_date = _.range(sdate, moment().toDate(), 1000 * 60 * 60 * 24).map(o=>moment(o).toISOString(true));
+        const edate = moment().day(-6).toDate();
+        const range = _.range(15).map(o=>moment(edate).subtract(o, 'weeks').toISOString(true));
+        const range_date = _.range(7 * 15).map(o=>moment(edate).subtract(o - 1, 'days').toISOString(true));
+        const sdate = _.minBy(range, o=>moment(o).toDate());
         const xlsx = XLSX.utils.book_new();
         const xlsx_name = `블로그통계분석_${user.nickname}_${user.userId}_${moment(sdate).format('YYYY-MM-DD')}~${moment(edate).format('YYYY-MM-DD')}.xlsx`
         // 방문분석
