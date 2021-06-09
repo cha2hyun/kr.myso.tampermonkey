@@ -29,7 +29,7 @@ GM_App(async function main() {
     async function download() {
         const edate = moment().day(-6).toDate();
         const range = _.range(15).map(o=>moment(edate).subtract(o, 'weeks').toISOString(true));
-        const range_date = _.range(7 * 15).map(o=>moment(edate).subtract(o - 1, 'days').toISOString(true));
+        const range_date = _.range(7 * 15).map(o=>moment(edate).subtract(o - 6, 'days').toISOString(true));
         const sdate = _.minBy(range, o=>moment(o).toDate());
         const xlsx = XLSX.utils.book_new();
         const xlsx_name = `블로그통계분석_${user.nickname}_${user.userId}_${moment(sdate).format('YYYY-MM-DD')}~${moment(edate).format('YYYY-MM-DD')}.xlsx`
