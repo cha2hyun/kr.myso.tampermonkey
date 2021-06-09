@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.3
+// @version      1.1.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -9,15 +9,15 @@
 // @match        *://blog.naver.com/*Redirect=Update*
 // @match        *://blog.naver.com/*/*
 // @match        *://m.blog.naver.com/*/*
-// @match        *://blog.naver.com/PostWriteForm.nhn?*
-// @match        *://blog.naver.com/PostUpdateForm.nhn?*
-// @match        *://blog.naver.com/PostView.nhn?*
-// @match        *://m.blog.naver.com/PostView.nhn?*
+// @match        *://blog.naver.com/PostWriteForm*
+// @match        *://blog.naver.com/PostUpdateForm*
+// @match        *://blog.naver.com/PostView*
+// @match        *://m.blog.naver.com/PostView*
 // @match        *://blog.editor.naver.com/editor*
 // @match        *://post.editor.naver.com/editor*
 // @match        *://m.post.editor.naver.com/editor*
-// @match        *://post.naver.com/viewer/postView.nhn?*
-// @match        *://m.post.naver.com/viewer/postView.nhn?*
+// @match        *://post.naver.com/viewer/postView*
+// @match        *://m.post.naver.com/viewer/postView*
 // @match        *://blog.naver.com/lib/smarteditor2/*/smart_editor2_inputarea.html
 // @grant        GM_addStyle
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
