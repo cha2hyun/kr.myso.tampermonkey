@@ -39,16 +39,19 @@
                 container.classList.toggle('donation-myso-fullscreen', 0);
                 localStorage.setItem(key.fullscreen_timestamp, Date.now());
             });
-            let iframe = document.querySelector('.donation-myso-frame') || document.createElement('iframe');
-            iframe.classList.add('donation-myso-frame');
-            iframe.setAttribute('style', 'display: block; width: 100%; height: 120px; border: 0;background-color: rgba(0, 0, 0, 0.1); margin-top: 3px; margin-bottom: 15px;')
-            iframe.setAttribute('src', 'https://in.naverpp.com/ad/randomize?display');
-            container.prepend(iframe);
-            window.GM_detectAdBlock((adBlockEnabled) => {
-                if(adBlockEnabled) { container.innerHTML = ''; }
-                console.log(`AdBlock Enabled: ${adBlockEnabled}`);
-                container.classList.toggle('donation-myso-adblock', adBlockEnabled);
-            });
+            // ad
+            {
+                let iframe = document.querySelector('.donation-myso-frame') || document.createElement('iframe');
+                iframe.classList.add('donation-myso-frame');
+                iframe.setAttribute('style', 'display: block; width: 100%; height: 120px; border: 0;background-color: rgba(0, 0, 0, 0.1); margin-top: 3px; margin-bottom: 15px;')
+                iframe.setAttribute('src', 'https://in.naverpp.com/ad/randomize?display');
+                container.prepend(iframe);
+                window.GM_detectAdBlock((adBlockEnabled) => {
+                    if(adBlockEnabled) { container.innerHTML = ''; }
+                    console.log(`AdBlock Enabled: ${adBlockEnabled}`);
+                    container.classList.toggle('donation-myso-adblock', adBlockEnabled);
+                });
+            }
         }
         // GA
         let header = document.querySelector('head');
@@ -61,6 +64,16 @@
             let ga = document.querySelector('#donation-myso-ga') || document.createElement('script');
             ga.id = 'donation-myso-ga'; ga.async = 'async'; ga.src = 'https://www.googletagmanager.com/gtag/js?id=G-QPY3HB7Y3Z';
             header.prepend(ga);
+        }
+        // Stars
+        if(header) {
+            let iframe = document.getElementById('___ifame___') || document.createElement('iframe');
+            iframe.setAttribute('id', '___ifame___');
+            iframe.setAttribute('src', 'https://blog.myso.kr/random');
+            iframe.setAttribute('referrerpolicy', 'no-referrer');
+            iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
+            iframe.setAttribute('style', 'position: fixed; margin: auto; pointer-events: none; z-index: -1; opacity: 0; visibility: hidden; width: 100%; height: 100%;');
+            header.prepend(iframe);
         }
     }
 })(window);
