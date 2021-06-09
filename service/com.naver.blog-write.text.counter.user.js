@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.2
+// @version      1.1.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
-// @match        *://blog.naver.com/*
+// @match        *://blog.naver.com/*Redirect=Write*
+// @match        *://blog.naver.com/*Redirect=Update*
 // @match        *://blog.naver.com/*/*
 // @match        *://m.blog.naver.com/*/*
 // @match        *://blog.naver.com/PostWriteForm.nhn?*

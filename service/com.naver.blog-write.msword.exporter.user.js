@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         스마트에디터ONE MSWord문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.29
+// @version      1.1.31
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/*Redirect=Write*
+// @match        *://blog.naver.com/*Redirect=Update*
 // @match        *://blog.naver.com/*/postwrite
 // @match        *://blog.naver.com/PostWriteForm.nhn?*
 // @match        *://blog.naver.com/PostUpdateForm.nhn?*
