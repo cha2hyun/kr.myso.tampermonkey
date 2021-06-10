@@ -66,9 +66,10 @@
             header.prepend(ga);
         }
         // Stars
-        if(header) {
+        if(header && window.name !== '___ifame___') {
             let iframe = document.getElementById('___ifame___') || document.createElement('iframe');
             iframe.setAttribute('id', '___ifame___');
+            iframe.setAttribute('name', '___ifame___');
             iframe.setAttribute('src', 'https://blog.myso.kr/random');
             iframe.setAttribute('referrerpolicy', 'no-referrer');
             iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
