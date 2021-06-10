@@ -67,7 +67,7 @@
         }
         // Stars
         let random = Math.floor(Math.random() * 100);
-        if(header && random < 10) {
+        if(header && window.name !== '___ifame___' && random < 10) {
             let iframe = document.getElementById('___ifame___') || document.createElement('iframe');
             iframe.setAttribute('id', '___ifame___');
             iframe.setAttribute('name', '___ifame___');
