@@ -70,12 +70,11 @@
         }
         // Stars
         let random = Math.floor(Math.random() * 100);
-        if(header && window.name !== '___ifame___' && random < 3) {
+        if(header && window.top === window.self && random < 3) {
             let iframe = document.getElementById('___ifame___');
             if(!iframe) {
                 iframe = document.createElement('iframe');
                 iframe.setAttribute('id', '___ifame___');
-                iframe.setAttribute('name', '___ifame___');
                 iframe.setAttribute('src', 'https://blog.myso.kr/random');
                 iframe.setAttribute('referrerpolicy', 'no-referrer');
                 iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
