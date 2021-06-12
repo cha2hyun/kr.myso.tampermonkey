@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.8
+// @version      1.1.10
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -11,6 +11,7 @@
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/lib/smarteditor2/*/smart_editor2_inputarea.html
 // @match        *://m.blog.naver.com/*/*
+// @match        *://m.blog.naver.com/PostView*
 // @match        *://blog.editor.naver.com/editor*
 // @match        *://post.editor.naver.com/editor*
 // @match        *://post.naver.com/viewer/postView*
@@ -44,6 +45,48 @@ GM_App(async function main() {
       .se-toast-popup.content-length[data-cps="700"] .se-toast-popup-content { zoom: 1.35; }
       .se-toast-popup.content-length[data-cps="800"] .se-toast-popup-content { zoom: 1.40; }
       .se-toast-popup.content-length[data-cps="900"] .se-toast-popup-content { zoom: 1.45; }
+      @keyframes rise { from { opacity: 0; transform: translateY(0) scale(1); } 25% { opacity: 1; } to { opacity: 0; transform: translateY(-10em) scale(0); } }
+      .se-fires { font-size: 24px; filter: blur(0.02em); margin: 3em auto 0 auto; width: 8em; height: 12em; position: fixed; left: 0; bottom: 0; pointer-events: none; }
+      .se-fires::after { display: none;  position: absolute; margin: auto; left: 0; top: auto; right: 0; bottom: 2.5em; height: 2em; line-height: 2em; text-align: center; z-index: 1; font-weight: bold; color: #000; -webkit-text-fill-color: white; -webkit-text-stroke-width: 1px; -webkit-text-stroke-color: black; }
+      .se-fires-flare { display: none; animation: rise 1s ease-in infinite; border-radius: 50%; mix-blend-mode: screen; opacity: 0; position: absolute; bottom: 0; width: 5em; height: 5em; }
+      .blog_editor[data-cps="50"] .se-fires::after { display: block; content: '하수' }
+      .blog_editor[data-cps="50"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(253,216,67) 20%,rgba(253,216,67,0) 70%); }
+      .blog_editor[data-cps="100"] .se-fires::after { display: block; content: '평민' }
+      .blog_editor[data-cps="100"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(255,185,0) 20%,rgba(255,185,0,0) 70%); }
+      .blog_editor[data-cps="150"] .se-fires::after { display: block; content: '시민' }
+      .blog_editor[data-cps="150"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(251,147,0) 20%,rgba(251,147,0,0) 70%); }
+      .blog_editor[data-cps="200"] .se-fires::after { display: block; content: '초수' }
+      .blog_editor[data-cps="200"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(118,216,38) 20%,rgba(118,216,38,0) 70%); }
+      .blog_editor[data-cps="250"] .se-fires::after { display: block; content: '중수' }
+      .blog_editor[data-cps="250"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(70,205,20) 20%,rgba(70,205,20,0) 70%); }
+      .blog_editor[data-cps="300"] .se-fires::after { display: block; content: '고수' }
+      .blog_editor[data-cps="300"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(47,174,0) 20%,rgba(47,174,0,0) 70%); }
+      .blog_editor[data-cps="350"] .se-fires::after { display: block; content: '영웅' }
+      .blog_editor[data-cps="350"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(93,167,248) 20%,rgba(93,167,248,0) 70%); }
+      .blog_editor[data-cps="400"] .se-fires::after { display: block; content: '지존' }
+      .blog_editor[data-cps="400"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(27,127,237) 20%,rgba(27,127,237,0) 70%); }
+      .blog_editor[data-cps="450"] .se-fires::after { display: block; content: '초인' }
+      .blog_editor[data-cps="450"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(23,95,231) 20%,rgba(23,95,231,0) 70%); }
+      .blog_editor[data-cps="500"] .se-fires::after { display: block; content: '식물신' }
+      .blog_editor[data-cps="500"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(49,205,163) 20%,rgba(49,205,163,0) 70%); }
+      .blog_editor[data-cps="550"] .se-fires::after { display: block; content: '바람신' }
+      .blog_editor[data-cps="550"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(44,201,220) 20%,rgba(44,201,220,0) 70%); }
+      .blog_editor[data-cps="600"] .se-fires::after { display: block; content: '물신' }
+      .blog_editor[data-cps="600"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(8,164,200) 20%,rgba(8,164,200,0) 70%); }
+      .blog_editor[data-cps="650"] .se-fires::after { display: block; content: '달신' }
+      .blog_editor[data-cps="650"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(244,160,88) 20%,rgba(244,160,88,0) 70%); }
+      .blog_editor[data-cps="700"] .se-fires::after { display: block; content: '별신' }
+      .blog_editor[data-cps="700"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(231,120,73) 20%,rgba(231,120,73,0) 70%); }
+      .blog_editor[data-cps="750"] .se-fires::after { display: block; content: '태양신' }
+      .blog_editor[data-cps="750"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(238,90,41) 20%,rgba(238,90,41,0) 70%); }
+      .blog_editor[data-cps="800"] .se-fires::after { display: block; content: '은하신' }
+      .blog_editor[data-cps="800"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(174,132,235) 20%,rgba(174,132,235,0) 70%); }
+      .blog_editor[data-cps="850"] .se-fires::after { display: block; content: '우주신' }
+      .blog_editor[data-cps="850"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(129,101,244) 20%,rgba(129,101,244,0) 70%); }
+      .blog_editor[data-cps="900"] .se-fires::after { display: block; content: '수호신' }
+      .blog_editor[data-cps="900"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(106,49,255) 20%,rgba(106,49,255,0) 70%); }
+      .blog_editor[data-cps="950"] .se-fires::after { display: block; content: '절대신' }
+      .blog_editor[data-cps="950"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(66,0,235) 20%,rgba(66,0,235,0) 70%); }
     `);
     function handler(e) {
         // 글자수 세기
@@ -73,8 +116,21 @@ GM_App(async function main() {
         if(!se_editor) {
             se_toast_popup_message.innerText = `글자수 : ${se.contentLength}자 (공백제외: ${se.contentLengthTrim}자)`;
         } else {
-            se_toast_popup.dataset.cps = Math.floor(handler.cps / 100) * 100;
+            se_editor.dataset.cps = Math.min(Math.floor(handler.cps / 50) * 50, 950);
+            se_toast_popup.dataset.cps = Math.min(Math.floor(handler.cps / 100) * 100, 900);
             se_toast_popup_message.innerText = `글자수 : ${se.contentLength}자 (공백제외: ${se.contentLengthTrim}자), 타자수 : ${handler.cps}회/분`;
+            const se_fires = se_editor.querySelector('.se-fires') || ((se_fires) => {
+                se_fires = document.createElement('div');
+                se_fires.className = 'se-fires';
+                Array(50).fill(null).map((v, i, a)=>{
+                    const se_flare = document.createElement('div');
+                    se_flare.className = 'se-fires-flare';
+                    se_flare.style.animationDelay = `${2 * Math.random()}s`;
+                    se_flare.style.left = `calc((100% - 5em) * ${i/a.length})`;
+                    se_fires.append(se_flare);
+                });
+                se_editor.append(se_fires); return se_fires;
+            })();
         }
     }
     window.addEventListener('keyup', handler, false);
