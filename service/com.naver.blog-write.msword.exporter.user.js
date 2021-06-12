@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         스마트에디터ONE MSWord문서(*.docx) 내보내기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.32
+// @version      1.1.33
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
+// @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.naver.com/*Redirect=Write*
 // @match        *://blog.naver.com/*Redirect=Update*
-// @match        *://blog.naver.com/*/postwrite
 // @match        *://blog.naver.com/PostWriteForm*
 // @match        *://blog.naver.com/PostUpdateForm*
 // @match        *://blog.editor.naver.com/editor*
@@ -143,14 +143,18 @@ async function transformDocument(content) {
             children.push(...convs.flat());
         }
         if(item.type == 'quotation') {
-            const items = _.zip(item.title, item.description);
-            const convs = await Promise.map(items, async ([ title, description ]) => {
+            const items1 = await Promise.map(item.title, async (title) => {
                 return [
                     new docx.Paragraph({ children: [ new docx.TextRun({ text: title, bold: 1, size: 22 }) ] }),
+                ];
+            });
+            children.push(...items1.flat());
+            const items2 = await Promise.map(item.description, async (description) => {
+                return [
                     new docx.Paragraph({ children: [ new docx.TextRun({ text: description }) ] }),
                 ];
             });
-            children.push(...convs.flat());
+            children.push(...items2.flat());
         }
         if(item.type == 'places') {
             const image = await Promise.map(item.image, async (image) => {
