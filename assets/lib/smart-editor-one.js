@@ -309,7 +309,7 @@
     window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
         const sectionsV2 = SE_components(document, SE_componentParseV2, '.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *');
-        const sectionsV3 = SE_components(document, SE_componentParseV3, '#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_wrap .se_component');
+        const sectionsV3 = SE_components(document, SE_componentParseV3, '#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component');
         const sectionsV4 = SE_components(document, SE_componentParseV4, '#viewTypeSelector .se-component, .se-main-container .se-component, .se-container .se-component');
         const sections = [sectionsV2, sectionsV3, sectionsV4].flat().filter(v=>!!v && v.type);
         const content = SE_componentContent(sections);
