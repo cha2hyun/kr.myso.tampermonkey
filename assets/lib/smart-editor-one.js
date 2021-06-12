@@ -12,7 +12,7 @@
             if(root || (component.childNodes && component.childNodes.length)) {
                 return Array.from(component.childNodes).map((component)=>componentParse(component)).filter(v=>!!v).flat();
             }
-            const section = { type: '', offset, version: 2 };
+            const section = { type: '', offset, version: 2 }; if(!component) return section;
             if(component.classList && component.classList.contains('__se_object')) {
                 const json = decodeURIComponent(component.getAttribute('jsonvalue') || '');
                 const data = decodeJSON(json);
@@ -32,7 +32,7 @@
         return componentParse(component, true);
     }
     window.SE_componentParseV3 = function SE_componentParseV3(component, offset = 0) {
-        const section = { type: '', offset, version: 3 };
+        const section = { type: '', offset, version: 3 }; if(!component) return section;
         // SE 3.0
         if(component.classList.contains('se_documentTitle')) {
             section.type = 'title';
@@ -149,7 +149,7 @@
         return section;
     }
     window.SE_componentParseV4 = function SE_componentParseV4(component, offset = 0) {
-        const section = { type: '', offset, version: 4 };
+        const section = { type: '', offset, version: 4 }; if(!component) return section;
         // SE 4.0
         if(component.classList.contains('se-documentTitle')) {
             section.type = 'title';
@@ -304,12 +304,15 @@
             }
         }).join("\n\n");
     }
+    window.SE_components = function SE_components(document, mapper, selector) {
+        return Array.from(document.querySelectorAll(selector)).filter((o,i,a)=>o && o.classList && a.indexOf(o) === i).map(mapper).flat();
+    }
     window.SE_parse = function SE_parse(document, info) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
-        const sectionsV2 = Array.from(document.querySelectorAll('#postViewArea > *, body.se2_inputarea > *')).map(SE_componentParseV2).flat();
-        const sectionsV3 = Array.from(document.querySelectorAll('.se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component')).map(SE_componentParseV3).flat();
-        const sectionsV4 = Array.from(document.querySelectorAll('.se-main-container .se-component, .se-container .se-component')).map(SE_componentParseV4).flat();
-        const sections = [sectionsV2, sectionsV3, sectionsV4].flat().filter(v=>!!v && v.type); if(!sections.length) return;
+        const sectionsV2 = SE_components(document, SE_componentParseV2, '.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *');
+        const sectionsV3 = SE_components(document, SE_componentParseV3, '#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component');
+        const sectionsV4 = SE_components(document, SE_componentParseV4, '#viewTypeSelector .se-component, .se-main-container .se-component, .se-container .se-component');
+        const sections = [sectionsV2, sectionsV3, sectionsV4].flat().filter(v=>!!v && v.type);
         const content = SE_componentContent(sections);
         const contentTrim = content.replace(/[\s]+/g, '');
         const contentLength = content.replace(/[\r\n]+/g, '').length;
