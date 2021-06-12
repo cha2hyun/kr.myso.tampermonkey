@@ -311,12 +311,14 @@
         const sectionsV4 = Array.from(document.querySelectorAll('.se-main-container .se-component, .se-container .se-component')).map(SE_componentParseV4).flat();
         const sections = [sectionsV2, sectionsV3, sectionsV4].flat().filter(v=>!!v && v.type); if(!sections.length) return;
         const content = SE_componentContent(sections);
+        const contentTrim = content.replace(/[\s\r\n]+/g, '');
         const contentLength = content.replace(/[\r\n]+/g, '').length;
-        const contentLengthTrim = content.replace(/[\s\r\n]+/g, '').length;
+        const contentLengthTrim = contentTrim.length;
         return {
             info,
             sections,
             content,
+            contentTrim,
             contentLength,
             contentLengthTrim
         }
