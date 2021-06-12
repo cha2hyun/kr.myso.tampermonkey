@@ -46,7 +46,6 @@
             } else if(component.classList.contains('paragraph_wrapping')) {
                 const section1 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot .se_subComponent'), offset));
                 const section2 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot + .se_textarea'), offset));
-                console.log(section1, section2);
                 return [section1, section2];
             } else {
                 section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
