@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.7
+// @version      1.1.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
+// @match        *://blog.naver.com/*/*
 // @match        *://blog.naver.com/PostWriteForm*
 // @match        *://blog.naver.com/PostUpdateForm*
 // @match        *://blog.naver.com/PostView*
@@ -47,7 +48,7 @@ GM_App(async function main() {
     function handler(e) {
         // 글자수 세기
         const se_editor = document.querySelector('.blog_editor');
-        const se = SE_parse(document); if(!se) return;
+        const se = SE_parse(document); if(!se || !se.content) return;
         const container = document.querySelector('head');
         const se_toast_popup = container.querySelector('.se-toast-popup.content-length') || document.createElement('div');
         const se_toast_popup_container = se_toast_popup.querySelector('.se-toast-popup-container') || document.createElement('div');
