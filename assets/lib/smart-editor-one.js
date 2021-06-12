@@ -156,8 +156,8 @@
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
         if(component.classList.contains('se-wrappingParagraph')) {
-            const section1 = Object.assign({}, section, SE_componentParse4(component.querySelector('.se-component-slot.se-component-slot-float .se-section'), offset));
-            const section2 = Object.assign({}, section, SE_componentParse4(component.querySelector('.se-component-slot:not(.se-component-slot-float) .se-section'), offset));
+            const section1 = Object.assign({}, section, SE_componentParseV4(component.querySelector('.se-component-slot.se-component-slot-float .se-section'), offset));
+            const section2 = Object.assign({}, section, SE_componentParseV4(component.querySelector('.se-component-slot:not(.se-component-slot-float) .se-section'), offset));
             return [section1, section2];
         }
         if(component.classList.contains('se-text') || component.classList.contains('se-section-text')) {
