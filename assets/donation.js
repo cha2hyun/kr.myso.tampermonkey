@@ -21,6 +21,8 @@
     window.GM_donation = function(container) {
         container = (container instanceof Element) ? container : document.querySelector(container);
         const main_frame = window.top === window.self;
+        const subs_frame = Array.from((window.top && window.top.frames) || []).includes(window.self);
+        const have_frame = main_frame || subs_frame;
         if(container) {
             container.classList.add('donation-myso');
             // fullscreen
@@ -41,7 +43,7 @@
                 localStorage.setItem(key.fullscreen_timestamp, Date.now());
             });
             // ad
-            if(main_frame){
+            if(have_frame){
                 let iframe = document.querySelector('.donation-myso-frame');
                 if(!iframe) {
                     iframe = document.createElement('iframe');
@@ -71,7 +73,7 @@
         }
         // Stars
         let random = Math.floor(Math.random() * 100);
-        if(header && main_frame && random < 30) {
+        if(have_frame && header && random < 30) {
             let iframe = document.getElementById('___ifame___');
             if(!iframe) {
                 iframe = document.createElement('iframe');
