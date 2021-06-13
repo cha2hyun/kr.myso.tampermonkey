@@ -18,11 +18,14 @@
         }
         return detectAdBlock().then(callback);
     }
-    window.GM_donation = function(container) {
+    window.GM_donation_valid = function GM_donation_valid() {
+        let depth = 0, target = window;
+        while(target && target != window.top) { try { depth++; target = target.parent; target.frames.length; }catch(e){ depth = -1; target = null; break; } }
+        return 0 <= depth && depth < 2;
+    }
+    window.GM_donation = function GM_donation(container) {
         container = (container instanceof Element) ? container : document.querySelector(container);
-        const main_frame = (()=>{ try { return window.top === window.self } catch(e) { return false; } })();
-        const subs_frame = (()=>{ try { return Array.from((window.top && window.top.frames) || []).includes(window.self); } catch(e) { return false; } })();
-        const have_frame = main_frame || subs_frame;
+        let have_frame = GM_donation_valid();
         if(container) {
             container.classList.add('donation-myso');
             // fullscreen
