@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 문서 구성 요약
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.components.analaysis.user.js
 // @description  네이버 블로그로 작성된 문서 구성을 간략하게 확인할 수 있습니다.
 // @author       Won Choi
@@ -14,7 +14,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=11
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js

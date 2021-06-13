@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         네이버 블로그 댓글 이용자 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.comments.analysis.user.js
 // @description  네이버 블로그의 댓글수 순위 이용자 분석 기능을 확장합니다.
 // @author       Won Choi
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @match        https://blog.stat.naver.com/blog/rank/comment*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // ==/UserScript==
 async function inject_js(opt) {
   return new Promise((resolve, reject) => {

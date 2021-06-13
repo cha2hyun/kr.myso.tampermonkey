@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 지수 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @author       Won Choi
@@ -10,7 +10,7 @@
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js

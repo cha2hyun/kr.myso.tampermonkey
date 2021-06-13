@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 스마트에디터 ONE 뷰포트
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.viewport.user.js
 // @description  네이버 스마트에디터 ONE에서 다양한 단말기 해상도에 맞게 글을 작성하게 도와줍니다.
 // @author       Won Choi
@@ -10,7 +10,7 @@
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.editor.naver.com/editor*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // ==/UserScript==
 async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.keyword.counter.user.js
 // @description  네이버 블로그&포스트 작성 중 포함된 키워드를 분석합니다.
 // @author       Won Choi
@@ -17,7 +17,7 @@
 // @match        *://post.editor.naver.com/editor*
 // @match        *://m.post.editor.naver.com/editor*
 // @match        *://blog.naver.com/lib/smarteditor2/*/smart_editor2_inputarea.html
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // ==/UserScript==

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 동영상 다운로더
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.1
+// @version      1.1.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-video.downloader.user.js
 // @description  네이버 블로그 동영상 다운로드 기능을 활성화됩니다.
 // @author       Won Choi
@@ -9,7 +9,7 @@
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @match        *://serviceapi.nmv.naver.com/flash/convertIframeTag*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
 // ==/UserScript==
 async function inject_xhr() {

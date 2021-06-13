@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         네이버 블로그 PC 통계 플러스 - 통합검색 노출누락 여부 확인
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.omission.search.user.js
 // @description  네이버 블로그 통계에서 네이버 통합검색 노출 여부 확인이 가능한 버튼을 추가해줍니다.
 // @author       Won Choi
 // @match        https://blog.stat.naver.com/blog/article/*/cv
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=4
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // ==/UserScript==
 async function main() {
     GM_donation('#_root', 0);

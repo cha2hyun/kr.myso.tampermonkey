@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 통계 지표 다운로드 플러스
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.msexcel.exporter.user.js
 // @description  네이버 블로그 통계의 지표 다운로드 기능을 개선하여 줍니다.
 // @author       Won Choi
@@ -12,7 +12,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js?v=25
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js

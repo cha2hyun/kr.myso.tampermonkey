@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 데이터랩 검색어 트렌드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
 // @description  네이버 검색결과에서 데이터랩의 검색어 트렌드 정보를 확인할 수 있습니다.
 // @author       Won Choi
@@ -12,7 +12,7 @@
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @require      https://cdn.jsdelivr.net/npm/chart.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
 // ==/UserScript==

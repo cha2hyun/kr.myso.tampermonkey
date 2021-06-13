@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 통계 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.advanced.user.js
 // @description  네이버 블로그 통계 그래프에 분석 및 예측에 필요한 다양한 요소를 추가해줍니다.
 // @author       Won Choi
@@ -13,7 +13,7 @@
 // @require      https://cdn.amcharts.com/lib/4/themes/animated.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=4
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/vendor.js
 // @require      https://cdn.jsdelivr.net/npm/chart.js
 // ==/UserScript==

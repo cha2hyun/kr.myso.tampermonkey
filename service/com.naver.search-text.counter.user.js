@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.10
+// @version      1.0.11
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -14,7 +14,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=20
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js

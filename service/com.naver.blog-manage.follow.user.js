@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         네이버 블로그 이웃,그룹 관리 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
 // @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @author       Won Choi
 // @match        *://admin.blog.naver.com/BuddyListManage*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @grant        GM_addStyle
 // ==/UserScript==
 async function inject_js(opt) {

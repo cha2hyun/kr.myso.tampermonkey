@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name         네이버 블로그 공감수 순위 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
 // @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
 // @author       Won Choi
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @match        https://blog.stat.naver.com/blog/rank/like*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // ==/UserScript==
 async function inject_js(opt) {
   return new Promise((resolve, reject) => {
