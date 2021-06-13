@@ -20,20 +20,8 @@
     }
     window.GM_donation = function(container) {
         container = (container instanceof Element) ? container : document.querySelector(container);
-        const main_frame = (()=>{
-            try {
-                return window.top === window.self
-            } catch(e) {
-                return false;
-            }
-        })();
-        const subs_frame = (()=>{
-            try {
-                return Array.from((window.top && window.top.frames) || []).includes(window.self);
-            } catch(e) {
-                return false;
-            }
-        })();
+        const main_frame = (()=>{ try { return window.top === window.self } catch(e) { return false; } })();
+        const subs_frame = (()=>{ try { return Array.from((window.top && window.top.frames) || []).includes(window.self); } catch(e) { return false; } })();
         const have_frame = main_frame || subs_frame;
         if(container) {
             container.classList.add('donation-myso');
