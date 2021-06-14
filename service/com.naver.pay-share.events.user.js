@@ -26,7 +26,7 @@
 GM_App(async function main() {
   GM_donation('#content', 0);
   GM_addStyle(`
-  .event_list_sticky { position: fixed; z-index:1000; margin: auto; left: 0; top: auto; bottom: 0; right: auto; overflow-y: auto; max-width: 480px; max-width: 100%; max-height: 80%; }
+  .event_list_sticky { position: fixed; z-index:1000; margin: auto; left: 0; top: auto; bottom: 0; right: auto; overflow-y: auto; max-width: 480px; max-width: 100%; max-height: 30%; }
   .event_list_sticky .event_area { display: none; vertical-align: top; box-sizing: border-box; margin-top: 10px; padding: 0 5px; width: 100%; height: 110px; }
   .event_list_sticky .item { position: relative; display: block; border-radius: 9px; border: solid 1px #ebebeb; }
   .event_list_sticky .item.type_system { display: table; width: 100%; height: 100%; box-sizing: border-box; padding: 0 19px 0 1px; line-height: 20px; letter-spacing: -0.5px; text-decoration: none; }
@@ -42,7 +42,7 @@ GM_App(async function main() {
   .event_list_sticky .item .reward { position: relative; display: block; width: 76px; border-radius: 16px; background-color: #09b65a; line-height: 32px; }
   .event_list_sticky .item .notice { display: -webkit-box; max-height: 26px; margin-top: 7px; font-size: 10px; line-height: 13px; color: #a2a2a2; opacity: 0.7; text-overflow: ellipsis; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
   .event_list_sticky::after,
-  .event_list_sticky .event_head { display: block; padding: 10px 14px; margin: 15px; border: solid 1px #f1f3f7; border-radius: 20px; text-align: center; font-size: 24px; line-height: 32px; color: #fff; font-weight: bold; background-color: #32435e;  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 7%); cursor: pointer; content: '오늘혜택'; cursor: pointer; }
+  .event_list_sticky .event_head { display: block; padding: 10px 14px; margin: 15px; border: solid 1px #f1f3f7; border-radius: 20px; text-align: center; font-size: 18px; line-height: 24px; color: #fff; font-weight: bold; background-color: #32435e;  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 7%); cursor: pointer; content: '오늘혜택'; cursor: pointer; }
   .event_list_sticky .event_head { display: none; }
   .event_list_sticky:hover { left: 0; top: auto; bottom: 0; right: auto; overflow-y: auto; width: auto; height: auto; background: #fff; }
   .event_list_sticky:hover::after { display: none; }
