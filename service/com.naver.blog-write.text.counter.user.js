@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.12
+// @version      1.1.13
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -32,6 +32,9 @@ GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`
       head { display: block !important; }
+      .se-util-button-gamemode { border: 1px solid #f00 !important; }
+      .se-util-button-gamemode.se-util-button-active { border: 1px solid #0f0 !important; }
+      .se-util-button-gamemode::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F579\\FE0F' !important; }
       .se-toast-popup.content-length { position: fixed; z-index: 52; bottom: 0; left: 0; right: 0; margin: auto; }
       .se-toast-popup.content-length .se-toast-popup-container { position: absolute; bottom: 90px; right: 0; left: 0; height: 0; margin: auto; text-align: center; font-size: 0; }
       .se-toast-popup.content-length .se-toast-popup-content { position: relative; display: inline-block; height: 39px; padding-left: 22px; padding-right: 22px; background-color: #fff; -webkit-box-sizing: border-box; box-sizing: border-box; border-radius: 2px; }
@@ -91,6 +94,17 @@ GM_App(async function main() {
       .blog_editor[data-cps="950"] .se-fires::after { display: block; content: '절대신' }
       .blog_editor[data-cps="950"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(66,0,235) 20%,rgba(66,0,235,0) 70%); }
     `);
+    function gamemode(type = 'gamemode', label = '포스팅 게임', callback) {
+        let enabled = gamemode[type] = gamemode[type] || false;
+        const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
+        const wrp = mnu.querySelector(`.se-utils-item.se-utils-item-${type}`) || document.createElement('li'); if(wrp.className) return;
+        wrp.classList.add('se-utils-item', `se-utils-item-${type}`); mnu.append(wrp);
+        const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-gamemode'); btn.innerHTML = `<span class="se-utils-text">${label}</span>`; wrp.append(btn);
+        btn.onclick = () => {
+            btn.classList.toggle('se-util-button-active', enabled = !enabled);
+            if(callback) callback(enabled);
+        }
+    }
     function handler(e) {
         // 글자수 세기
         const se_editor = document.querySelector('.blog_editor');
@@ -122,7 +136,11 @@ GM_App(async function main() {
             se_editor.dataset.cps = Math.min(Math.floor(handler.cps / 50) * 50, 950);
             se_toast_popup.dataset.cps = Math.min(Math.floor(handler.cps / 100) * 100, 900);
             se_toast_popup_message.innerText = `글자수 : ${se.contentLength}자 (공백제외: ${se.contentLengthTrim}자), 타자수 : ${handler.cps}회/분`;
-            const se_fires = se_editor.querySelector('.se-fires') || ((se_fires) => {
+        }
+        // 게임모드 1
+        gamemode('gamemode1', '게임모드Ⅰ', (enabled) => {
+            let se_fires = se_editor.querySelector('.se-fires');
+            if(enabled && !se_fires) {
                 se_fires = document.createElement('div');
                 se_fires.className = 'se-fires';
                 Array(50).fill(null).map((v, i, a)=>{
@@ -132,9 +150,11 @@ GM_App(async function main() {
                     se_flare.style.left = `calc((100% - 5em) * ${i/a.length})`;
                     se_fires.append(se_flare);
                 });
-                se_editor.append(se_fires); return se_fires;
-            })();
-        }
+                se_editor.append(se_fires);
+            } else {
+                se_fires.remove();
+            }
+        });
     }
     window.addEventListener('keyup', handler, false);
     window.addEventListener('keydown', handler, false);
