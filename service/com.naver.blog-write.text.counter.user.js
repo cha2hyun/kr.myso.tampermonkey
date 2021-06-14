@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.15
+// @version      1.1.16
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -141,51 +141,51 @@ GM_App(async function main() {
             se_editor.dataset.cps = Math.min(Math.floor(handler.cps / 50) * 50, 950);
             se_toast_popup.dataset.cps = Math.min(Math.floor(handler.cps / 100) * 100, 900);
             se_toast_popup_message.innerText = `글자수 : ${se.contentLength}자 (공백제외: ${se.contentLengthTrim}자), 타자수 : ${handler.cps}회/분`;
+            gamemode('gamemode1', '게임모드Ⅰ', (enabled) => {
+                let se_fires = se_editor.querySelector('.se-fires');
+                if(enabled && !se_fires) {
+                    se_fires = document.createElement('div');
+                    se_fires.className = 'se-fires';
+                    Array(50).fill(null).map((v, i, a)=>{
+                        const se_flare = document.createElement('div');
+                        se_flare.className = 'se-fires-flare';
+                        se_flare.style.animationDelay = `${2 * Math.random()}s`;
+                        se_flare.style.left = `calc((100% - 5em) * ${i/a.length})`;
+                        se_fires.append(se_flare);
+                    });
+                    se_editor.append(se_fires);
+                } else {
+                    se_fires.remove();
+                }
+            });
+            gamemode('gamemode2', '게임모드Ⅱ', (enabled, state, element) => {
+                const gametime = 1000 * 60 * 30;
+                function pause(notice) {
+                    window.datetime2 = null;
+                    window.gamemode2 = clearTimeout(window.gamemode2);
+                    Array.from(document.querySelectorAll('.apply-gamemode2')).map(el=>el.classList.remove('apply-gamemode2'));
+                    alert(notice || '30분 타임어택 게임을 포기하였습니다.');
+                    state(false);
+                    delete element.dataset.text;
+                }
+                function start() {
+                    window.datetime2 = window.datetime2 || Date.now();
+                    window.gamemode2 = clearTimeout(window.gamemode2);
+                    window.gamemode2 = setTimeout(() => {
+                        const diffs = window.datetime2 + gametime - Date.now(); element.dataset.text = `[타임어택] ${(diffs / 1000 / 60).toFixed(2)}분 남음`;
+                        const items = Array.from(document.querySelectorAll('.se-module:not(.apply-gamemode2)'));
+                        if(diffs <= 3000 + (150 * items.length)) {
+                            const index = Math.floor(Math.random() * items.length);
+                            const item = items[index]; if(item) { item.classList.add('apply-gamemode2'); }
+                        }
+                        if(diffs <= 0) {
+                            pause('30분 타임어택 게임을 실패하였습니다.');
+                        } else { start(); }
+                    }, 150);
+                }
+                if(enabled && confirm('30분 타임어택 게임을 시작합니다.\n30분에 가까워질수록 구성요소들이 사라지는 효과가 적용됩니다.\n게임을 포기하거나 실패하면 글이 원래대로 복원됩니다.')) { start(); } else { pause(); }
+            });
         }
-        gamemode('gamemode1', '게임모드Ⅰ', (enabled) => {
-            let se_fires = se_editor.querySelector('.se-fires');
-            if(enabled && !se_fires) {
-                se_fires = document.createElement('div');
-                se_fires.className = 'se-fires';
-                Array(50).fill(null).map((v, i, a)=>{
-                    const se_flare = document.createElement('div');
-                    se_flare.className = 'se-fires-flare';
-                    se_flare.style.animationDelay = `${2 * Math.random()}s`;
-                    se_flare.style.left = `calc((100% - 5em) * ${i/a.length})`;
-                    se_fires.append(se_flare);
-                });
-                se_editor.append(se_fires);
-            } else {
-                se_fires.remove();
-            }
-        });
-        gamemode('gamemode2', '게임모드Ⅱ', (enabled, state, element) => {
-            const gametime = 1000 * 60 * 30;
-            function pause(notice) {
-                window.datetime2 = null;
-                window.gamemode2 = clearTimeout(window.gamemode2);
-                Array.from(document.querySelectorAll('.apply-gamemode2')).map(el=>el.classList.remove('apply-gamemode2'));
-                alert(notice || '30분 타임어택 게임을 포기하였습니다.');
-                state(false);
-                delete element.dataset.text;
-            }
-            function start() {
-                window.datetime2 = window.datetime2 || Date.now();
-                window.gamemode2 = clearTimeout(window.gamemode2);
-                window.gamemode2 = setTimeout(() => {
-                    const diffs = window.datetime2 + gametime - Date.now(); element.dataset.text = `[타임어택] ${(diffs / 1000 / 60).toFixed(2)}분 남음`;
-                    const items = Array.from(document.querySelectorAll('.se-module:not(.apply-gamemode2)'));
-                    if(diffs <= 3000 + (150 * items.length)) {
-                        const index = Math.floor(Math.random() * items.length);
-                        const item = items[index]; if(item) { item.classList.add('apply-gamemode2'); }
-                    }
-                    if(diffs <= 0) {
-                        pause('30분 타임어택 게임을 실패하였습니다.');
-                    } else { start(); }
-                }, 150);
-            }
-            if(enabled && confirm('30분 타임어택 게임을 시작합니다.\n30분에 가까워질수록 구성요소들이 사라지는 효과가 적용됩니다.\n게임을 포기하거나 실패하면 글이 원래대로 복원됩니다.')) { start(); } else { pause(); }
-        });
     }
     window.addEventListener('keyup', handler, false);
     window.addEventListener('keydown', handler, false);
