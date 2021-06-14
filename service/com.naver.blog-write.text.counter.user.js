@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.13
+// @version      1.1.14
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -32,6 +32,8 @@ GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`
       head { display: block !important; }
+      .se-util-button[data-text]::after { content: attr(data-text); transition-property: opacity; transition-duration: .3s; transition-timing-function: cubic-bezier(.19,1,.22,1); position: absolute; top: 0; right: 100%; bottom: 0; height: 12px; margin: auto 10px auto 0; font-size: 12px; color: #00c73c; white-space: nowrap; opacity: 1; }
+      .se-util-button[data-text]:hover::after { display: none; }
       .se-util-button-gamemode { border: 1px solid #f00 !important; }
       .se-util-button-gamemode.se-util-button-active { border: 1px solid #0f0 !important; }
       .se-util-button-gamemode::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F579\\FE0F' !important; }
@@ -93,6 +95,8 @@ GM_App(async function main() {
       .blog_editor[data-cps="900"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(106,49,255) 20%,rgba(106,49,255,0) 70%); }
       .blog_editor[data-cps="950"] .se-fires::after { display: block; content: '절대신' }
       .blog_editor[data-cps="950"] .se-fires-flare { display: block; background-image: radial-gradient(rgb(66,0,235) 20%,rgba(66,0,235,0) 70%); }
+      @keyframes gamemode2 { from { opacity: 1; transform: translateY(0) scale(1) rotate(0); } to { opacity: 0; transform: translateY(-10em) scale(0) rotate(360deg); } }
+      .apply-gamemode2 { animation: rise 2s ease-in; animation-fill-mode: forwards; }
     `);
     function gamemode(type = 'gamemode', label = '포스팅 게임', callback) {
         let enabled = gamemode[type] = gamemode[type] || false;
@@ -102,7 +106,7 @@ GM_App(async function main() {
         const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-gamemode'); btn.innerHTML = `<span class="se-utils-text">${label}</span>`; wrp.append(btn);
         btn.onclick = () => {
             btn.classList.toggle('se-util-button-active', enabled = !enabled);
-            if(callback) callback(enabled);
+            if(callback) callback(enabled, (state)=>btn.classList.toggle('se-util-button-active', enabled=!!state), btn);
         }
     }
     function handler(e) {
@@ -137,7 +141,6 @@ GM_App(async function main() {
             se_toast_popup.dataset.cps = Math.min(Math.floor(handler.cps / 100) * 100, 900);
             se_toast_popup_message.innerText = `글자수 : ${se.contentLength}자 (공백제외: ${se.contentLengthTrim}자), 타자수 : ${handler.cps}회/분`;
         }
-        // 게임모드 1
         gamemode('gamemode1', '게임모드Ⅰ', (enabled) => {
             let se_fires = se_editor.querySelector('.se-fires');
             if(enabled && !se_fires) {
@@ -154,6 +157,33 @@ GM_App(async function main() {
             } else {
                 se_fires.remove();
             }
+        });
+        gamemode('gamemode2', '게임모드Ⅱ', (enabled, state, element) => {
+            const gametime = 1000 * 60 * 30;
+            function pause(notice) {
+                window.datetime2 = null;
+                window.gamemode2 = clearTimeout(window.gamemode2);
+                Array.from(document.querySelectorAll('.apply-gamemode2')).map(el=>el.classList.remove('apply-gamemode2'));
+                alert(notice || '30분 타임어택 게임을 포기하였습니다.');
+                state(false);
+                delete element.dataset.text;
+            }
+            function start() {
+                window.datetime2 = window.datetime2 || Date.now();
+                window.gamemode2 = clearTimeout(window.gamemode2);
+                window.gamemode2 = setTimeout(() => {
+                    const diffs = window.datetime2 + gametime - Date.now(); element.dataset.text = `[타임어택] ${(diffs / 1000 / 60).toFixed(2)}분 남음`;
+                    const items = Array.from(document.querySelectorAll('.se-module:not(.apply-gamemode2)'));
+                    if(diffs <= 3000 + (150 * items.length)) {
+                        const index = Math.floor(Math.random() * items.length);
+                        const item = items[index]; if(item) { item.classList.add('apply-gamemode2'); }
+                    }
+                    if(diffs <= 0) {
+                        pause('30분 타임어택 게임을 실패하였습니다.');
+                    } else { start(); }
+                }, 150);
+            }
+            if(enabled && confirm('30분 타임어택 게임을 시작합니다.\n30분에 가까워질수록 점점 구성요소들이 사라집니다.')) { start(); } else { pause(); }
         });
     }
     window.addEventListener('keyup', handler, false);
