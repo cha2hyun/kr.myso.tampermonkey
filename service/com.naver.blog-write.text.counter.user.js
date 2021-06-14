@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.14
+// @version      1.1.15
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -32,6 +32,7 @@ GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`
       head { display: block !important; }
+      .se-utils > ul > li > button { margin-top: 14px !important; }
       .se-util-button[data-text]::after { content: attr(data-text); transition-property: opacity; transition-duration: .3s; transition-timing-function: cubic-bezier(.19,1,.22,1); position: absolute; top: 0; right: 100%; bottom: 0; height: 12px; margin: auto 10px auto 0; font-size: 12px; color: #00c73c; white-space: nowrap; opacity: 1; }
       .se-util-button[data-text]:hover::after { display: none; }
       .se-util-button-gamemode { border: 1px solid #f00 !important; }
@@ -183,7 +184,7 @@ GM_App(async function main() {
                     } else { start(); }
                 }, 150);
             }
-            if(enabled && confirm('30분 타임어택 게임을 시작합니다.\n30분에 가까워질수록 점점 구성요소들이 사라집니다.')) { start(); } else { pause(); }
+            if(enabled && confirm('30분 타임어택 게임을 시작합니다.\n30분에 가까워질수록 구성요소들이 사라지는 효과가 적용됩니다.\n게임을 포기하거나 실패하면 글이 원래대로 복원됩니다.')) { start(); } else { pause(); }
         });
     }
     window.addEventListener('keyup', handler, false);
