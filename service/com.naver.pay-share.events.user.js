@@ -6,7 +6,6 @@
 // @description  네이버 페이의 포인트 혜택 클릭보상 이벤트를 전부 확인하고, 공유 할 수 있도록 리스트를 복사합니다.
 // @author       Won Choi
 // @connect      naver.com
-// @match        *://m.naver.com/
 // @match        *://www.naver.com/
 // @match        *://pay.naver.com/*
 // @match        *://*.pay.naver.com/*
