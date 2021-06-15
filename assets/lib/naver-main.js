@@ -1,8 +1,8 @@
 (function(window) {
   window.GM_xmlhttpRequestAsync = function(url, options) {
-      return new Promise((resolve, reject) => {
-          GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options));
-      });
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options));
+    });
   }
 })(window);
 // ---------------------
@@ -48,17 +48,17 @@
   NM_CATEGORIES.push({ label: '여행+', type: "TRAVEL" })
   NM_CATEGORIES.push({ label: '연애·결혼', type: "WEDDING" })
   NM_CATEGORIES.push({ label: '함께N', type: "WITH" })
-  window.NM_search = async function NM_search(type, param = {}) {
+  window.NM_search = async function NM_search(type, label, param = {}) {
     const cookie = Object.keys(param).map(k=>`${k}=${param[k]}`).join('; ');
     const res = await GM_xmlhttpRequestAsync(`https://m.naver.com/panels/${type}.shtml?_=${Date.now()}`, { cookie });
     const doc = new DOMParser().parseFromString(res.response, 'text/html');
-    return Array.from(doc.querySelectorAll('ul > li > a')).map((el, offset)=>({ type, offset, url: el.href }));
+    return Array.from(doc.querySelectorAll('ul > li > a')).map((el, offset)=>({ type, label, offset, url: el.href }));
   }
   window.NM_searchAll = async function NM_searchAll() {
     const result = [];
     for(let i = 0; i < NM_CATEGORIES.length; i++) {
       const item = NM_CATEGORIES[i];
-      const items = await NM_search(item.type);
+      const items = await NM_search(item.type, item.label || item.type);
       result.push(...items);
     }
     return result.flat();
