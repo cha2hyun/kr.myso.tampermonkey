@@ -31,7 +31,7 @@ GM_App(async function main() {
         const items = await NM_searchAll();
         const finds = items.filter(o=>o.url.includes('blog.naver.com') && o.url.includes(`/${blogId}/`));
         if(finds.length) {
-            finds.map((item)=>Toastify({ text: `[메인노출:${item.label}] ${item.url}`, onClick: ()=>window.open(item.url) }).showToast());
+            finds.map((item)=>Toastify({ text: `[메인노출:${item.label}] ${item.url}`, duration: 15000, onClick: ()=>window.open(item.url) }).showToast());
         } else {
             Toastify({ text: `메인노출 데이터 없음`, }).showToast();
         }
