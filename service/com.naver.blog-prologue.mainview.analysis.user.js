@@ -35,6 +35,7 @@ GM_App(async function main() {
         } else {
             Toastify({ text: `메인노출 데이터 없음`, }).showToast();
         }
+        Toastify({ text: `5분 뒤 메인노출 데이터를 새로 가져옵니다...`, }).showToast();
         setTimeout(repeat, 1000 * 60 * 5);
     })();
 });
