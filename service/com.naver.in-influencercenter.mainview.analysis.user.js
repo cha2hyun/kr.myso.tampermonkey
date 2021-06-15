@@ -21,19 +21,19 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
 // ==/UserScript==
 GM_App(async function main() {
-  GM_donation('[class^="My__content___"]', 0);
-  GM_addStyle("@import url('https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css')");
-  const dom = document.querySelector('[class^="MyProfile__link_t___"]'); if(!dom) return;
-  const uri = new URL(dom.href), urlId = _.last(uri.pathname.split('/')); if(!urlId) return;
-  (async function repeat() {
-      Toastify({ text: `메인노출 데이터 가져오는 중...`, }).showToast();
-      const items = await NM_searchAll(); console.log(items);
-      const finds = items.filter(o=>o.url.includes('in.naver.com') && o.url.includes(`/${urlId}/`));
-      if(finds.length) {
-          finds.map((item)=>Toastify({ text: `[메인노출:${item.label}] ${item.url}`, onClick: ()=>window.open(item.url) }).showToast());
-      } else {
-          Toastify({ text: `메인노출 데이터 없음`, }).showToast();
-      }
-      setTimeout(repeat, 1000 * 60 * 5);
-  })();
+    GM_donation('[class^="My__content___"]', 0);
+    GM_addStyle("@import url('https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css')");
+    const dom = document.querySelector('[class^="MyProfile__link_t___"]'); if(!dom) return;
+    const uri = new URL(dom.href), urlId = _.last(uri.pathname.split('/')); if(!urlId) return;
+    (async function repeat() {
+        Toastify({ text: `메인노출 데이터 가져오는 중...`, }).showToast();
+        const items = await NM_searchAll(); console.log(items);
+        const finds = items.filter(o=>o.url.includes('in.naver.com') && o.url.includes(`/${urlId}/`));
+        if(finds.length) {
+            finds.map((item)=>Toastify({ text: `[메인노출:${item.label}] ${item.url}`, onClick: ()=>window.open(item.url) }).showToast());
+        } else {
+            Toastify({ text: `메인노출 데이터 없음`, }).showToast();
+        }
+        setTimeout(repeat, 1000 * 60 * 5);
+    })();
 });
