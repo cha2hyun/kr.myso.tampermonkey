@@ -55,6 +55,6 @@
     return Array.from(doc.querySelectorAll('ul > li > a')).map((el, offset)=>({ type, offset, url: el.href }));
   }
   window.NM_searchAll = async function NM_searchAll() {
-    return Promise.map(categories, async (item) => (!item.params) ? NM_search(item.type) : Promise.map(item.params, (param)=>NM_search(item.type, param)).then(r=>r.flat())).then(r=>r.flat());
+    return Promise.map(NM_CATEGORIES, async (item) => (!item.params) ? NM_search(item.type) : Promise.map(item.params, (param)=>NM_search(item.type, param)).then(r=>r.flat())).then(r=>r.flat());
   }
 })(window);
