@@ -18,6 +18,8 @@
     <meta property="profile:first_name" content="Won">
     <meta property="profile:last_name" content="Choi">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" integrity="sha512-Ez0cGzNzHR1tYAv56860NLspgUGuQw16GiOOp/I2LuTmpSK9xDXlgJz3XN4cnpXWDmkNBKXR/VDMTCnAaEooxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.map%2CArray.prototype.keys%2CArray.from%2CObject.assign%2CURL%2CURLSearchParams"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/js/bootstrap.bundle.min.js" integrity="sha512-sH8JPhKJUeA9PWk3eOcOl8U+lfZTgtBXD41q6cO/slwxGHCxKcW45K4oPCUhHG7NMB4mbKEddVmPuTXtpbCbFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   </head>
   <body>
     <div class="container d-flex justify-content-center align-items-center h-100 overflow-auto">
@@ -54,7 +56,6 @@
         </ul>
       </div>
     </div>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.map%2CArray.prototype.keys%2CArray.from%2CObject.assign%2CURL%2CURLSearchParams"></script>
     <script>
       Array.from(document.querySelectorAll('img.hits-seeyoufarm')).map(function(el) {
         let uri = new URL('https://hits.seeyoufarm.com/api/count/incr/badge.svg');
