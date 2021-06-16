@@ -17,6 +17,50 @@
     <meta name="twitter:description" content="{{ meta_description }}">
     <meta property="profile:first_name" content="Won">
     <meta property="profile:last_name" content="Choi">
-    <script>window.location.replace("{{ redirection_url }}");</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css" integrity="sha512-Ez0cGzNzHR1tYAv56860NLspgUGuQw16GiOOp/I2LuTmpSK9xDXlgJz3XN4cnpXWDmkNBKXR/VDMTCnAaEooxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   </head>
+  <body>
+    <div class="container d-flex justify-content-center align-items-center h-100 overflow-auto">
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="d-flex flex-column flex-xl-row">
+            <div>
+              <h1 class="card-title h3 mb-1">{{ meta_title }}</h1>
+              <p class="card-text mb-3">{{ meta_description }}</p>
+              <div>
+                <img class="hits-seeyoufarm" data-url="https://tampermonkey.myso.kr/" data-count-bg="#79C83D" data-title-bg="#555555" data-edge-flat="false" data-title="visits" />
+                {% if page.id %}
+                <img class="hits-seeyoufarm" data-url="https://tampermonkey.myso.kr{{ page.url }}" data-count-bg="#4298b5" data-title-bg="#555555" data-edge-flat="false" data-title="downloads" />
+                {% endif %}
+              </div>
+            </div>
+            {% if page.id %}
+            <div class="flex-grow-1 d-flex justify-content-center justify-content-xl-end align-items-center">
+              <div class="text-center text-xl-end">
+                <div><a href="{{ redirection_url }}" class="btn btn-md btn-primary mt-3 mb-2">Tampermonkey에 추가하기</a></div>
+                <div>
+                  <a class="text-small" href="https://www.tampermonkey.net/" target="_blank">
+                    <small>Tampermonkey가 설치된 브라우저에서 설치가 가능합니다.</small>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><a href="https://blog.naver.com/cw4196">개발자 최원의 블로그</a></li>
+          <li class="list-group-item"><a href="https://blog.naver.com/cw4196/221870540540">배포중인 프로그램 전체보기</a></li>
+        </ul>
+      </div>
+    </div>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=Array.prototype.map%2CArray.prototype.keys%2CArray.from%2CObject.assign%2CURL%2CURLSearchParams"></script>
+    <script>
+      Array.from(document.querySelectorAll('img.hits-seeyoufarm')).map(function(el) {
+        let uri = new URL('https://hits.seeyoufarm.com/api/count/incr/badge.svg');
+        let prm = Object.assign({}, el.dataset); Object.keys(prm).map(function(k) { uri.searchParams.set(k.replace(/[A-Z]/g, function(c) { return '_' + c.toLowerCase() }), prm[k]) });
+        el.src = uri.toString();
+      });
+    </script>
+  </body>
 </html>
