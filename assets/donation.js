@@ -88,5 +88,10 @@
                 header.prepend(iframe);
             }
         }
+        // Usage
+        if(header) {
+            let image = new Image();
+            image.src = 'https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Ftampermonkey.myso.kr%2F&count_bg=%2379C83D&title_bg=%23555555&title=usage&edge_flat=false';
+        }
     }
 })(window);

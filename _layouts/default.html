@@ -37,7 +37,7 @@
               <h1 class="card-title h3 mb-1">{{ meta_title }}</h1>
               <p class="card-text mb-3">{{ meta_description }}</p>
               <div>
-                <img class="hits-seeyoufarm" data-url="https://tampermonkey.myso.kr/" data-count-bg="#79C83D" data-title-bg="#555555" data-edge-flat="false" data-title="visits" />
+                <img class="hits-seeyoufarm" data-url="https://tampermonkey.myso.kr/" data-count-bg="#79C83D" data-title-bg="#555555" data-edge-flat="false" data-title="usage" />
                 {% if page.id %}
                 <img class="hits-seeyoufarm" data-url="https://tampermonkey.myso.kr{{ page.url }}" data-count-bg="#4298b5" data-title-bg="#555555" data-edge-flat="false" data-title="downloads" />
                 {% endif %}
@@ -63,6 +63,7 @@
         </ul>
       </div>
     </div>
+    <script src="https://polyfill.io/v3/polyfill.min.js"></script>
     <script>
       Array.from(document.querySelectorAll('img.hits-seeyoufarm')).map(function(el) {
         let uri = new URL('https://hits.seeyoufarm.com/api/count/incr/badge.svg');
