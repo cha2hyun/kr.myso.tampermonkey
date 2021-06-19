@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 크리에이터 어드바이저 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
-// @version      2.1.0
+// @version      2.1.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @author       Won Choi
@@ -49,7 +49,7 @@ GM_App(async function main() {
                 const contents = await window.CreatorAdvisor.exec('popular-contents', params);
                 return { date, data: contents.data }
             });
-            data.report = _.orderBy(_.map(_.groupBy(data.items.map(o=>o.data).flat(), 'channelName'), (items, channelName)=>({ channelName, metricValue: _.sumBy(items, 'metricValue') })), 'metricValue', 'desc').map((o, i)=>Object.assign({ rank: i + 1 }, o));
+            data.report = data.items && _.orderBy(_.map(_.groupBy(data.items.map(o=>o.data).flat(), 'channelName'), (items, channelName)=>({ channelName, metricValue: _.sumBy(items, 'metricValue') })), 'metricValue', 'desc').map((o, i)=>Object.assign({ rank: i + 1 }, o));
             cont.innerHTML = Handlebars.compile(`
             <div class="u_ni_ranking_component">
               <form class="u_ni_section_unit u_ni_ranking_component mb-3">
