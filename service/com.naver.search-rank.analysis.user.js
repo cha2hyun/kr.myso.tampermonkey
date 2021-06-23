@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 지수 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @author       Won Choi
@@ -62,11 +62,11 @@ async function update(keyword, start = 1, crUnknown) {
   let rnk = Object.keys(ret).filter(k=>/^r[\d]+$/.test(k)).map(k=>ret[k]);
   rnk.map((data)=>{
       let [[[crArea]], [[crGdid]], [[o1, a, b, c, d, e]]] = data;
-      let crScoreA = parseFloat(a).toFixed(2); if(crScoreA == 0 || crScoreA > 1600000000) crScoreA = '?';
-      let crScoreB = parseFloat(b).toFixed(2); if(crScoreB == 0 || crScoreB > 1600000000) crScoreB = '?';
-      let crScoreC = parseFloat(c).toFixed(2); if(crScoreC == 0 || crScoreC > 1600000000) crScoreC = '?';
-      let crScoreD = parseFloat(d).toFixed(2); if(crScoreD == 0 || crScoreD > 1600000000) crScoreD = '?';
-      let crScoreE = parseFloat(e).toFixed(2); if(crScoreE == 0 || crScoreE > 1600000000) crScoreE = '?';
+      let crScoreA = parseFloat(a); if(crScoreA == 0 || crScoreA > 1600000000) crScoreA = '?';
+      let crScoreB = parseFloat(b); if(crScoreB == 0 || crScoreB > 1600000000) crScoreB = '?';
+      let crScoreC = parseFloat(c); if(crScoreC == 0 || crScoreC > 1600000000) crScoreC = '?';
+      let crScoreD = parseFloat(d); if(crScoreD == 0 || crScoreD > 1600000000) crScoreD = '?';
+      let crScoreE = parseFloat(e); if(crScoreE == 0 || crScoreE > 1600000000) crScoreE = '?';
       let crElement = document.querySelector(`[data-cr-gdid="${crGdid}"]`);
       if(crElement && !crElement.dataset.crUnknown) {
           Object.assign(crElement.dataset, { crUnknown, crScoreA, crScoreB, crScoreC, crScoreD, crScoreE });
