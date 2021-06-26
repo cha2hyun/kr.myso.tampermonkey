@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.13
+// @version      1.0.14
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -42,7 +42,7 @@ GM_App(async function main() {
         const obj = SE_parse(new DOMParser().parseFromString(res.responseText, 'text/html'));
         const map = _.flattenDeep(nx_terms).map((keyword) =>({ keyword, count: obj.contentTrim.toLowerCase().split(keyword.toLowerCase()).length - 1 }));
         const keywordCounts = _.orderBy(map, 'count', 'desc').map((info)=>`${info.keyword}: ${info.count}회`).join(', ');
-        Object.assign(target.dataset, { keywordCounts: keywordCounts }, obj);
+        Object.assign(target.dataset, { keywordCounts: keywordCounts }, _.pick(obj, 'contentLength', 'contentLengthTrim'));
     }
     async function observe(target) {
         const observer = new MutationObserver(function(mutations) {
