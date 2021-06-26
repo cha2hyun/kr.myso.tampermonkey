@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그&포스트 키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.7
+// @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.keyword.counter.user.js
 // @description  네이버 블로그&포스트 작성 중 포함된 키워드를 분석합니다.
 // @author       Won Choi
@@ -23,7 +23,8 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=7
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=4
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=11
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -44,28 +45,42 @@ GM_App(async function main() {
       padding: 15px; width: 300px; height: auto; overflow-y: auto; white-space: pre-line;
       border: 1px solid #ddd; border-radius: 8px; background-color: #fff;
       content: attr(data-process-keyword-info); line-height: 1.5rem;
+      word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; white-space: pre-wrap;
     }
-    .se-utils-item-keywords[data-process-keyword-info]:hover::after { display: block; }
+    .se-utils-item-keywords.se-utils-item-keywords-show[data-process-keyword-info]::after { display: block; }
     `);
     async function handler(e) {
         const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
         const wrp = mnu.querySelector('.se-utils-item.se-utils-item-keywords') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-keywords'); mnu.prepend(wrp);
         const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-keywords'); btn.innerHTML = '<span class="se-utils-text">키워드 분석</span>'; wrp.append(btn);
-        if(!window.__processing_content) {
-            wrp.dataset.processKeywordInfo = '[분석진행중]\n키워드 추출 및 분석 작업이 진행중입니다...\n아이콘의 회전이 멈출때까지 잠시 기다려 주세요.';
+        wrp.onclick = function () { wrp.classList.remove('se-utils-item-keywords-show'); }
+        btn.onclick = async function() {
+            if(window.__processing_content) return;
             wrp.classList.toggle('se-utils-item-keywords-loading', window.__processing_content = true);
+            wrp.dataset.processKeywordInfo = '[분석진행중]\n키워드 추출 및 분석 작업이 진행중입니다...\n아이콘의 회전이 멈출때까지 잠시 기다려 주세요.';
             const se = SE_parse(document);
+            const sentences = se.sections.filter((section)=>['text', ''].includes(section.type));
             if(se.content) {
-                const terms = await NX_termsParagraph(se.content);
+                const terms = await NX_termsParagraph(se.content).catch(e=>[]);
+                const title = await NR_termsAll(...terms).catch(e=>[]);
                 const uniqs = terms.filter((word, index, terms)=>terms.indexOf(word) == index);
-                const group = uniqs.reduce((group, query, index)=>(group[index] = Object.assign({ query, count: terms.filter(item=>item==query).length }), group), []).sort((a, b)=>b.count - a.count);
-                wrp.dataset.processKeywordInfo = _.map(group, o=>`${o.query} (${o.count})`).join('\n') || '[오류]\n키워드 본문이 너무 짧거나, 분석 결과를 산출 할 수 없습니다.';
+                const group = uniqs.reduce((group, query, index)=>(group[index] = Object.assign({ query, count: terms.filter(item=>item==query).length }, title.find(o=>o.query == query)), group), []).sort((a, b)=>b.count - a.count);
+                wrp.dataset.processKeywordInfo = group.map((item, offset)=>{
+                    const info = [`${_.padEnd(`(${item.count})`, 8)}${_.padEnd(item.query, 10)}`];
+                    if(item.r_category) info.push(`생산선호주제: ${item.r_category}`)
+                    if(item.theme && item.theme.main) info.push(`메인소비주제: ${item.theme.main.name}`);
+                    if(item.theme && item.theme.sub)  info.push(`서브소비주제: ${item.theme.sub.map(o=>o.name).join(', ')}`);
+                    return info.join('\n');
+                }).join('\n\n') || '[오류]\n키워드 본문이 너무 짧거나, 분석 결과를 산출 할 수 없습니다.';
             } else {
                 wrp.dataset.processKeywordInfo = '[오류]\n키워드 분석 결과를 산출 할 수 없습니다.';
             }
+            wrp.classList.add('se-utils-item-keywords-show');
             wrp.classList.toggle('se-utils-item-keywords-loading', window.__processing_content = false);
-        }
+        };
     }
+    window.addEventListener('keyup', handler, false);
+    window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
     handler();
 })
