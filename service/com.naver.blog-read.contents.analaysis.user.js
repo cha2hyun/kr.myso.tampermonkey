@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 문단 단위 키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.analaysis.user.js
 // @description  네이버 블로그로 작성된 문서를 문단 단위로 키워드를 분석하고 문장의 주요 주제를 간략하게 확인할 수 있습니다.
 // @author       Won Choi
@@ -15,7 +15,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=5
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=2
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=11
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
@@ -54,9 +54,9 @@ GM_App(async function main() {
               const group = uniqs.reduce((group, query, index)=>(group[index] = Object.assign({ query, count: terms.filter(item=>item==query).length }, title.find(o=>o.query == query)), group), []).sort((a, b)=>b.count - a.count);
               line.dataset.nxStatusKeywords = group.map((item)=>{
                   const info = [`${_.padEnd(`(${item.count})`, 8)}${_.padEnd(item.query, 10)}`];
-                  if(item.r_category) info.push(`        생산선호주제: ${item.r_category}`)
-                  if(item.theme && item.theme.main) info.push(`        메인소비주제: ${item.theme.main.name}`);
-                  if(item.theme && item.theme.sub)  info.push(`        서브소비주제: ${item.theme.sub.map(o=>o.name).join(', ')}`);
+                  if(item.r_category) info.push(`생산선호주제: ${item.r_category}`)
+                  if(item.theme && item.theme.main) info.push(`메인소비주제: ${item.theme.main.name}`);
+                  if(item.theme && item.theme.sub)  info.push(`서브소비주제: ${item.theme.sub.map(o=>o.name).join(', ')}`);
                   return info.join('\n');
               }).join('\n\n');
               line.dataset.nxStatusLoading = false;
