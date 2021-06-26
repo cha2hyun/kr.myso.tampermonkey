@@ -53,7 +53,7 @@
     window.NX_termsParagraph = async function NX_termsParagraph(paragraph) {
         const words = paragraph.split(/[\s]+/g);
         const chunk = words.reduce((chunk, word, offset)=>{ const index = Math.floor(offset / 5), item = chunk[index] = chunk[index] || []; item.push(word); return chunk }, []).map(item=>item.join(' '));
-        const terms = []; for(let item of chunk) { terms.push(await NX_terms(item)); }
+        const terms = []; while(chunk.length) { terms.push((await Promise.all(chunk.splice(0, 30).map(NX_terms))).flat()); }
         return terms.flat();
         //return chunk.length ? (await Promise.all(chunk.map(NX_terms))).flat() : [];
     }
