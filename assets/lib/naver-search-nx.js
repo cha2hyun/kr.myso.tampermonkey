@@ -32,6 +32,6 @@
   }
   window.NX_terms = async function NX_terms(keyword) {
       const res = await NX_info(keyword).catch(e=>null);
-      return (res.terms || []).map(item=>item.flat()).flat();
+      return ((res && res.terms) || []).map(item=>item.flat()).flat();
   }
 })(window);
