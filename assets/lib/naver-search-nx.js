@@ -34,7 +34,7 @@
         const res = await NX_info(keyword).catch(e=>null);
         if(!res || !res.terms) return [];
         if(typeof res.terms == 'string') return [res.terms];
-        const terms = res.terms.map(item=>item.flat()).flat();
+        const terms = res.terms.map(item=>item && item.flat && item.flat()).flat();
         return terms.filter((word, offset, terms)=>terms.filter((item)=>item.includes(word)).length == 2);
     }
     window.NX_termsParagraph = async function NX_termsParagraph(paragraph) {
