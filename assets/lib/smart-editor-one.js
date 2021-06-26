@@ -1,4 +1,12 @@
 (function(window) {
+    window.GM_xmlhttpRequestAsync = function(url, options) {
+        return new Promise((resolve, reject) => {
+            GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options));
+        });
+    }
+})(window);
+// ---------------------
+(function(window) {
     function get_text(el) { return el.value || el.innerText || el.nodeValue || ''; }
     function get_placeholder(el) { return el.placeholder || (el.querySelectorAll ? Array.from(el.querySelectorAll('.se-placeholder, se_editable.is-empty')).map(get_text).join('') : ''); }
     function get_text_without_placeholder(el) { return get_text(el).replace(get_placeholder(el), ''); }
@@ -324,5 +332,10 @@
             contentLength,
             contentLengthTrim
         }
+    }
+    window.SE_parseRemote = async function SE_parseRemote(blogId, logNo) {
+        const res = await GM_xmlhttpRequestAsync(`https://m.blog.naver.com/PostView.nhn?blogId=${blogId}&logNo=${logNo}`);
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+        return SE_parse(doc, { blogId, logNo });
     }
 })(window);

@@ -57,5 +57,25 @@
         return terms.flat();
         //return chunk.length ? (await Promise.all(chunk.map(NX_terms))).flat() : [];
     }
+    window.NX_items = async function NX_items(keyword, start, where = 'view', mode) {
+        const res = await NX_Request(keyword, start, where, mode);
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
+        const listview = Array.from(doc.querySelectorAll('.lst_total > li'));
+        return listview.map((listitem, offset) => {
+            const el_n = listitem.querySelector('.sub_name');
+            const el_t = listitem.querySelector('.total_tit');
+            const el_d = listitem.querySelector('.dsc_txt');
+            if(!el_n || !el_t || !el_d) return;
+            const uri = new URL(el_t.href), params = Object.fromEntries(uri.searchParams.entries());
+            if(!uri.hostname.includes('blog.naver.com')) return;
+            return {
+                ...params,
+                rank: offset + 1,
+                blogId: uri.pathname.split('/')[1],
+                briefContents: el_t.textContent,
+                titleWithInspectMessage: el_t.textContent,
+            }
+        }).filter(v=>!!v);
+    }
 })(window);
 // ---------------------

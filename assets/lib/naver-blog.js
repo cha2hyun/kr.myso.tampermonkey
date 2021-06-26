@@ -17,6 +17,15 @@
         const data = eval(`('${res.responseText})`);
         return data && data.result;
     }
+    window.NB_blogPostList = async function NB_blogPostList(blogId, limit = 10, options) {
+        let posts = [];
+        for(let currentPage = 1; currentPage <= limit; currentPage++) {
+            const data = await NB_blogInfo(blogId, 'PostListInfo', { currentPage }).catch(e=>({}));
+            const list = data.postViewList; if(!list || !list.length) break;
+            posts = posts.concat(list.filter(o=>o.categoryOpenYn && o.allOpenPost && o.searchYn));
+        }
+        return posts;
+    }
 })(window);
 // ---------------------
 (function(window) {
