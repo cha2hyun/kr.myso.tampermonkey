@@ -30,7 +30,7 @@ GM_App(async function main() {
   .se-text-paragraph[data-nx-status-keywords] { position: relative; }
   .se-text-paragraph[data-nx-status-keywords]::after { position: absolute; z-index: 1; display: block; padding: 0.2em; background: rgba(0,0,0,0.3); color: #fff; font-size: 10px; line-height: 1.3em; border-radius: 0.2em; content: '분석 완료'; right: 0; bottom: 0; opacity: 0.5; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; white-space: pre-wrap; }
   .se-text-paragraph[data-nx-status-keywords]:hover { outline: 1px solid rgba(255, 0, 0, 0.3);  }
-  .se-text-paragraph[data-nx-status-keywords]:hover::after { background: #b4a996; color: #fff; font-size: 11px; content: attr(data-nx-status-keywords); overflow-y: auto; max-height: 240px; opacity: 1; }
+  .se-text-paragraph[data-nx-status-keywords]:hover::after { z-index: 10000; background: #b4a996; color: #fff; font-size: 11px; content: attr(data-nx-status-keywords); overflow-y: auto; max-height: 240px; opacity: 1; }
   `);
   const se = SE_parse(document); if(!se.content) return;
   let docs = document, clip = docs.querySelector('#__clipContent'); if(clip) { docs = new DOMParser().parseFromString(clip.textContent, 'text/html'); }
