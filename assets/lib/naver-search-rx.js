@@ -59,22 +59,27 @@
         uri.searchParams.set('mode', 'normal');
         return GM_xmlhttpRequestAsync(uri);
     }
-    async function NR_show(keyword, where) {
+    window.NR_info = async function NR_info(keyword, where) {
         const res = await NR_Request(keyword, where);
         const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
-        const api = doc.querySelector('.review_loading[data-api], [data-loading-class="u_pg_new_loading"][data-api]'); if(!api) return;
+        const api = doc.querySelector('.review_loading[data-api], [data-loading-class="u_pg_new_loading"][data-api]'); if(!api) return {};
         const url = api && api.dataset.api, uri = new URL(url);
         const prm = Object.fromEntries(uri.searchParams.entries());
         const map = Object.keys(prm).reduce((map, key) => (map[key] = ((v)=>{ try { return JSON.parse(v) } catch(e){ return v; } })(prm[key]), map), {});
-        const obj = flatten(map, null, '_');
-        if(obj['nlu_query_r_category']) {
-            obj['nlu_query_r_category'] = map_categories(obj['nlu_query_r_category']).join(', ') || '(알 수 없음)';
+        const obj = Object.assign({}, flatten(map, null, '$'), map);
+        if(obj && obj.nlu_query && obj.nlu_query.r_category) {
+            obj.nlu_query.r_category = map_categories(obj.nlu_query.r_category).join(', ') || '(알 수 없음)';
+            obj['nlu_query$r_category'] = obj.nlu_query.r_category;
         }
         return obj;
     }
-    window.NR_info = async function NR_info(keyword) {
-        const m_view = await NR_show(keyword, 'm_view');
-        const m_blog = await NR_show(keyword, 'm_blog');
-        return Object.assign({}, m_view, m_blog);
+    window.NR_terms = async function NR_terms(keyword)  {
+        const m_view = await NR_info(keyword, 'm_view');
+        const m_blog = await NR_info(keyword, 'm_blog');
+        return Object.assign({ query: m_view.query || m_blog.query }, m_view.nqx_theme, m_blog.nlu_query);
+    }
+    window.NR_termsAll = async function NR_termsParagraph(...keywords) {
+        const uniqs = keywords.filter((word, index, keywords)=>keywords.indexOf(word) == index);
+        return (await Promise.all(uniqs.map(NR_terms))).flat();
     }
 })(window);
