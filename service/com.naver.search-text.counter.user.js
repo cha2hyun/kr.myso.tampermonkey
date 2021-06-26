@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 블로그&포스트 글자수 세기
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.12
+// @version      1.0.13
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @author       Won Choi
@@ -32,7 +32,7 @@ GM_App(async function main() {
     `);
     // keyword NX
     const uri = new URL(location.href), query = uri.searchParams.get('query'); if(!query) return;
-    const nx_terms = [] = await NX_terms(query);
+    const nx_terms = await NX_terms(query);
 
     async function parse(target) {
         if(!target || !target.querySelector) return;
