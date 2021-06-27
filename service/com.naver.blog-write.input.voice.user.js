@@ -26,65 +26,69 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==
 GM_App(async function main() {
-  GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
-  GM_addStyle(`
-  .se-utils > ul > li > button { margin-top: 14px !important; }
-  .se-util-button-voice.se-util-button-active { border: 1px solid #0f0 !important; }
-  .se-util-button-voice::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F399\\FE0F' !important; }
-  .se-utils-item-voice-loading .se-util-button-voice::before { animation: spin1 2s infinite linear; }
-  .se-utils-item-voice[data-process-keyword-info]::after {
-    display: none; position: absolute; z-index: -1; margin:auto; right: 20px; top: -240px; bottom: 0px; margin-bottom: 10px;
-    padding: 15px; width: 300px; height: auto; overflow-y: auto; white-space: pre-line;
-    border: 1px solid #ddd; border-radius: 8px; background-color: #fff;
-    content: attr(data-process-keyword-info); line-height: 1.5rem;
-  }
-  .se-utils-item-voice[data-process-keyword-info]:hover::after { display: block; }
-  `);
-  const uri = new URL(location.href), params = Object.fromEntries(uri.searchParams.entries());
-  const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
-  const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog) return;
-  function toggle() {
-      if(toggle.flag = !toggle.flag) {
-          GM_addScript(async () => {
-              const se = window.SmartEditor && await window.SmartEditor._editorPromise; if(!se) return;
-              const recognition = window.__recognition || new webkitSpeechRecognition();
-              recognition.continuous = true;
-              recognition.interimResults = true;
-              recognition.lang="ko-KR";
-              recognition.start();
-              recognition.onresult = async (event) => {
-                  window.__transcript_timer = clearTimeout(window.__transcript_timer);
-                  const transcript = Array.from(event.results).reduce((output, data) => {
-                      if(!data.isFinal) se.toastInfo(data[0]['transcript']);
-                      return (data.isFinal ? data[0]['transcript'].trim() : null) || output;
-                  }, null);
-                  if(transcript && window.__transcript_lasts !== transcript && (window.__transcript_lasts = transcript)) {
-                      window.__transcript_timer = setTimeout(()=>se._editingService.lineBreak(), 3000);
-                      se._editingService.writeTextWithSoftLineBreak(`${window.__transcript_lasts}  `);
-                      se._editingService.erase();
-                  }
-              };
-              recognition.onerror = async (event) => console.error(event);
-              window.__recognition = recognition;
-          });
-      } else {
-          GM_addScript(() => {
-              const recognition = window.__recognition;
-              if(recognition) recognition.stop();
-          });
-      }
-      return toggle.flag;
-  }
-  async function handler(e) {
-      const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
-      const wrp = mnu.querySelector('.se-utils-item.se-utils-item-voice') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-voice'); mnu.prepend(wrp);
-      const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-voice'); btn.innerHTML = '<span class="se-utils-text">보이스 입력</span>'; wrp.append(btn);
-      btn.onclick = GM_donationApp(async function(){
-          btn.classList.toggle('se-util-button-active', toggle());
-      });
-  }
-  window.addEventListener('keyup', handler, false);
-  window.addEventListener('keydown', handler, false);
-  window.addEventListener('keypress', handler, false);
-  handler();
+    GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
+    GM_addStyle(`
+    .se-utils > ul > li > button { margin-top: 14px !important; }
+    .se-util-button-voice.se-util-button-active { border: 1px solid #0f0 !important; }
+    .se-util-button-voice::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F399\\FE0F' !important; }
+    .se-utils-item-voice-loading .se-util-button-voice::before { animation: spin1 2s infinite linear; }
+    .se-utils-item-voice[data-process-keyword-info]::after {
+      display: none; position: absolute; z-index: -1; margin:auto; right: 20px; top: -240px; bottom: 0px; margin-bottom: 10px;
+      padding: 15px; width: 300px; height: auto; overflow-y: auto; white-space: pre-line;
+      border: 1px solid #ddd; border-radius: 8px; background-color: #fff;
+      content: attr(data-process-keyword-info); line-height: 1.5rem;
+    }
+    .se-utils-item-voice[data-process-keyword-info]:hover::after { display: block; }
+    `);
+    const uri = new URL(location.href), params = Object.fromEntries(uri.searchParams.entries());
+    const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
+    const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog) return;
+    function toggle() {
+        if(toggle.flag = !toggle.flag) {
+            GM_addScript(async () => {
+                const btn = document.querySelector('.se-util-button-voice');
+                const se = window.SmartEditor && await window.SmartEditor._editorPromise; if(!se) return;
+                const recognition = window.__recognition || new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang="ko-KR";
+                recognition.start();
+                recognition.onresult = async (event) => {
+                    window.__transcript_reset = clearTimeout(window.__transcript_reset);
+                    window.__transcript_timer = clearTimeout(window.__transcript_timer);
+                    const transcript = Array.from(event.results).reduce((output, data) => {
+                        if(!data.isFinal) se.toastInfo(data[0]['transcript']);
+                        return (data.isFinal ? data[0]['transcript'].trim() : null) || output;
+                    }, null);
+                    if(transcript && window.__transcript_lasts !== transcript && (window.__transcript_lasts = transcript)) {
+                        window.__transcript_reset = setTimeout(()=>(recognition.stop(), btn && btn.classList.remove('se-util-button-active')), 30000);
+                        window.__transcript_timer = setTimeout(()=>se._editingService.lineBreak(), 3000);
+                        se._editingService.writeTextWithSoftLineBreak(`${window.__transcript_lasts}  `);
+                        se._editingService.erase();
+                    }
+                };
+                recognition.onerror = async (event) => console.error(event);
+                window.__recognition = recognition;
+                if(btn) btn.classList.toggle('se-util-button-active', true);
+            });
+        } else {
+            GM_addScript(() => {
+                const btn = document.querySelector('.se-util-button-voice');
+                const recognition = window.__recognition;
+                if(recognition) recognition.stop();
+                if(btn) btn.classList.toggle('se-util-button-active', false);
+            });
+        }
+        return toggle.flag;
+    }
+    async function handler(e) {
+        const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
+        const wrp = mnu.querySelector('.se-utils-item.se-utils-item-voice') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-voice'); mnu.prepend(wrp);
+        const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-voice'); btn.innerHTML = '<span class="se-utils-text">보이스 입력</span>'; wrp.append(btn);
+        btn.onclick = GM_donationApp(()=>toggle());
+    }
+    window.addEventListener('keyup', handler, false);
+    window.addEventListener('keydown', handler, false);
+    window.addEventListener('keypress', handler, false);
+    handler();
 });

@@ -24,7 +24,7 @@
                 const cfrm = confirm('광고 차단 플러그인이 발견 되었습니다!\n브라우저의 광고 차단 설정을 해제해주세요.\n\n개발자 최원의 모든 프로그램은\n후원 및 광고 수익을 조건으로 무료로 제공됩니다.\n\nhttps://blog.naver.com/cw4196\n후원계좌 : 최원 3333-04-6073417 카카오뱅크');
                 if(cfrm) window.open('https://in.naverpp.com/donation');
             } else {
-                callback();
+                return callback();
             }
         }
     }
