@@ -13,7 +13,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=4
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=21
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=29
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -48,7 +48,7 @@ GM_App(async function main() {
                         for(let text of item.description) await GM_speech(text);
                     }
                     if(item.type == 'line') {
-                        await GM_speech('잠시 후 네이버 블로그 오디오 리더가 이어서 재생됩니다.', 5000);
+                        await GM_speech('잠시 후 네이버 블로그 오디오 리더가 이어서 재생됩니다.', 3000);
                     }
                     if(item.type == 'sticker') {}
                     if(item.type == 'quotation') {
@@ -71,22 +71,22 @@ GM_App(async function main() {
                         for(let text of item.name) await GM_speech(`${text} 파일이 첨부되어 있습니다.`);
                     }
                     if(item.type == 'schedule') {
-                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는 일정이 포함되어 있습니다.', 3000);
+                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는 일정이 포함되어 있습니다.', 1500);
                     }
                     if(item.type == 'table' && item.table) {
-                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 표가 포함되어 있습니다.', 3000);
+                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 표가 포함되어 있습니다.', 1500);
                     }
                     if(item.type == 'code') {
-                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 코드 내용이 포함되어 있습니다.', 3000);
+                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 코드 내용이 포함되어 있습니다.', 1500);
                     }
                     if(item.type == 'formula') {
-                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 수식 정보가 포함되어 있습니다.', 3000);
+                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 수식 정보가 포함되어 있습니다.', 1500);
                     }
                     if(item.type == 'talktalk') {
                         await GM_speech('궁금할 땐 네이버 톡톡하세요!');
                     }
                     if(item.type == 'material') {
-                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 글감 정보가 포함되어 있습니다.', 3000);
+                        await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 글감 정보가 포함되어 있습니다.', 1500);
                     }
                 }
                 await GM_speech('이상. 모든 글의 읽기가 완료되었습니다.', 1000);
