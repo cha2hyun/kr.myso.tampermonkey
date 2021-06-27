@@ -47,10 +47,6 @@
             section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
         }
-        if(component.previousSibling && component.previousSibling.className && component.previousSibling.className.includes('se_wrapping_slot')) {
-            section.type = 'text';
-            section.text = [get_text_without_placeholder(component)];
-        }
         if(component.classList.contains('se_paragraph') || component.classList.contains('se_textarea')) {
             section.type = 'text';
             if(component.classList.contains('se_textarea')) {
@@ -62,6 +58,10 @@
             } else {
                 section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
             }
+        }
+        if(component.previousSibling && component.previousSibling.className && component.previousSibling.className.includes('se_wrapping_slot')) {
+            section.type = 'text';
+            section.text = [get_text_without_placeholder(component)];
         }
         if(component.classList.contains('se_image') || component.classList.contains('se_imageStrip') || component.classList.contains('se_subComponent_image')) {
             section.type = 'image';
