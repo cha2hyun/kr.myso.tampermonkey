@@ -65,10 +65,10 @@ GM_App(async function main() {
                             }
                         }
                         if(item.type == 'link') {
-                            //const items = _.zip(item.title, item.description, item.hostname);
-                            //for(let item of items) {
-                            //    await GM_speech(`첨부된 웹문서 "${item[0]}"에 대한 설명입니다. ${item[1]}. 이 웹문서는 ${item[2]} 웹사이트로 이동합니다.`);
-                            //}
+                            const items = _.zip(item.title, item.description, item.hostname);
+                            for(let item of items) {
+                                await GM_speech(`첨부된 웹문서, "${item[0]}"`);
+                            }
                         }
                         if(item.type == 'file') {
                             for(let text of item.name) await GM_speech(`${text} 파일이 첨부되어 있습니다.`);
