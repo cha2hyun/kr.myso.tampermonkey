@@ -53,15 +53,21 @@
         setTimeout(function () { speechSynthesis.speak(newUtt); }, 0);
     };
     const synth = window.speechSynthesis;
-    window.GM_speechState = function GM_speechState(){ return synth.speaking; }
-    window.GM_speechReset = function GM_speechReset() { synth.cancel(); }
+    window.GM_speechState = function GM_speechState(){
+        if(synth.speaking) return synth.speaking;
+        if(synth.utterance) return !synth.utterance.cancel;
+    }
+    window.GM_speechReset = function GM_speechReset() {
+        if(synth.speaking) synth.cancel();
+        if(synth.utterance) synth.utterance.cancel = true;
+    }
     window.GM_speech = function GM_speech(message, suffix_delay) {
-        synth.cancel();
         return new Promise((resolve, reject) => {
-            if(GM_speech.utterance) GM_speech.utterance.cancel = true;
-            GM_speech.utterance = new SpeechSynthesisUtterance(message);
-            GM_speech.utterance.onerror = reject;
-            speechUtteranceChunker(utterance, { chunkLength: 90 }, resolve);
+            if(synth.speaking) synth.cancel();
+            if(synth.utterance) synth.utterance.cancel = true;
+            synth.utterance = new SpeechSynthesisUtterance(message);
+            synth.utterance.onerror = reject;
+            speechUtteranceChunker(synth.utterance, { chunkLength: 120 }, resolve);
         }).then(()=>new Promise((resolve)=>setTimeout(resolve, suffix_delay)));
     }
-  })(window);
+})(window);
