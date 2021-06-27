@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 오디오 리더
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
 // @description  네이버 블로그의 글을 소리내어 읽어줍니다.
 // @author       Won Choi
@@ -13,7 +13,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=4
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=29
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=30
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -21,41 +21,6 @@
 // ==/UserScript==
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
-    GM_addStyle(``);
-    GM_addScript(() => {
-        window.bgm = document.querySelector('#frameBGM') || document.createElement('div'); (document.body || document.documentElement).append(window.bgm);
-        window.bgm.id = 'frameBGM';
-        window.bgm.setAttribute('frameborder', 0);
-        window.bgm.setAttribute('style', 'width: 120px; height: 120px; position: fixed; left: 15px; bottom: 15px; opacity: 0.9; border-radius: 50rem; pointer-events: none; display: none;');
-        window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
-            window.yt_list = 'PLRBp0Fe2GpglDkRdEd_BhnSkHo8FgPmzs';
-            window.yt_numb = () => Math.floor(Math.random() * 100);
-            window.yt = new YT.Player('frameBGM', {
-                height: 120, width: 120,
-                events: {
-                    onReady(event){ window.yt.setVolume(10); },
-                    onStateChange(event){ window.yt.setVolume(10); },
-                },
-                playerVars: { listType: 'playlist', list: window.yt_list, index: window.yt_numb(), autoplay: 0, loop: 1, rel: 0, },
-            });
-        }
-    });
-    GM_addScript('https://www.youtube.com/iframe_api');
-    function bg_play() {
-        GM_addScript(()=>{
-            window.yt && window.yt.loadPlaylist(window.yt_list, window.yt_numb());
-            window.yt && window.yt.playVideo();
-            window.bgm = document.querySelector('#frameBGM');
-            window.bgm && (window.bgm.style.display = 'block');
-        });
-    }
-    function bg_stop() {
-        GM_addScript(()=>{
-            window.yt && window.yt.stopVideo();
-            window.bgm = document.querySelector('#frameBGM');
-            window.bgm && (window.bgm.style.display = 'none');
-        });
-    }
     function handler(event) {
         const wrappers = Array.from(document.querySelectorAll('[data-post-editor-version]'));
         wrappers.map((wrapper) => {
@@ -66,11 +31,11 @@ GM_App(async function main() {
                 event.preventDefault();
                 if(GM_speechState()) {
                     GM_speechReset();
-                    bg_stop();
                 } else {
-                    const se = SE_parse(wrapper);
-                    bg_play();
+                    const sections = SE_parseNodes(wrapper), se = SE_parse(wrapper);
                     for(let item of se.sections) {
+                        const section = sections[item.offset];
+                        if(section) section.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
                         if(item.type == 'title') {
                             for(let text of item.text) await GM_speech(text);
                         }
@@ -100,10 +65,10 @@ GM_App(async function main() {
                             }
                         }
                         if(item.type == 'link') {
-                            const items = _.zip(item.title, item.description, item.hostname);
-                            for(let item of items) {
-                                await GM_speech(`첨부된 웹문서 "${item[0]}"에 대한 설명입니다. ${item[1]}. 이 웹문서는 ${item[2]} 웹사이트로 이동합니다.`);
-                            }
+                            //const items = _.zip(item.title, item.description, item.hostname);
+                            //for(let item of items) {
+                            //    await GM_speech(`첨부된 웹문서 "${item[0]}"에 대한 설명입니다. ${item[1]}. 이 웹문서는 ${item[2]} 웹사이트로 이동합니다.`);
+                            //}
                         }
                         if(item.type == 'file') {
                             for(let text of item.name) await GM_speech(`${text} 파일이 첨부되어 있습니다.`);
@@ -130,7 +95,6 @@ GM_App(async function main() {
                     await GM_speech('이상. 모든 글의 읽기가 완료되었습니다.', 1000);
                     await GM_speech('네이버 블로그 오디오 리더가 마음에 드셨다면, 개발자 최원을 후원해주세요. 이용해 주셔서 감사합니다.');
                     await GM_speechReset();
-                    bg_stop();
                 }
             }
         });
