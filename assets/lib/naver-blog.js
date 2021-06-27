@@ -22,7 +22,7 @@
         for(let currentPage = 1; currentPage < limit; currentPage++) {
             const data = await NB_blogInfo(blogId, 'PostListInfo', { ...options, currentPage }).catch(e=>({}));
             const list = data.postViewList; if(!list || !list.length) break;
-            posts = posts.concat(list.filter(o=>o.categoryOpenYn && o.allOpenPost && o.searchYn));
+            posts = posts.concat(list.filter(o=>!o.scraped && o.allOpenPost && o.searchYn));
         }
         return posts;
     }
