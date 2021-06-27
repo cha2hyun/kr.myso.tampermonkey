@@ -81,6 +81,7 @@
         if(component.classList.contains('se_quotation') || component.classList.contains('se_subComponent_quotation')) {
             section.type = 'quotation';
             section.title = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
+            section.description = [];
             section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
         }
         if(component.classList.contains('se_map')) {
