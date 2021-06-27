@@ -31,7 +31,11 @@ GM_App(async function main() {
             window.yt_list = 'PLRBp0Fe2GpglDkRdEd_BhnSkHo8FgPmzs';
             window.yt_numb = () => Math.floor(Math.random() * 100);
             window.yt = new YT.Player('frameBGM', {
-                height: 120, width: 120, events: { onReady(event){ window.yt.setVolume(10); } },
+                height: 120, width: 120,
+                events: {
+                    onReady(event){ window.yt.setVolume(10); },
+                    onStateChange(event){ window.yt.setVolume(10); },
+                },
                 playerVars: { listType: 'playlist', list: window.yt_list, index: window.yt_numb(), autoplay: 0, loop: 1, rel: 0, },
             });
         }
