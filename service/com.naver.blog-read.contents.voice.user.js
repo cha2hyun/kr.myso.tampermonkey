@@ -11,7 +11,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=2
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=3
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=21
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
@@ -19,7 +19,6 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==
-// ---------------------
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(``);
