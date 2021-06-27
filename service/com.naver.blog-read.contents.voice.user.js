@@ -28,8 +28,8 @@ GM_App(async function main() {
         window.bgm.setAttribute('frameborder', 0);
         window.bgm.setAttribute('style', 'width: 120px; height: 120px; position: fixed; left: 15px; bottom: 15px; opacity: 0.9; border-radius: 50rem; pointer-events: none; display: none;');
         window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
-            window.yt_list = 'PLRBp0Fe2Gpgm57nFVNM7qYZ9u64U9Q-Bf';
-            window.yt_numb = () => Math.floor(Math.random() * 20);
+            window.yt_list = 'PLRBp0Fe2GpglDkRdEd_BhnSkHo8FgPmzs';
+            window.yt_numb = () => Math.floor(Math.random() * 100);
             window.yt = new YT.Player('frameBGM', {
                 height: 120, width: 120, events: { onReady(event){ window.yt.setVolume(15); } },
                 playerVars: { listType: 'playlist', list: window.yt_list, index: window.yt_numb(), autoplay: 0, loop: 1, rel: 0, },
