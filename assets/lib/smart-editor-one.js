@@ -59,7 +59,7 @@
                 section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
             }
         }
-        if(component.previousSibling && component.previousSibling.className && component.previousSibling.className.includes('se_wrapping_slot')) {
+        if(component.previousElementSibling && component.previousElementSibling.classList.contains('se_wrapping_slot')) {
             section.type = 'text';
             section.text = [get_text_without_placeholder(component)];
         }
