@@ -59,7 +59,7 @@
                 section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
             }
         }
-        if(component.classList.contains('se_image') || component.classList.contains('se_subComponent_image')) {
+        if(component.classList.contains('se_image') || component.classList.contains('se_imageStrip') || component.classList.contains('se_subComponent_image')) {
             section.type = 'image';
             section.image = Array.from(component.querySelectorAll('.se_mediaImage')).map(el=>el.src || '');
             section.description = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
