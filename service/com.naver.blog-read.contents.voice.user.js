@@ -28,13 +28,12 @@ GM_App(async function main() {
         window.bgm.setAttribute('frameborder', 0);
         window.bgm.setAttribute('style', 'width: 120px; height: 120px; position: fixed; left: 15px; bottom: 15px; opacity: 0.9; border-radius: 50rem; pointer-events: none; display: none;');
         window.onYouTubeIframeAPIReady = function onYouTubeIframeAPIReady() {
+            const list = 'PLRBp0Fe2GpglTnOLbhyrHAVaWsCIEX53Y';
+            const index = Math.floor(Math.random() * 500);
             window.yt = new YT.Player('frameBGM', {
-                events: { onReady(event){ window.yt.setVolume(25); } },
+                events: { onReady(event){ window.yt.setVolume(25); window.yt.loadPlaylist(list, index); } },
                 height: 120, width: 120,
-                playerVars: {
-                  listType: 'playlist', list: 'PLRBp0Fe2GpglTnOLbhyrHAVaWsCIEX53Y',
-                  autoplay: 0, loop: 1, rel: 0, index: Math.floor(Math.random() * 500),
-                },
+                playerVars: { listType: 'playlist', list, index, autoplay: 0, loop: 1, rel: 0, },
             });
             window.bgm = document.querySelector('#frameBGM');
         }
