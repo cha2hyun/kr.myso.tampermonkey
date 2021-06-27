@@ -52,7 +52,6 @@
         //placing the speak invocation inside a callback fixes ordering and onend issues.
         setTimeout(function () { speechSynthesis.speak(newUtt); }, 0);
     };
-    const synth = window.speechSynthesis;
     window.GM_speechState = function GM_speechState(){ return speechSynthesis.speaking; }
     window.GM_speechReset = function GM_speechReset() { speechUtteranceChunker.cancel = true; speechSynthesis.cancel(); }
     window.GM_speech = function GM_speech(message, suffix_delay) {
