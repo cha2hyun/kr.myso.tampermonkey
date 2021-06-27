@@ -11,7 +11,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=3
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=4
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=21
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
