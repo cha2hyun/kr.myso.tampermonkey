@@ -1,0 +1,90 @@
+// ==UserScript==
+// @name         스마트에디터ONE 보이스 입력기
+// @namespace    https://tampermonkey.myso.kr/
+// @version      1.0.0
+// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.input.voice.user.js
+// @description  네이버 블로그 스마트에디터ONE에서 마이크를 이용해 글을 쓸 수 있게 됩니다.
+// @author       Won Choi
+// @match        *://blog.naver.com/*/postwrite*
+// @match        *://blog.naver.com/*Redirect=Write*
+// @match        *://blog.naver.com/*Redirect=Update*
+// @match        *://blog.naver.com/PostWriteForm*
+// @match        *://blog.naver.com/PostUpdateForm*
+// @match        *://blog.editor.naver.com/editor*
+// @connect      naver.com
+// @connect      pstatic.net
+// @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210628
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
+// ==/UserScript==
+GM_App(async function main() {
+  GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
+  GM_addStyle(`
+  .se-utils > ul > li > button { margin-top: 14px !important; }
+  .se-util-button-voice.se-util-button-active { border: 1px solid #0f0 !important; }
+  .se-util-button-voice::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F399\\FE0F' !important; }
+  .se-utils-item-voice-loading .se-util-button-voice::before { animation: spin1 2s infinite linear; }
+  .se-utils-item-voice[data-process-keyword-info]::after {
+    display: none; position: absolute; z-index: -1; margin:auto; right: 20px; top: -240px; bottom: 0px; margin-bottom: 10px;
+    padding: 15px; width: 300px; height: auto; overflow-y: auto; white-space: pre-line;
+    border: 1px solid #ddd; border-radius: 8px; background-color: #fff;
+    content: attr(data-process-keyword-info); line-height: 1.5rem;
+  }
+  .se-utils-item-voice[data-process-keyword-info]:hover::after { display: block; }
+  `);
+  const uri = new URL(location.href), params = Object.fromEntries(uri.searchParams.entries());
+  const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user) return;
+  const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog) return;
+  function toggle() {
+      if(toggle.flag = !toggle.flag) {
+          GM_addScript(async () => {
+              const se = window.SmartEditor && await window.SmartEditor._editorPromise; if(!se) return;
+              const recognition = window.__recognition || new webkitSpeechRecognition();
+              recognition.continuous = true;
+              recognition.interimResults = true;
+              recognition.lang="ko-KR";
+              recognition.start();
+              recognition.onresult = async (event) => {
+                  window.__transcript_timer = clearTimeout(window.__transcript_timer);
+                  const transcript = Array.from(event.results).reduce((output, data) => {
+                      if(!data.isFinal) se.toastInfo(data[0]['transcript']);
+                      return (data.isFinal ? data[0]['transcript'].trim() : null) || output;
+                  }, null);
+                  if(transcript && window.__transcript_lasts !== transcript && (window.__transcript_lasts = transcript)) {
+                      window.__transcript_timer = setTimeout(()=>se._editingService.lineBreak(), 3000);
+                      se._editingService.writeTextWithSoftLineBreak(`${window.__transcript_lasts}  `);
+                      se._editingService.erase();
+                  }
+              };
+              recognition.onerror = async (event) => console.error(event);
+              window.__recognition = recognition;
+          });
+      } else {
+          GM_addScript(() => {
+              const recognition = window.__recognition;
+              if(recognition) recognition.stop();
+          });
+      }
+      return toggle.flag;
+  }
+  async function handler(e) {
+      const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
+      const wrp = mnu.querySelector('.se-utils-item.se-utils-item-voice') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-voice'); mnu.prepend(wrp);
+      const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-voice'); btn.innerHTML = '<span class="se-utils-text">보이스 입력</span>'; wrp.append(btn);
+      btn.onclick = GM_donationApp(async function(){
+          btn.classList.toggle('se-util-button-active', toggle());
+      });
+  }
+  window.addEventListener('keyup', handler, false);
+  window.addEventListener('keydown', handler, false);
+  window.addEventListener('keypress', handler, false);
+  handler();
+});
