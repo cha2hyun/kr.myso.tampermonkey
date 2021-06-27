@@ -34,7 +34,6 @@ GM_App(async function main() {
                 height: 120, width: 120, events: { onReady(event){ window.yt.setVolume(15); } },
                 playerVars: { listType: 'playlist', list: window.yt_list, index: window.yt_numb(), autoplay: 0, loop: 1, rel: 0, },
             });
-            window.bgm = document.querySelector('#frameBGM');
         }
     });
     GM_addScript('https://www.youtube.com/iframe_api');
@@ -42,12 +41,14 @@ GM_App(async function main() {
         GM_addScript(()=>{
             window.yt && window.yt.loadPlaylist(window.yt_list, window.yt_numb());
             window.yt && window.yt.playVideo();
+            window.bgm = document.querySelector('#frameBGM');
             window.bgm && (window.bgm.style.display = 'block');
         });
     }
     function bg_stop() {
         GM_addScript(()=>{
             window.yt && window.yt.stopVideo();
+            window.bgm = document.querySelector('#frameBGM');
             window.bgm && (window.bgm.style.display = 'none');
         });
     }
