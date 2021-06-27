@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 보유키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.0
+// @version      1.1.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-profile.keyword.counter.user.js
 // @description  네이버 블로그 프로필에서 보유키워드를 확인할 수 있습니다.
 // @author       Won Choi
@@ -51,7 +51,7 @@ GM_App(async function main() {
         const postsSizes = _.get(blog, 'CategoryList.mylogPostCount', 1);
         const categories = _.get(blog, 'CategoryList.mylogCategoryList', []).filter(o=>o.openYN && o.postCnt > 0);
         const posts = (categoryNo !== undefined) ? await NB_blogPostList(blogId, pages, { categoryNo }) : [];
-        const posts_with_terms = await Promise.map(posts, async (post)=>(post.terms = await NX_termsParagraph(post.titleWithInspectMessage), post));
+        const posts_with_terms = await Promise.mapSeries(posts, async (post)=>(post.terms = await NX_termsParagraph(post.titleWithInspectMessage), post));
         const terms = posts_with_terms.map((post)=>post.terms).flat();
         const uniqs = terms.filter((word, index, keywords)=>keywords.indexOf(word) == index);
         const group = uniqs.reduce((group, query, index)=>(group[index] = Object.assign({ query, count: terms.filter(item=>item==query).length }), group), []).sort((a, b)=>b.count - a.count);
