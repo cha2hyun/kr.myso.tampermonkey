@@ -47,13 +47,13 @@
             section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
         }
-        if(component.classList.contains('se_paragraph') || component.classList.contains('se_textarea')) {
+        if(component.classList.contains('se_paragraph') || component.classList.contains('se_textarea') || component.previousSibling.classList.conains('se_wrapping_slot')) {
             section.type = 'text';
             if(component.classList.contains('se_textarea')) {
                 section.text = [get_text_without_placeholder(component)];
             } else if(component.classList.contains('paragraph_wrapping')) {
                 const section1 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot .se_subComponent'), offset));
-                const section2 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot + .se_textarea'), offset));
+                const section2 = Object.assign({}, section, SE_componentParseV3(component.querySelector('.se_wrapping_slot + *'), offset));
                 return [section1, section2];
             } else {
                 section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
