@@ -47,7 +47,7 @@
             section.text = Array.from(component.querySelectorAll('.se_textarea')).map(get_text_without_placeholder);
             section.placeholder = Array.from(component.querySelectorAll('.se_textarea')).map(get_placeholder);
         }
-        if(component.classList.contains('se_paragraph') || component.classList.contains('se_textarea') || component.previousSibling.classList.conains('se_wrapping_slot')) {
+        if(component.classList.contains('se_paragraph') || component.classList.contains('se_textarea') || (component.previousSibling && component.previousSibling.classList.conains('se_wrapping_slot'))) {
             section.type = 'text';
             if(component.classList.contains('se_textarea')) {
                 section.text = [get_text_without_placeholder(component)];
