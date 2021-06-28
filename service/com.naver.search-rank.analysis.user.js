@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 지수 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.8
+// @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @author       Won Choi
@@ -21,65 +21,6 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // ==/UserScript==
-(function(window) {
-    window.GM_xmlhttpRequestAsync = function(url, options) {
-        return new Promise((resolve, reject) => {
-            GM_xmlhttpRequest(Object.assign({ method: 'GET', url: url.toString(), onerror: reject, onload: resolve, }, options));
-        });
-    }
-})(window);
-// ---------------------
-(function(window){
-    async function NX_Request(keyword, start = 1, where = 'm_blog', mode = 'normal') {
-        const endpoints = [];
-        endpoints.push({ url: 'https://s.search.naver.com/p/review/search.naver', where: ['view', 'm_view'] });
-        endpoints.push({ url: 'https://s.search.naver.com/p/blog/search.naver', where: ['blog', 'm_blog'] });
-        const endpoint = endpoints.find(o=>o.where.includes(where)) || 'https://s.search.naver.com/p/blog/search.naver';
-        const uri = new URL(endpoint.url);
-        if(start) uri.searchParams.set('start', start);
-        uri.searchParams.set('where', where);
-        uri.searchParams.set('mode', mode);
-        uri.searchParams.set('query', keyword);
-        return GM_xmlhttpRequestAsync(uri);
-    }
-    window.NX_info = async function NX_info(keyword, start, where, mode) {
-        const res = await NX_Request(keyword, start, where, mode);
-        const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
-        const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
-        const ret = map.reduce((r, { k, v }) => {
-            if(typeof v === 'string' && v.includes(',')) v = v.split(',').map(r=>r.split(',').map(v=>decodeURIComponent(v).split(':').map(v=>decodeURIComponent(v))));
-            if(typeof v === 'string' && v.includes('|')) v = v.split('|').map(r=>r.split(':').map(v=>decodeURIComponent(v)));
-            if(typeof v === 'string' && v.includes(':')) v = v.split(':').map(v=>decodeURIComponent(v));
-            if(typeof v === 'string') v = decodeURIComponent(v);
-            return (r[k] = v, r);
-        }, {});
-        return ret;
-    }
-    window.NX_score = async function NX_score(keyword, start, where, mode) {
-        const res = await NX_info(keyword, start, where, mode).catch(e=>null);
-        const rnk = Object.keys(res || {}).filter(k=>/^r[\d]+$/.test(k)).map(k=>res[k]);
-        return rnk.map((data)=>{
-            let [[[crArea]], [[crGdid]], [[o1, a, b, c]]] = data;
-            let crScoreA = parseFloat(a); if(crScoreA == 0 || crScoreA > 1600000000) crScoreA = '?';
-            let crScoreB = parseFloat(b); if(crScoreB == 0 || crScoreB > 1600000000) crScoreB = '?';
-            let crScoreC = parseFloat(c); if(crScoreC == 0 || crScoreC > 1600000000) crScoreC = '?';
-            return { crGdid, crArea, crScoreA, crScoreB, crScoreC };
-        });
-    }
-    window.NX_terms = async function NX_terms(keyword) {
-        const res = await NX_info(keyword).catch(e=>null);
-        if(!res || !res.terms) return [];
-        if(typeof res.terms == 'string') return [res.terms];
-        const terms = res.terms.map(item=>item && item.flat && item.flat()).flat();
-        return terms.filter((word, offset, terms)=>terms.filter((item)=>item.includes(word)).length == 2);
-    }
-    window.NX_termsParagraph = async function NX_termsParagraph(paragraph) {
-        const words = paragraph.split(/[\s]+/g);
-        const chunk = words.reduce((chunk, word, offset)=>{ const index = Math.floor(offset / 5), item = chunk[index] = chunk[index] || []; item.push(word); return chunk }, []).map(item=>item.join(' '));
-        return (await Promise.all(chunk.map(NX_terms))).flat();
-    }
-})(window);
-// ---------------------
 async function observe(target) {
     const uri = new URL(location.href), query = uri.searchParams.get('query'); if(!query) return;
     const observer = new MutationObserver(async function(mutations) {
@@ -93,7 +34,7 @@ async function observe(target) {
 async function update(keyword, start = 1) {
     const uri = new URL(location.href);
     const mode = uri.searchParams.get('mode');
-    const where = uri.searchParams.get('where');
+    const where = 'view';
     const items = Array.from(document.querySelectorAll('[data-cr-gdid][data-cr-rank]'));
     const scores = await NX_score(keyword, start, where, mode);
     await Promise.map(items, async (item) => {
