@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 오디오 리더
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
 // @description  네이버 블로그의 글을 소리내어 읽어줍니다.
 // @author       Won Choi
@@ -11,7 +11,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=4
+// @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=5
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=30
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
@@ -21,87 +21,106 @@
 // ==/UserScript==
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
-    function handler(event) {
+    GM_addStyle(`a._readVoice .ico_spd { display: block; position: absolute; right: 13px; top: 13px; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size:11px; font-weight: bold; }`);
+    async function stopper(event) {
+        handler.running = false
+        if(GM_speechState()) { GM_speechReset(); await GM_speech('글 읽기가 취소되었습니다. 다음에 다시 또 이용해주세요.'); }
+    }
+    async function starter(event, rate = 1) {
+        const ratio = 1 / rate;
+        if(!GM_speechState()) {
+            handler.running = true;
+            const sections = SE_parseNodes(wrapper), se = SE_parse(wrapper);
+            for(let item of se.sections) {
+                if(GM_speechState()) break;
+                const section = sections[item.offset];
+                if(section) section.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+                if(item.type == 'title') {
+                    for(let text of item.text) await GM_speech(text, { rate });
+                }
+                if(item.type == 'text') {
+                    for(let text of item.text) await GM_speech(text, { rate });
+                }
+                if(item.type == 'image') {
+                    for(let text of item.description) await GM_speech(`첨부된 이미지에 대한 설명입니다. ${text}.`, { rate });
+                }
+                if(item.type == 'video') {
+                    await GM_speech('첨부된 영상에 대한 설명입니다.');
+                    for(let text of item.title) await GM_speech(text, { rate });
+                    for(let text of item.description) await GM_speech(text, { rate });
+                }
+                if(item.type == 'line') {
+                    await Promise.delay(3000*ratio);
+                    //await GM_speech('잠시 후 네이버 블로그 오디오 리더가 이어서 재생됩니다.', { rate, delay: 3000*ratio });
+                }
+                if(item.type == 'sticker') {}
+                if(item.type == 'quotation') {
+                    for(let text of item.title) await GM_speech(text, { rate });
+                    for(let text of item.description) await GM_speech(text, { rate });
+                }
+                if(item.type == 'places') {
+                    for(let location of item.location) {
+                        const items = _.zip(location.name, location.addr);
+                        for(let item of items) await GM_speech(`첨부된 장소 ${item[0]}의 주소는 ${item[1]}입니다.`, { rate });
+                    }
+                }
+                if(item.type == 'link') {
+                    const items = _.zip(item.title, item.description, item.hostname);
+                    for(let item of items) {
+                        await GM_speech(`첨부된 웹문서, "${item[0]}"`, { rate });
+                    }
+                }
+                if(item.type == 'file') {
+                    for(let text of item.name) await GM_speech(`${text} 파일이 첨부되어 있습니다.`, { rate });
+                }
+                if(item.type == 'schedule') {
+                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는 일정이 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                }
+                if(item.type == 'table' && item.table) {
+                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 표가 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                }
+                if(item.type == 'code') {
+                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 코드 내용이 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                }
+                if(item.type == 'formula') {
+                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 수식 정보가 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                }
+                if(item.type == 'talktalk') {
+                    await GM_speech('궁금할 땐 네이버 톡톡하세요!', { rate });
+                }
+                if(item.type == 'material') {
+                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 글감 정보가 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                }
+            }
+            if(!GM_speechState()) {
+                await GM_speech('이상. 모든 글의 읽기가 완료되었습니다.', { delay: 1000 });
+                await GM_speech('네이버 블로그 오디오 리더가 마음에 드셨다면, 개발자 최원을 후원해주세요. 이용해 주셔서 감사합니다.');
+                await GM_speechReset();
+            }
+        }
+        GM_speechReset();
+        handler.running = false;
+    }
+    async function handler(event) {
+        if(handler.running && event && event.type == 'mousewheel') return stopper(event);
+        if(handler.running && event && event.type == 'keydown' && event.keyCode == 27) stopper(event);
         const wrappers = Array.from(document.querySelectorAll('[data-post-editor-version]'));
         wrappers.map((wrapper) => {
             const menu = wrapper.querySelector('.lyr_overflow_menu'); if(!menu) return;
-            const item = menu.querySelector('a._readVoice') || document.createElement('a'); item.classList.add('_readVoice'); item.href = '#'; menu.prepend(item);
-            item.innerText = '오디오 블로그';
-            item.onclick = async function(event) {
-                event.preventDefault();
-                if(GM_speechState()) {
-                    GM_speechReset();
-                } else {
-                    const sections = SE_parseNodes(wrapper), se = SE_parse(wrapper);
-                    for(let item of se.sections) {
-                        const section = sections[item.offset];
-                        if(section) section.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
-                        if(item.type == 'title') {
-                            for(let text of item.text) await GM_speech(text);
-                        }
-                        if(item.type == 'text') {
-                            for(let text of item.text) await GM_speech(text);
-                        }
-                        if(item.type == 'image') {
-                            for(let text of item.description) await GM_speech(`첨부된 이미지에 대한 설명입니다. ${text}.`);
-                        }
-                        if(item.type == 'video') {
-                            await GM_speech('첨부된 영상에 대한 설명입니다.');
-                            for(let text of item.title) await GM_speech(text);
-                            for(let text of item.description) await GM_speech(text);
-                        }
-                        if(item.type == 'line') {
-                            await GM_speech('잠시 후 네이버 블로그 오디오 리더가 이어서 재생됩니다.', 3000);
-                        }
-                        if(item.type == 'sticker') {}
-                        if(item.type == 'quotation') {
-                            for(let text of item.title) await GM_speech(text);
-                            for(let text of item.description) await GM_speech(text);
-                        }
-                        if(item.type == 'places') {
-                            for(let location of item.location) {
-                                const items = _.zip(location.name, location.addr);
-                                for(let item of items) await GM_speech(`첨부된 장소 ${item[0]}의 주소는 ${item[1]}입니다.`);
-                            }
-                        }
-                        if(item.type == 'link') {
-                            const items = _.zip(item.title, item.description, item.hostname);
-                            for(let item of items) {
-                                await GM_speech(`첨부된 웹문서, "${item[0]}"`);
-                            }
-                        }
-                        if(item.type == 'file') {
-                            for(let text of item.name) await GM_speech(`${text} 파일이 첨부되어 있습니다.`);
-                        }
-                        if(item.type == 'schedule') {
-                            await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는 일정이 포함되어 있습니다.', 1500);
-                        }
-                        if(item.type == 'table' && item.table) {
-                            await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 표가 포함되어 있습니다.', 1500);
-                        }
-                        if(item.type == 'code') {
-                            await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 코드 내용이 포함되어 있습니다.', 1500);
-                        }
-                        if(item.type == 'formula') {
-                            await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 수식 정보가 포함되어 있습니다.', 1500);
-                        }
-                        if(item.type == 'talktalk') {
-                            await GM_speech('궁금할 땐 네이버 톡톡하세요!');
-                        }
-                        if(item.type == 'material') {
-                            await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 글감 정보가 포함되어 있습니다.', 1500);
-                        }
-                    }
-                    await GM_speech('이상. 모든 글의 읽기가 완료되었습니다.', 1000);
-                    await GM_speech('네이버 블로그 오디오 리더가 마음에 드셨다면, 개발자 최원을 후원해주세요. 이용해 주셔서 감사합니다.');
-                    await GM_speechReset();
-                }
+            const menu_append = (type, rate = 1) => {
+                const item = menu.querySelector(`a._readVoice.${type}`) || document.createElement('a'); if(item.className) return;
+                item.classList.add('_readVoice', type); item.href = '#'; menu.append(item); item.innerHTML = `오디오 블로그 <span class="ico_spd">x${rate.toFixed(1)}</span>`;
+                item.onclick = async function(event) { event.preventDefault(); await starter(event, rate); }
             }
+            menu_append('x100', 1.0);
+            menu_append('x130', 1.3);
+            menu_append('x150', 1.5);
         });
     }
     window.addEventListener('keyup', handler, false);
     window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
     window.addEventListener('click', handler, false);
+    window.addEventListener('mousewheel', handler, false);
     handler();
 });

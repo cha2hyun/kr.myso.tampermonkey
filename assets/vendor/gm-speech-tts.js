@@ -19,7 +19,7 @@
             var chunkLength = (settings && settings.chunkLength) || 160;
             var pattRegex = new RegExp('^[\\s\\S]{' + Math.floor(chunkLength / 2) + ',' + chunkLength + '}[.!?,]{1}|^[\\s\\S]{1,' + chunkLength + '}$|^[\\s\\S]{1,' + chunkLength + '} ');
             var chunkArr = txt.match(pattRegex);
-  
+
             if (chunkArr == null || chunkArr[0] === undefined || chunkArr[0].length <= 2) {
                 //call once all text has been spoken...
                 if (callback !== undefined) {
@@ -54,11 +54,13 @@
     };
     window.GM_speechState = function GM_speechState(){ return speechSynthesis.speaking; }
     window.GM_speechReset = function GM_speechReset() { speechUtteranceChunker.cancel = true; speechSynthesis.cancel(); }
-    window.GM_speech = function GM_speech(message, suffix_delay) {
+    window.GM_speech = function GM_speech(message, options = {}) {
+        options = Object.assign({ rate: 1 }, options);
         return new Promise((resolve) => {
             if(GM_speechState()) GM_speechReset();
             const utterance = new SpeechSynthesisUtterance(message);
-            speechUtteranceChunker(utterance, { chunkLength: 80 }, resolve);
-        }).then(()=>new Promise((resolve)=>setTimeout(resolve, suffix_delay)));
+            const modifier = (utt) => (utt.rate = options.rate);
+            speechUtteranceChunker(utterance, { modifier, chunkLength: 80 }, resolve);
+        }).then(()=>new Promise((resolve)=>setTimeout(resolve, options.delay)));
     }
 })(window);
