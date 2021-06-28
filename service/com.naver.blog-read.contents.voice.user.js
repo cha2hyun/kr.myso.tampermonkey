@@ -24,7 +24,11 @@ GM_App(async function main() {
     GM_addStyle(`a._readVoice .ico_spd { display: block; position: absolute; right: 13px; top: 13px; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size:11px; font-weight: bold; }`);
     async function stopper(event) {
         handler.running = false
-        if(GM_speechState()) { GM_speechReset(); await GM_speech('글 읽기가 취소되었습니다. 다음에 다시 또 이용해주세요.'); }
+        if(GM_speechState()) {
+            GM_speechReset();
+            await GM_speech('글 읽기가 취소되었습니다. 다음에 다시 또 이용해주세요.', { delay: 1000 });
+            await GM_speech('네이버 블로그 오디오 리더가 마음에 드셨다면, 개발자 최원을 후원해주세요. 이용해 주셔서 감사합니다.');
+        }
     }
     async function starter(event, rate = 1) {
         const ratio = 1 / rate;
