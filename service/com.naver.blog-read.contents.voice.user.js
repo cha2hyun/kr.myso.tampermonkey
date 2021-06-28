@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 오디오 리더
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
 // @description  네이버 블로그의 글을 소리내어 읽어줍니다.
 // @author       Won Choi
@@ -18,15 +18,40 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js
 // ==/UserScript==
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`a._readVoice .ico_spd { display: block; position: absolute; right: 13px; top: 13px; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size:11px; font-weight: bold; }`);
+    async function speaker_wheel(event) {
+        speaker.disable_autoscroll = true;
+        speaker_wheel.timer = clearTimeout(speaker_wheel.timer);
+        speaker_wheel.timer = setTimeout(() => speaker.disable_autoscroll = false, 10000);
+    }
+    async function speaker(section, items, options = {}) {
+        options = Object.assign({ offset: 0, delay: 0, format: '%s' }, options);
+        if(!section) return;
+        if(!items) {
+            if(!speaker.disable_autoscroll) section.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+            return await Promise.delay(options.delay);
+        }
+        if(typeof items === 'string') {
+            if(!speaker.disable_autoscroll) section.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+            return await GM_speech(sprintf(options.format, items), options);
+        }
+        const lines = Array.from(section ? section.querySelectorAll('.se-text-paragraph, .se_textarea') : []).concat([section]);
+        for(let item, i = 0; item = items[i]; i++) {
+            let idx = i + options.offset;
+            let dom = lines[idx] || section;
+            if(!speaker.disable_autoscroll) dom.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
+            await GM_speech(sprintf(options.format, item), options);
+        }
+    }
     async function stopper(event) {
         handler.running = false
         if(GM_speechState()) {
             GM_speechReset();
-            await GM_speech('글 읽기가 취소되었습니다. 다음에 다시 또 이용해주세요.', { delay: 1000 });
+            await GM_speech('글 읽기가 취소되었습니다. 다음에 다시 또 이용해주세요.');
             await GM_speech('네이버 블로그 오디오 리더가 마음에 드셨다면, 개발자 최원을 후원해주세요. 이용해 주셔서 감사합니다.');
         }
     }
@@ -38,66 +63,70 @@ GM_App(async function main() {
             for(let item of se.sections) {
                 if(GM_speechState()) break;
                 const section = sections[item.offset];
-                if(section) section.scrollIntoView({behavior: "smooth", block: "center", inline: "center"});
                 if(item.type == 'title') {
-                    for(let text of item.text) await GM_speech(text, { rate });
+                    await speaker(section, item.text, { rate, offset: 0 });
                 }
                 if(item.type == 'text') {
-                    for(let text of item.text) await GM_speech(text, { rate });
+                    await speaker(section, item.text, { rate, offset: 0 });
                 }
                 if(item.type == 'image') {
-                    for(let text of item.description) await GM_speech(`첨부된 이미지에 대한 설명입니다. ${text}.`, { rate });
+                    await speaker(section, item.description, { rate, offset: 0, format: '첨부된 이미지에 대한 설명입니다. %s' });
                 }
+
                 if(item.type == 'video') {
-                    await GM_speech('첨부된 영상에 대한 설명입니다.');
-                    for(let text of item.title) await GM_speech(text, { rate });
-                    for(let text of item.description) await GM_speech(text, { rate });
+                    await speaker(section, '첨부된 영상에 대한 설명입니다.', { rate });
+                    await speaker(section, item.title, { rate });
+                    await speaker(section, item.description, { rate, offset: item.title.length });
                 }
                 if(item.type == 'line') {
-                    await Promise.delay(3000*ratio);
-                    //await GM_speech('잠시 후 네이버 블로그 오디오 리더가 이어서 재생됩니다.', { rate, delay: 3000*ratio });
+                    await speaker(section, null, { delay: 1500*ratio });
                 }
-                if(item.type == 'sticker') {}
+                if(item.type == 'sticker') {
+                    await speaker(section);
+                }
                 if(item.type == 'quotation') {
-                    for(let text of item.title) await GM_speech(text, { rate });
-                    for(let text of item.description) await GM_speech(text, { rate });
+                    await speaker(section, item.title, { rate });
+                    await speaker(section, item.description, { rate, offset: item.title.length });
                 }
                 if(item.type == 'places') {
+                    await speaker(section);
                     for(let location of item.location) {
                         const items = _.zip(location.name, location.addr);
                         for(let item of items) await GM_speech(`첨부된 장소 ${item[0]}의 주소는 ${item[1]}입니다.`, { rate });
                     }
                 }
                 if(item.type == 'link') {
+                    await speaker(section);
                     const items = _.zip(item.title, item.description, item.hostname);
                     for(let item of items) {
                         await GM_speech(`첨부된 웹문서, "${item[0]}"`, { rate });
                     }
                 }
                 if(item.type == 'file') {
+                    await speaker(section);
                     for(let text of item.name) await GM_speech(`${text} 파일이 첨부되어 있습니다.`, { rate });
                 }
                 if(item.type == 'schedule') {
-                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는 일정이 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                    await speaker(section, '네이버 블로그 오디오 리더가 지원하지 않는 일정이 포함되어 있습니다.', { rate, delay: 1500*ratio });
                 }
                 if(item.type == 'table' && item.table) {
-                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 표가 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                    await speaker(section, '네이버 블로그 오디오 리더가 지원하지 않는, 표가 포함되어 있습니다.', { rate, delay: 1500*ratio });
                 }
                 if(item.type == 'code') {
-                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 코드 내용이 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                    await speaker(section, '네이버 블로그 오디오 리더가 지원하지 않는, 코드 내용이 포함되어 있습니다.', { rate, delay: 1500*ratio });
                 }
                 if(item.type == 'formula') {
-                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 수식 정보가 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                    await speaker(section, '네이버 블로그 오디오 리더가 지원하지 않는, 수식 정보가 포함되어 있습니다.', { rate, delay: 1500*ratio });
                 }
                 if(item.type == 'talktalk') {
-                    await GM_speech('궁금할 땐 네이버 톡톡하세요!', { rate });
+                    await speaker(section, '궁금할 땐 네이버 톡톡하세요!', { rate });
                 }
                 if(item.type == 'material') {
-                    await GM_speech('네이버 블로그 오디오 리더가 지원하지 않는, 글감 정보가 포함되어 있습니다.', { rate, delay: 1500*ratio });
+                    await speaker(section, '네이버 블로그 오디오 리더가 지원하지 않는, 글감 정보가 포함되어 있습니다.', { rate, delay: 1500*ratio });
                 }
             }
             if(!GM_speechState()) {
-                await GM_speech('이상. 모든 글의 읽기가 완료되었습니다.', { delay: 1000 });
+                await GM_speech('이상. 모든 글의 읽기가 완료되었습니다.');
                 await GM_speech('네이버 블로그 오디오 리더가 마음에 드셨다면, 개발자 최원을 후원해주세요. 이용해 주셔서 감사합니다.');
                 await GM_speechReset();
             }
@@ -124,5 +153,6 @@ GM_App(async function main() {
     window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
     window.addEventListener('click', handler, false);
+    window.addEventListener('mousewheel', speaker_wheel, false);
     handler();
 });
