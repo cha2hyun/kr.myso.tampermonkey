@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 오디오 리더
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
 // @description  네이버 블로그의 글을 소리내어 읽어줍니다.
 // @author       Won Choi
@@ -106,7 +106,6 @@ GM_App(async function main() {
         handler.running = false;
     }
     async function handler(event) {
-        if(handler.running && event && event.type == 'mousewheel') return stopper(event);
         if(handler.running && event && event.type == 'keydown' && event.keyCode == 27) stopper(event);
         const wrappers = Array.from(document.querySelectorAll('[data-post-editor-version]'));
         wrappers.map((wrapper) => {
@@ -125,6 +124,5 @@ GM_App(async function main() {
     window.addEventListener('keydown', handler, false);
     window.addEventListener('keypress', handler, false);
     window.addEventListener('click', handler, false);
-    window.addEventListener('mousewheel', handler, false);
     handler();
 });
