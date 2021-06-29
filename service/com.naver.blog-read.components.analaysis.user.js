@@ -88,7 +88,8 @@ GM_App(async function main() {
           const sectionsV3 = Array.from(docs.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));
           const sectionsV4 = Array.from(docs.querySelectorAll('#viewTypeSelector .se-component, .se-viewer .se-component, .se-main-container .se-component, .se-container .se-component'));
           const sections = [sectionsV2, sectionsV3, sectionsV4].flat();
-          const component = sections[index]; if(component) {
+          const component = sections[index];
+          if(component) {
               event.preventDefault();
               component.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
               component.classList.remove('content-analysis-highlight');
