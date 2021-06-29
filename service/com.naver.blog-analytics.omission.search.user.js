@@ -7,7 +7,7 @@
 // @author       Won Choi
 // @match        https://blog.stat.naver.com/blog/article/*/cv
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js?v=210613
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
 // ==/UserScript==
 async function main() {
     GM_donation('#_root', 0);

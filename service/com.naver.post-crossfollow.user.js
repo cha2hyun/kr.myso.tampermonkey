@@ -8,7 +8,7 @@
 // @match        *://post.naver.com/my/followingList*
 // @match        *://m.post.naver.com/my/followingList*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js?v=210613
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
 // ==/UserScript==
 async function search_followers(fromNo = 1, totalCount = 100000000, result = {}) {
     const list = document.getElementById('el_list_container'), ul = list.children[0];
