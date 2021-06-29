@@ -1,61 +1,68 @@
 // ==UserScript==
-// @name         네이버 블로그 PC 통계 플러스 - 통합검색 노출누락 여부 확인
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 PC 통계 플러스 - 통합검색 노출누락 여부 확인
+// @description  네이버 블로그 통계에서 네이버 통합검색 노출 여부 확인이 가능한 버튼을 추가해줍니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.omission.search.user.js
-// @description  네이버 블로그 통계에서 네이버 통합검색 노출 여부 확인이 가능한 버튼을 추가해줍니다.
 // @author       Won Choi
 // @match        https://blog.stat.naver.com/blog/article/*/cv
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
-async function main() {
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
+GM_App(async function main() {
     GM_donation('#_root', 0);
     GM_addStyle(`
-.u_ni_btn_group {
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-.u_ni_menu_list {
-    text-align: center;
-    border: 1px solid #ddd;
-    *zoom: 1;
-}
-.u_ni_menu_item {
-    float: left;
-    position: relative;
-    margin-left: -1px;
-    border-left: 1px solid #ddd;
-    background-color: #fff;
-}
-.u_ni_menu_item.u_ni_is_active:before {
-    content: '';
-    display: block;
-    position: absolute;
-    top: -1px;
-    right: -1px;
-    bottom: -1px;
-    left: -1px;
-    background-color: #00c73c;
-}
-.u_ni_menu_item a {
-    position: relative;
-    display: inline-block;
-    min-width: 48px;
-    padding-right: 10px;
-    padding-left: 10px;
-    color: #888;
-    font-size: 12px;
-    line-height: 30px;
-    letter-spacing: -0.5px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-.u_ni_menu_item.u_ni_is_active a {
-    color: #fff;
-}
+    .u_ni_btn_group {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .u_ni_menu_list {
+        text-align: center;
+        border: 1px solid #ddd;
+        *zoom: 1;
+    }
+    .u_ni_menu_item {
+        float: left;
+        position: relative;
+        margin-left: -1px;
+        border-left: 1px solid #ddd;
+        background-color: #fff;
+    }
+    .u_ni_menu_item.u_ni_is_active:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
+        background-color: #00c73c;
+    }
+    .u_ni_menu_item a {
+        position: relative;
+        display: inline-block;
+        min-width: 48px;
+        padding-right: 10px;
+        padding-left: 10px;
+        color: #888;
+        font-size: 12px;
+        line-height: 30px;
+        letter-spacing: -0.5px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .u_ni_menu_item.u_ni_is_active a {
+        color: #fff;
+    }
     `);
 
     const container = document.querySelector('[class^="u_ni_info_section"] > div');
@@ -94,10 +101,4 @@ async function main() {
 		uri.searchParams.set('query', `${info.tx_title}`);
 		window.open(uri.toString(), 'u_ni_search');
     }
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
