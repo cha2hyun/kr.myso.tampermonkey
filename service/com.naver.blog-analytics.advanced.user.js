@@ -1,22 +1,24 @@
 // ==UserScript==
-// @name         네이버 블로그 통계 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 통계 어드밴스드
+// @description  네이버 블로그 통계 그래프에 분석 및 예측에 필요한 다양한 요소를 추가해줍니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.advanced.user.js
-// @description  네이버 블로그 통계 그래프에 분석 및 예측에 필요한 다양한 요소를 추가해줍니다.
 // @author       Won Choi
 // @connect      naver.com
 // @match        https://blog.stat.naver.com/blog/*
 // @match        https://blog.stat.naver.com/m/blog/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-cors.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-hook.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestCORS.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestHook.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // @require      https://cdn.amcharts.com/lib/4/core.js
 // @require      https://cdn.amcharts.com/lib/4/charts.js
 // @require      https://cdn.amcharts.com/lib/4/themes/animated.js
@@ -25,6 +27,10 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/regression/2.0.1/regression.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 GM_App(async function main() {
     const root = document.querySelector('#_root'); if(!root) return;
     GM_donation('#_root');
