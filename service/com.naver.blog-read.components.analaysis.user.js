@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 문서 구성 요약
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.components.analaysis.user.js
 // @description  네이버 블로그로 작성된 문서 구성을 간략하게 확인할 수 있습니다.
 // @author       Won Choi
@@ -82,7 +82,11 @@ GM_App(async function main() {
   Handlebars.registerHelper('lengthTrim', (section) => SE_componentContent([section]).replace(/[\r\n\s]+/g, '').length);
   GM_addScript(() => {
       function toggle(index, state) {
-          const sections = Array.from(document.querySelectorAll('#se_components_wrapper .se_component, .se_component_wrap .se_component, .se_card_container .se_component, .__se_editor-content .se_component, .se-main-container .se-component, .se-container .se-component'));
+          const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
+          const sectionsV2 = Array.from(wrapper.querySelectorAll('.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *'));
+          const sectionsV3 = Array.from(wrapper.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));
+          const sectionsV4 = Array.from(wrapper.querySelectorAll('#viewTypeSelector .se-component, .se-viewer .se-component, .se-main-container .se-component, .se-container .se-component'));
+          const sections = [sectionsV2, sectionsV3, sectionsV4].flat();
           const component = sections[index]; if(component) {
               event.preventDefault();
               component.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
