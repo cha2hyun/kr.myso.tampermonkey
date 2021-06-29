@@ -25,7 +25,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=31
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=32
 // ==/UserScript==
 // ---------------------
 GM_App(async function main() {

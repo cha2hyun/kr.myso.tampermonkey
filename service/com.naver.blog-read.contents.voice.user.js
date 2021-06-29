@@ -13,7 +13,7 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-speech-tts.js?v=5
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=31
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=32
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
