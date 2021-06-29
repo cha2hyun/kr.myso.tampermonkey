@@ -1,16 +1,22 @@
 // ==UserScript==
-// @name         인스타그램 이미지 우클릭 제한 해제
 // @namespace    https://tampermonkey.myso.kr/
+// @name         인스타그램 이미지 우클릭 제한 해제
+// @description  인스타그램에서 이미지의 우클릭 기능이 활성화됩니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.instagram-bypass.rightclick.user.js
-// @description  인스타그램에서 이미지의 우클릭 기능이 활성화됩니다.
 // @author       Won Choi
+// @grant        GM_addStyle
 // @match        *://instagram.com
 // @match        *://instagram.com/*
 // @match        *://www.instagram.com
 // @match        *://www.instagram.com/*
-// @grant        GM_addStyle
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function main() {
   GM_addStyle(`
     ._9AhH0 { display: none; }
