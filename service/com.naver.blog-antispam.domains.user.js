@@ -9,8 +9,8 @@
 // @author       Won Choi
 // @match        https://admin.blog.naver.com/AdminUserFilter*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/donation.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==

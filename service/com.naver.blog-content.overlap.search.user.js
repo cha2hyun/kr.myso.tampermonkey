@@ -10,8 +10,8 @@
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/donation.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==

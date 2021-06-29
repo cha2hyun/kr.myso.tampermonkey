@@ -5,7 +5,7 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.0.8
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-screenshot.search.user.js
+// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey@latest/raw/master/service/com.naver.blog-screenshot.search.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostList*
 // @match        *://blog.naver.com/PostView*

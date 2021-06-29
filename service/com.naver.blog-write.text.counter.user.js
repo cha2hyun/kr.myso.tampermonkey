@@ -23,11 +23,11 @@
 // @match        *://m.post.editor.naver.com/editor*
 // @match        *://m.post.naver.com/viewer/postView*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-style.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-script.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/lib/smart-editor-one.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-add-style.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-add-script.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/lib/smart-editor-one.js
 // ==/UserScript==
 
 // ==OpenUserJS==

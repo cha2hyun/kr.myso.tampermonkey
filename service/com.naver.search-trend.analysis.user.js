@@ -13,11 +13,11 @@
 // @connect      ryo.co.kr
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-style.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-script.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-async.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-add-style.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-add-script.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/vendor/gm-xmlhttp-request-async.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/assets/donation.min.js
 // @require      https://cdn.jsdelivr.net/npm/chart.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
