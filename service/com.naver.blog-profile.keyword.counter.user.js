@@ -15,8 +15,6 @@
 // @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
 // @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
 // @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestCORS.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestHook.min.js
 // @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // @require      https://openuserjs.org/src/libs/myso/com.naver.blog.min.js
 // @require      https://openuserjs.org/src/libs/myso/com.naver.search.nx.min.js

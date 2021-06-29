@@ -1,15 +1,18 @@
 // ==UserScript==
-// @name         네이버 블로그 키워드 노출순위 모니터링
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 키워드 노출순위 모니터링
+// @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.1.24
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
-// @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/prologue/PrologueList*
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -19,6 +22,10 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/localforage/1.9.0/localforage.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 let keyword_analysis_toast;
 moment.tz.setDefault("Asia/Seoul");
 
@@ -232,7 +239,7 @@ async function draw(blogId) {
     wrap.innerHTML = tmpl(data);
     keyword_analysis_toast.remove();
 }
-async function main() {
+GM_App(async function main() {
     GM_donation('#post-area', 0);
     GM_addStyle(`@import url(https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css)`);
     GM_addStyle(`
@@ -295,10 +302,4 @@ async function main() {
     const blog = await request_blog(blogId, 'BlogInfo'); if(!blog || !blog.blogOwner) return;
     await draw(blogId);
     setInterval(() => draw(blogId), 1000 * 60 * 30);
-}
-function _requestIdleCallback(callback) {
-    if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-    return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
