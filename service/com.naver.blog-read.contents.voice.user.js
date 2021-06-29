@@ -4,7 +4,7 @@
 // @description  네이버 블로그의 글을 소리내어 읽어줍니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*

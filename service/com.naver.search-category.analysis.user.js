@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 키워드에 대한 생산/소비 선호 주제를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-category.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*

@@ -4,7 +4,7 @@
 // @description  네이버 블로그 통계 그래프에 분석 및 예측에 필요한 다양한 요소를 추가해줍니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.0
+// @version      1.1.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.advanced.user.js
 // @author       Won Choi
 // @connect      naver.com

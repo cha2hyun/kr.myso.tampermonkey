@@ -4,7 +4,7 @@
 // @description  네이버 블로그&포스트에서 글자수 세기를 활성화합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.16
+// @version      1.1.17
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/*/*

@@ -4,7 +4,7 @@
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.34
+// @version      1.1.35
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/*/postwrite*

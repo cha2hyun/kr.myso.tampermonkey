@@ -4,7 +4,7 @@
 // @description  네이버 크리에이터 어드바이저에 새로운 기능을 추가합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      2.1.1
+// @version      2.1.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @author       Won Choi
 // @connect      naver.com

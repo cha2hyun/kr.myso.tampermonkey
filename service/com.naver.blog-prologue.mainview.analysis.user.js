@@ -4,7 +4,7 @@
 // @description  네이버 모바일 메인에서 유입될 수 있는 내 블로그의 글들의 노출된 현황을 모니터링 할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.mainview.analysis.user.js
 // @author       Won Choi
 // @connect      naver.com

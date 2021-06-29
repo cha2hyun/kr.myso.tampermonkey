@@ -4,7 +4,7 @@
 // @description  네이버 블로그 동영상 다운로드 기능을 활성화됩니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.2
+// @version      1.1.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-video.downloader.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*

@@ -4,7 +4,7 @@
 // @description  네이버 블로그&포스트 작성 중 포함된 키워드를 분석합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.2
+// @version      1.1.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.keyword.counter.user.js
 // @author       Won Choi
 // @connect      naver.com

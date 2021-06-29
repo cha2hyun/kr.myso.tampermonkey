@@ -4,7 +4,7 @@
 // @description  네이버 블로그로 작성된 문서를 문단 단위로 키워드를 분석하고 문장의 주요 주제를 간략하게 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.analaysis.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*
