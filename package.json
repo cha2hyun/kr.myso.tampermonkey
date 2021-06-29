@@ -1,0 +1,27 @@
+{
+  "name": "kr.myso.tampermonkey",
+  "version": "1.0.0",
+  "description": "Tampermonkey scripts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myso-kr/kr.myso.tampermonkey.git"
+  },
+  "keywords": [
+    "tampermonkey",
+    "geasemonkey",
+    "violentmonkey",
+    "influencer",
+    "marketing",
+    "automation"
+  ],
+  "author": "Choi Won",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/myso-kr/kr.myso.tampermonkey/issues"
+  },
+  "homepage": "https://github.com/myso-kr/kr.myso.tampermonkey#readme"
+}

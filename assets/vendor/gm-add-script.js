@@ -1,5 +1,5 @@
 // ==UserScript==
-// @namespace     https://tampermonkey.myso.kr
+// @namespace     https://tampermonkey.myso.kr/
 // @exclude       *
 
 // ==UserLibrary==

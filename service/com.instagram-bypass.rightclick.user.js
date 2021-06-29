@@ -12,7 +12,7 @@
 // @match        *://instagram.com/*
 // @match        *://www.instagram.com
 // @match        *://www.instagram.com/*
-// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==

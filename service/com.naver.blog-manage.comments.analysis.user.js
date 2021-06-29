@@ -10,10 +10,10 @@
 // @match        https://blog.stat.naver.com/blog/rank/comment*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
-// @require      https://openuserjs.org/src/libs/myso/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-style.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-script.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==

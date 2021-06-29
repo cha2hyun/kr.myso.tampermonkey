@@ -23,11 +23,11 @@
 // @match        *://m.post.editor.naver.com/editor*
 // @match        *://m.post.naver.com/viewer/postView*
 // @grant        GM_addStyle
-// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
-// @require      https://openuserjs.org/src/libs/myso/donation.min.js
-// @require      https://openuserjs.org/src/libs/myso/com.naver.smart-editor.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-style.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-script.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/lib/smart-editor-one.js
 // ==/UserScript==
 
 // ==OpenUserJS==

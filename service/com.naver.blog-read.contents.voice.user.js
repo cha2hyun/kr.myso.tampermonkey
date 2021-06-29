@@ -12,14 +12,14 @@
 
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_speech.min.js
-// @require      https://openuserjs.org/src/libs/myso/donation.min.js
-// @require      https://openuserjs.org/src/libs/myso/com.naver.blog.min.js
-// @require      https://openuserjs.org/src/libs/myso/com.naver.smart-editor.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-app.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-style.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-add-script.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-async.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/vendor/gm-speech-tts.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/donation.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/lib/naver-blog.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey/assets/lib/smart-editor-one.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
