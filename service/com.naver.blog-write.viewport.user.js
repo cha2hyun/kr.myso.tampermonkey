@@ -1,18 +1,27 @@
 // ==UserScript==
-// @name         네이버 스마트에디터 ONE 뷰포트
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 스마트에디터 ONE 뷰포트
+// @description  네이버 스마트에디터 ONE에서 다양한 단말기 해상도에 맞게 글을 작성하게 도와줍니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.viewport.user.js
-// @description  네이버 스마트에디터 ONE에서 다양한 단말기 해상도에 맞게 글을 작성하게 도와줍니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/PostWriteForm*
 // @match        *://blog.naver.com/PostUpdateForm*
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.editor.naver.com/editor*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
-async function main() {
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
+GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`
 #root { position: relative !important; }
@@ -65,10 +74,4 @@ async function main() {
         container.appendChild(group);
     }
     handler();
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
