@@ -1,16 +1,27 @@
 // ==UserScript==
-// @name         네이버 인플루언서 홈 키워드 챌린지 순위 확인
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 인플루언서 홈 키워드 챌린지 순위 확인
+// @description  네이버 인플루언서 홈에서 키워드 챌린지 순위를 확인합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-challenge.rank.user.js
-// @description  네이버 인플루언서 홈에서 키워드 챌린지 순위를 확인합니다.
 // @author       Won Choi
 // @match        https://in.naver.com/*/challenge*
-// @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @grant        GM_xmlhttpRequest
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestCORS.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
-async function main() {
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
+GM_App(async function main() {
     main.timer = clearTimeout(main.timer);
     main.timer = setTimeout(async () => {
         const urlIdBase = location.pathname.split('/')[1];
@@ -45,10 +56,4 @@ async function main() {
             el.addEventListener('click', (e)=>el.getAttribute('aria-pressed')=="true"&&window.open(`https://s.search.naver.com/p/influencer/search.naver?query=${encodeURIComponent(keywords[i])}`), false);
         });
     }, 300);
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+})
