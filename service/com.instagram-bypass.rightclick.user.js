@@ -12,20 +12,15 @@
 // @match        *://instagram.com/*
 // @match        *://www.instagram.com
 // @match        *://www.instagram.com/*
+// @require      https://openuserjs.org/src/libs/myso/GM_App.js
 // ==/UserScript==
 
 // ==OpenUserJS==
 // @author myso
 // ==/OpenUserJS==
-async function main() {
+GM_App(async function main() {
   GM_addStyle(`
     ._9AhH0 { display: none; }
     .PyenC, .fXIG0 { margin: auto; left: 0; right: 0; top: 0; bottom: 0; width: 135px; height: 135px; }
  `);
-}
-function _requestIdleCallback(callback) {
-if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
