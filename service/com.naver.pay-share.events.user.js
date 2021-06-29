@@ -1,9 +1,9 @@
 // ==UserScript==
+// @namespace    https://tampermonkey.myso.kr/
 // @name         네이버 페이 포인트 짠테크 도우미
 // @description  네이버 페이의 포인트 혜택 클릭보상 이벤트를 전부 확인하고, 공유 할 수 있도록 리스트를 복사합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @namespace    https://tampermonkey.myso.kr/
 // @version      1.0.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.pay-share.events.user.js
 // @author       Won Choi
@@ -17,7 +17,6 @@
 // @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
 // @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
 // @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
-// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestCORS.min.js
 // @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js

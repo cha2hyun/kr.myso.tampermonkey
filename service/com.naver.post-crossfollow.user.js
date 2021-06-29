@@ -1,15 +1,26 @@
 // ==UserScript==
-// @name         네이버 포스트 맞구독 검증기
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 포스트 맞구독 검증기
+// @description  네이버 포스트에서 맞구독 상태를 검증합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.1.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.post-crossfollow.user.js
-// @description  네이버 포스트에서 맞구독 상태를 검증합니다.
 // @author       Won Choi
 // @match        *://post.naver.com/my/followingList*
 // @match        *://m.post.naver.com/my/followingList*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @grant        GM_xmlhttpRequest
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function search_followers(fromNo = 1, totalCount = 100000000, result = {}) {
     const list = document.getElementById('el_list_container'), ul = list.children[0];
     const loc = new URL(location.href);
