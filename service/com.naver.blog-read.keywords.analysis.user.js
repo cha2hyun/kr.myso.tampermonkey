@@ -1,28 +1,35 @@
 // ==UserScript==
-// @name         네이버 블로그 글 제목 키워드 추출 분석
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 글 제목 키워드 추출 분석
+// @description  네이버 블로그의 글 제목을 기반으로 모든 키워드를 추출하고 분석결과를 제공합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.keywords.analysis.user.js
-// @description  네이버 블로그의 글 제목을 기반으로 모든 키워드를 추출하고 분석결과를 제공합니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/smart-editor-one.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-blog.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-search-nx.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-search-rx.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
+// @require      https://openuserjs.org/src/libs/myso/com.naver.blog.min.js
+// @require      https://openuserjs.org/src/libs/myso/com.naver.search.nx.min.js
+// @require      https://openuserjs.org/src/libs/myso/com.naver.search.rx.min.js
+// @require      https://openuserjs.org/src/libs/myso/com.naver.smart-editor.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`a._readKeywords .ico_spd { display: block; position: absolute; right: 13px; top: 13px; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size:11px; font-weight: bold; }`);
