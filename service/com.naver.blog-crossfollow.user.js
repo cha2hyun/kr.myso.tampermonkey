@@ -1,88 +1,97 @@
 // ==UserScript==
 // @name         네이버 블로그 나만 이웃 자동 정리
+// @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @namespace    https://tampermonkey.myso.kr/
 // @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
-// @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @author       Won Choi
 // @match        https://admin.blog.naver.com/*
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
 // @grant        GM_addStyle
+// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
-async function search_buddy_me_page(page = 1, results = []) {
-    const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.match(/^\/([^\/]+)/)[1];
-    const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.nhn?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
-    const doc = document.createElement('div'); doc.innerHTML = res;
-    const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
-    const has_next = pagenation_last.tagName == 'A' && !!pagenation_last.className, has_next_valid = pagenation_last.tagName != 'STRONG';
-    const usernames_rows = Array.from(doc.querySelectorAll('tr a[href*="blog.naver.com"], tr a[href*=".blog.me"]'));
-    const usernames = usernames_rows.map(e=>{
-        const uri = new URL(e.href);
-        const id = (() => e.closest('tr').querySelector('td:first-child input').value)();
-        const createdAt = (() => new Date('20'+e.closest('tr').querySelector('td:last-child').innerText))();
-        const nickname = (() => {
-            if(uri.hostname.includes('.blog.me')) return uri.hostname.replace('.blog.me', '');
-            if(uri.hostname.includes('blog.naver.com')) return uri.pathname.replace('/', '');
-            return uri.hostname;
-        })();
-        return { id, nickname, createdAt };
-    });
-    results.push(...usernames);
-    return (has_next || has_next_valid) ? search_buddy_me_page(page+1, results) : results.filter((o,i)=>results.indexOf(o)==i);
-}
-async function search_buddy_page(page = 1, results = []) {
-    const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.match(/^\/([^\/]+)/)[1];
-    const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.nhn?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
-    const doc = document.createElement('div'); doc.innerHTML = res;
-    const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
-    const has_next = pagenation_last.tagName == 'A' && !!pagenation_last.className, has_next_valid = pagenation_last.tagName != 'STRONG';
-    const usernames_rows = Array.from(doc.querySelectorAll('tr a[href*="blog.naver.com"], tr a[href*=".blog.me"]'));
-    const usernames = usernames_rows.map(e=>{
-        const uri = new URL(e.href);
-        const id = (() => e.closest('tr').querySelector('td:first-child input').value)();
-        const createdAt = (() => new Date('20'+e.closest('tr').querySelector('td:last-child').innerText))();
-        const nickname = (() => {
-            if(uri.hostname.includes('.blog.me')) return uri.hostname.replace('.blog.me', '');
-            if(uri.hostname.includes('blog.naver.com')) return uri.pathname.replace('/', '');
-            return uri.hostname;
-        })();
-        return { id, nickname, createdAt };
-    });
-    results.push(...usernames);
-    return (has_next || has_next_valid) ? search_buddy_page(page+1, results) : results.filter((o,i)=>results.indexOf(o)==i);
-}
-async function search_buddy_me() {
-    const session_timestamp = eval(sessionStorage.getItem('search_buddy_me_timestamp') || '0');
-    const session_buddy_me = JSON.parse(sessionStorage.getItem('session_buddy_me') || '[]');
-    if(Date.now() - session_timestamp > 1000 * 60 * 1) {
-        const followers = await search_buddy_me_page();
-        sessionStorage.setItem('session_buddy_me', JSON.stringify(followers));
-        sessionStorage.setItem('search_buddy_me_timestamp', Date.now())
-        return followers;
-    } else {
-        return session_buddy_me;
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
+GM_App(async function main() {
+    async function search_buddy_me_page(page = 1, results = []) {
+        const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.match(/^\/([^\/]+)/)[1];
+        const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.nhn?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
+        const doc = document.createElement('div'); doc.innerHTML = res;
+        const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
+        const has_next = pagenation_last.tagName == 'A' && !!pagenation_last.className, has_next_valid = pagenation_last.tagName != 'STRONG';
+        const usernames_rows = Array.from(doc.querySelectorAll('tr a[href*="blog.naver.com"], tr a[href*=".blog.me"]'));
+        const usernames = usernames_rows.map(e=>{
+            const uri = new URL(e.href);
+            const id = (() => e.closest('tr').querySelector('td:first-child input').value)();
+            const createdAt = (() => new Date('20'+e.closest('tr').querySelector('td:last-child').innerText))();
+            const nickname = (() => {
+                if(uri.hostname.includes('.blog.me')) return uri.hostname.replace('.blog.me', '');
+                if(uri.hostname.includes('blog.naver.com')) return uri.pathname.replace('/', '');
+                return uri.hostname;
+            })();
+            return { id, nickname, createdAt };
+        });
+        results.push(...usernames);
+        return (has_next || has_next_valid) ? search_buddy_me_page(page+1, results) : results.filter((o,i)=>results.indexOf(o)==i);
     }
-}
-async function search_buddy() {
-    const session_timestamp = eval(sessionStorage.getItem('search_buddy_timestamp') || '0');
-    const session_buddy = JSON.parse(sessionStorage.getItem('session_buddy') || '[]');
-    if(Date.now() - session_timestamp > 1000 * 60 * 1) {
-        const following = await search_buddy_page();
-        sessionStorage.setItem('session_buddy', JSON.stringify(following));
-        sessionStorage.setItem('search_buddy_timestamp', Date.now())
-        return following;
-    } else {
-        return session_buddy;
+    async function search_buddy_page(page = 1, results = []) {
+        const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.match(/^\/([^\/]+)/)[1];
+        const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.nhn?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
+        const doc = document.createElement('div'); doc.innerHTML = res;
+        const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
+        const has_next = pagenation_last.tagName == 'A' && !!pagenation_last.className, has_next_valid = pagenation_last.tagName != 'STRONG';
+        const usernames_rows = Array.from(doc.querySelectorAll('tr a[href*="blog.naver.com"], tr a[href*=".blog.me"]'));
+        const usernames = usernames_rows.map(e=>{
+            const uri = new URL(e.href);
+            const id = (() => e.closest('tr').querySelector('td:first-child input').value)();
+            const createdAt = (() => new Date('20'+e.closest('tr').querySelector('td:last-child').innerText))();
+            const nickname = (() => {
+                if(uri.hostname.includes('.blog.me')) return uri.hostname.replace('.blog.me', '');
+                if(uri.hostname.includes('blog.naver.com')) return uri.pathname.replace('/', '');
+                return uri.hostname;
+            })();
+            return { id, nickname, createdAt };
+        });
+        results.push(...usernames);
+        return (has_next || has_next_valid) ? search_buddy_page(page+1, results) : results.filter((o,i)=>results.indexOf(o)==i);
     }
-}
-async function delete_buddy(selfishes) {
-    const uri = new URL('https://admin.blog.naver.com/BuddyDelete.nhn');
-    const formData = new FormData(); selfishes.map(o=>formData.append('buddyBlogNo', o.id));
-    formData.append('blogId', location.pathname.replace('/', ''));
-    formData.append('on', ''); formData.append('force', 'true');
-    await fetch(uri.toString(), { method: 'POST', body: formData });
-}
-async function main() {
+    async function search_buddy_me() {
+        const session_timestamp = eval(sessionStorage.getItem('search_buddy_me_timestamp') || '0');
+        const session_buddy_me = JSON.parse(sessionStorage.getItem('session_buddy_me') || '[]');
+        if(Date.now() - session_timestamp > 1000 * 60 * 1) {
+            const followers = await search_buddy_me_page();
+            sessionStorage.setItem('session_buddy_me', JSON.stringify(followers));
+            sessionStorage.setItem('search_buddy_me_timestamp', Date.now())
+            return followers;
+        } else {
+            return session_buddy_me;
+        }
+    }
+    async function search_buddy() {
+        const session_timestamp = eval(sessionStorage.getItem('search_buddy_timestamp') || '0');
+        const session_buddy = JSON.parse(sessionStorage.getItem('session_buddy') || '[]');
+        if(Date.now() - session_timestamp > 1000 * 60 * 1) {
+            const following = await search_buddy_page();
+            sessionStorage.setItem('session_buddy', JSON.stringify(following));
+            sessionStorage.setItem('search_buddy_timestamp', Date.now())
+            return following;
+        } else {
+            return session_buddy;
+        }
+    }
+    async function delete_buddy(selfishes) {
+        const uri = new URL('https://admin.blog.naver.com/BuddyDelete.nhn');
+        const formData = new FormData(); selfishes.map(o=>formData.append('buddyBlogNo', o.id));
+        formData.append('blogId', location.pathname.replace('/', ''));
+        formData.append('on', ''); formData.append('force', 'true');
+        await fetch(uri.toString(), { method: 'POST', body: formData });
+    }
+    //-----------------
     if(/\.nhn$/.test(location.pathname)) return;
     const container = document.querySelector('#nav > div:nth-child(4)');
     const container_title = container && container.querySelector('.lnb__title');
@@ -124,10 +133,4 @@ async function main() {
         menuitem.append(menulink);
         menulist.append(menuitem);
     }
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
