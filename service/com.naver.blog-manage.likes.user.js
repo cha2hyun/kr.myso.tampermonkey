@@ -1,9 +1,9 @@
 // ==UserScript==
+// @namespace    https://tampermonkey.myso.kr/
 // @name         네이버 블로그 공감수 순위 어드밴스드
 // @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @namespace    https://tampermonkey.myso.kr/
 // @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
 // @author       Won Choi

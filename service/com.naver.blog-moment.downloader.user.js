@@ -1,18 +1,30 @@
 // ==UserScript==
-// @name         네이버 블로그 모먼트 다운로더
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 모먼트 다운로더
+// @description  네이버 블로그 모먼트 영상을 다운로드 합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-moment.downloader.user.js
-// @description  네이버 블로그 모먼트 영상을 다운로드 합니다.
 // @author       Won Choi
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @match        *://m.blog.naver.com/*/moment/*
+// @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestCORS.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestHook.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js
-// @grant        GM_addStyle
-// @match        *://m.blog.naver.com/*/moment/*
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 (function() {
   const cache = {};
   GM_donation('#root', 0);
