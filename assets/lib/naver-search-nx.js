@@ -12,12 +12,14 @@
         endpoints.push({ url: 'https://s.search.naver.com/p/review/search.naver', where: ['view', 'm_view'] });
         endpoints.push({ url: 'https://s.search.naver.com/p/blog/search.naver', where: ['blog', 'm_blog'] });
         const endpoint = endpoints.find(o=>o.where.includes(where)) || 'https://s.search.naver.com/p/blog/search.naver';
+        const ref = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=mtb_jum&query=');
         const uri = new URL(endpoint.url);
         if(start) uri.searchParams.set('start', start);
         uri.searchParams.set('where', where);
         uri.searchParams.set('mode', mode);
         uri.searchParams.set('query', keyword);
-        return GM_xmlhttpRequestAsync(uri);
+        ref.searchParams.set('query', keyword);
+        return GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
     }
     window.NX_info = async function NX_info(keyword, start, where, mode) {
         const res = await NX_Request(keyword, start, where, mode);
