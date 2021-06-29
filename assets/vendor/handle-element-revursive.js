@@ -1,3 +1,21 @@
+// ==UserScript==
+// @namespace     https://tampermonkey.myso.kr
+// @exclude       *
+
+// ==UserLibrary==
+// @name          GM_elementRecursive
+// @description   GM_elementRecursive 스크립트
+// @copyright     2021, myso (https://tampermonkey.myso.kr)
+// @license       Apache-2.0
+// @version       1.0.0
+
+// ==/UserScript==
+
+// ==/UserLibrary==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 (function (window) {
   HTMLDocument.prototype.createElement = ((createElement) => {
     return function() {

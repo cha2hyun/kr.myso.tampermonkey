@@ -1,3 +1,21 @@
+// ==UserScript==
+// @namespace     https://tampermonkey.myso.kr
+// @exclude       *
+
+// ==UserLibrary==
+// @name          GM_addScript
+// @description   GM_addScript 스크립트
+// @copyright     2021, myso (https://tampermonkey.myso.kr)
+// @license       Apache-2.0
+// @version       1.0.0
+
+// ==/UserScript==
+
+// ==/UserLibrary==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 (function(window) {
   window.inject_js = function inject_js(script) {
     const container = (document.head || document.body || document.documentElement);

@@ -1,3 +1,21 @@
+// ==UserScript==
+// @namespace     https://tampermonkey.myso.kr
+// @exclude       *
+
+// ==UserLibrary==
+// @name          prototype.collections
+// @description   prototype.collections 스크립트
+// @copyright     2021, myso (https://tampermonkey.myso.kr)
+// @license       Apache-2.0
+// @version       1.0.0
+
+// ==/UserScript==
+
+// ==/UserLibrary==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 (function () {
   Object.pick = function(object, ...filter) {
     let keys = Object.keys(object).filter((key)=>filter.includes(key));
