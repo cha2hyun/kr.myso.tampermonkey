@@ -82,7 +82,7 @@ GM_App(async function main() {
   Handlebars.registerHelper('lengthTrim', (section) => SE_componentContent([section]).replace(/[\r\n\s]+/g, '').length);
   GM_addScript(() => {
       function toggle(index, state) {
-          const docs = document;
+          let docs = document;
           const clipContent = docs.querySelector('#__clipContent'); if(clipContent) { docs = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
           const sectionsV2 = Array.from(docs.querySelectorAll('.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *'));
           const sectionsV3 = Array.from(docs.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));

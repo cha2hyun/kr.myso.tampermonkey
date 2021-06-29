@@ -320,7 +320,7 @@
         return Array.from(document.querySelectorAll(selector)).filter((o,i,a)=>o && o.classList && a.indexOf(o) === i).map(mapper).flat();
     }
     window.SE_parseNodes = function SE_parseNodes(document) {
-        const docs = document;
+        let docs = document;
         const clipContent = docs.querySelector('#__clipContent'); if(clipContent) { docs = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
         const sectionsV2 = Array.from(docs.querySelectorAll('.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *'));
         const sectionsV3 = Array.from(docs.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));
@@ -328,7 +328,7 @@
         return [sectionsV2, sectionsV3, sectionsV4].flat();
     }
     window.SE_parse = function SE_parse(document, info) {
-        const docs = document;
+        let docs = document;
         const clipContent = docs.querySelector('#__clipContent'); if(clipContent) { docs = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
         const sectionsV2 = SE_components(docs, SE_componentParseV2, '.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *');
         const sectionsV3 = SE_components(docs, SE_componentParseV3, '#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component');
