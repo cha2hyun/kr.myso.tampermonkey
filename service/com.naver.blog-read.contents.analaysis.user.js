@@ -17,7 +17,7 @@
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=10
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=6
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=11
+// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=31
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
