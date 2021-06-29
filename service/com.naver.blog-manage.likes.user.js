@@ -1,15 +1,24 @@
 // ==UserScript==
 // @name         네이버 블로그 공감수 순위 어드밴스드
+// @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @namespace    https://tampermonkey.myso.kr/
 // @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
-// @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
 // @author       Won Choi
-// @grant        GM_xmlhttpRequest
-// @grant        GM_addStyle
 // @match        https://blog.stat.naver.com/blog/rank/like*
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function inject_js(opt) {
   return new Promise((resolve, reject) => {
       var el = document.createElement('script'); el.type = 'text/javascript';
@@ -31,7 +40,7 @@ async function inject_js(opt) {
       if(typeof opt === 'function') resolved();
   });
 }
-async function main() {
+GM_App(async function main() {
   GM_donation('.u_ni_stats_detail_wrap');
   document.addEventListener('GM_xmlhttpRequest', async (e) => {
     const detail = await new Promise((resolve, reject) => GM_xmlhttpRequest({ ...e.detail, onerror: reject, onload: resolve, })).catch(e=>null);
@@ -241,10 +250,4 @@ async function main() {
       }, 300);
     }, 300);
   })
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
