@@ -99,7 +99,7 @@
     }
     window.NX_itemsAll = async function NX_itemsAll(...keywords) {
         const uniqs = keywords.filter((word, index, keywords)=>keywords.indexOf(word) == index);
-        const items = []; while(uniqs.length) { items.push((await Promise.all(uniqs.splice(0, 30).map(async (query)=>({ query, items: await NX_items(query) })))).flat()); }
+        const items = []; while(uniqs.length) { items.push((await Promise.all(uniqs.splice(0, 5).map(async (query)=>({ query, items: await NX_items(query) })))).flat()); }
         return items.flat();
     }
 })(window);

@@ -100,8 +100,7 @@
     }
     window.NR_termsAll = async function NR_termsParagraph(...keywords) {
         const uniqs = keywords.filter((word, index, keywords)=>keywords.indexOf(word) == index);
-        const terms = []; while(uniqs.length) { terms.push((await Promise.all(uniqs.splice(0, 30).map(NR_terms))).flat()); }
+        const terms = []; while(uniqs.length) { terms.push((await Promise.all(uniqs.splice(0, 5).map(NR_terms))).flat()); }
         return terms.flat();
-        // return uniqs.length ? (await Promise.all(uniqs.map(NR_terms))).flat() : [];
     }
 })(window);
