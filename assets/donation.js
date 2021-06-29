@@ -1,3 +1,21 @@
+// ==UserScript==
+// @namespace     https://tampermonkey.myso.kr
+// @exclude       *
+
+// ==UserLibrary==
+// @name          kr.myso.tampermonkey.donation
+// @description   MYSO 템퍼몽키 후원 스크립트
+// @copyright     2021, myso (https://tampermonkey.myso.kr)
+// @license       Apache-2.0
+// @version       1.0.0
+
+// ==/UserScript==
+
+// ==/UserLibrary==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 (function(window) {
     let time_dif = (1000*60*60*24*30), time_now = Date.now(), time_ref = time_now - time_dif;
     let key = {};
