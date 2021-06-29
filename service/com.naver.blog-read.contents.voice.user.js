@@ -1,17 +1,19 @@
 // ==UserScript==
-// @name         네이버 블로그 오디오 리더
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 오디오 리더
+// @description  네이버 블로그의 글을 소리내어 읽어줍니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
-// @description  네이버 블로그의 글을 소리내어 읽어줍니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-speech-tts.js
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/smart-editor-one.js
 // @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-blog.js
@@ -20,6 +22,10 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle(`a._readVoice .ico_spd { display: block; position: absolute; right: 13px; top: 13px; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size:11px; font-weight: bold; }`);
