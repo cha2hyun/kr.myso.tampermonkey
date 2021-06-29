@@ -10,7 +10,7 @@
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @grant        GM_addStyle
-// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
 // @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
 

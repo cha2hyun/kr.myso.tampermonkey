@@ -10,7 +10,7 @@
 // @match        https://blog.stat.naver.com/blog/rank/comment*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
 // @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
 // @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
 // @require      https://openuserjs.org/src/libs/myso/donation.min.js

@@ -9,7 +9,7 @@
 // @author       Won Choi
 // @match        https://admin.blog.naver.com/AdminUserFilter*
 // @grant        GM_addStyle
-// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
 // @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
 
