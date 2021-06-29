@@ -1,9 +1,11 @@
 // ==UserScript==
 // @name         스마트에디터ONE MSWord문서(*.docx) 내보내기
+// @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @namespace    https://tampermonkey.myso.kr/
 // @version      1.1.34
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.save.msword.user.js
-// @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.naver.com/*Redirect=Write*
@@ -15,18 +17,22 @@
 // @connect      pstatic.net
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-xmlhttp-request-cors.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-blog.js
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/smart-editor-one.js
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestAsync.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_xmlhttpRequestCORS.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
+// @require      https://openuserjs.org/src/libs/myso/com.naver.blog.min.js
+// @require      https://openuserjs.org/src/libs/myso/com.naver.smart-editor.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function transformDocument(content) {
     const container = (children) => {
         const width = { size: 9010, type: docx.WidthType.DXA };
