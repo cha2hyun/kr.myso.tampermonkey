@@ -9,7 +9,7 @@
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @match        *://serviceapi.nmv.naver.com/flash/convertIframeTag*
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js?v=210613
 // @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
 // ==/UserScript==
 async function inject_xhr() {

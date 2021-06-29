@@ -12,12 +12,12 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-app.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-timer.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-style.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-script.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-timer.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js?v=210613
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-blog.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==

@@ -21,11 +21,11 @@
 // @match        *://m.post.editor.naver.com/editor*
 // @match        *://m.post.naver.com/viewer/postView*
 // @grant        GM_addStyle
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-app.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-style.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-script.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/smart-editor-one.js?v=32
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js?v=210613
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/smart-editor-one.js?v=32
 // ==/UserScript==
 // ---------------------
 GM_App(async function main() {

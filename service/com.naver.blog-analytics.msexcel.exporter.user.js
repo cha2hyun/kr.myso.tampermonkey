@@ -9,11 +9,11 @@
 // @match        *://admin.blog.naver.com/*/stat/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-app.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-style.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-script.js
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
-// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/naver-blog.js?v=25
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js?v=210613
+// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/lib/naver-blog.js?v=25
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
