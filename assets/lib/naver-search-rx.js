@@ -52,12 +52,14 @@
         return (nlu_category || '').split(' ').map((id) => categories.find((o)=>o.id == id)).filter(v=>!!v).map(o=>o.name);
     }
     async function NR_Request(keyword, where = 'm_view') {
+        const ref = new URL('https://search.naver.com/search.naver?ie=UTF-8&query=&sm=chr_hty');
         const uri = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=mtb_jum&query=');
         if(location.hostname.includes('search.naver.com')) uri.search = location.search;
         uri.searchParams.set('where', where);
         uri.searchParams.set('query', keyword);
         uri.searchParams.set('mode', 'normal');
-        return GM_xmlhttpRequestAsync(uri);
+        ref.searchParams.set('query', keyword);
+        return GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
     }
     window.NR_info = async function NR_info(keyword, where) {
         const res = await NR_Request(keyword, where);
