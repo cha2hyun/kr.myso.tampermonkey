@@ -5,7 +5,7 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.1.35
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.msword.exporter.user.JS
+// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.msword.exporter.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.naver.com/*Redirect=Write*
