@@ -1,14 +1,22 @@
 // ==UserScript==
-// @name         네이버 블로그 스팸 차단글 자동화 도구 - 모든 도메인
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 스팸 차단글 자동화 도구 - 모든 도메인
+// @description  네이버 블로그 스팸 차단글 설정에서 손쉽게 모든 국제 도메인을 차단 키워드로 등록 할 수 있습니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-antispam.domains.user.js
-// @description  네이버 블로그 스팸 차단글 설정에서 손쉽게 모든 국제 도메인을 차단 키워드로 등록 할 수 있습니다.
 // @author       Won Choi
 // @match        https://admin.blog.naver.com/AdminUserFilter*
-// @grant        none
+// @grant        GM_addStyle
+// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
-async function main() {
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
+GM_App(async function main() {
     const container = document.querySelector('.spam_set.last-box > div');
     const canvas = document.createElement('span'); canvas.className = 'btn btn2';
     const button = document.createElement('input'); button.type = 'submit'; button.value='모든 도메인 차단';
@@ -51,11 +59,4 @@ async function main() {
             }
         }, 500);
     };
-
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+})
