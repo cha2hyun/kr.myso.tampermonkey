@@ -40,7 +40,7 @@ async function inject_js(opt) {
       if(typeof opt === 'function') resolved();
   });
 }
-async function main() {
+GM_App(async function main() {
   GM_donation('.u_ni_stats_detail_wrap');
   document.addEventListener('GM_xmlhttpRequest', async (e) => {
     const detail = await new Promise((resolve, reject) => GM_xmlhttpRequest({ ...e.detail, onerror: reject, onload: resolve, })).catch(e=>null);
@@ -285,10 +285,4 @@ async function main() {
       }, 300);
     }, 300);
   })
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
