@@ -53,7 +53,7 @@
     }
     async function NR_Request(keyword, where = 'm_view') {
         const uri = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=mtb_jum&query=');
-        uri.search = location.search;
+        if(location.hostname.includes('search.naver.com')) uri.search = location.search;
         uri.searchParams.set('where', where);
         uri.searchParams.set('query', keyword);
         uri.searchParams.set('mode', 'normal');
