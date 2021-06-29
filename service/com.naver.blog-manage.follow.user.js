@@ -1,14 +1,24 @@
 // ==UserScript==
-// @name         네이버 블로그 이웃,그룹 관리 어드밴스드
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 이웃,그룹 관리 어드밴스드
+// @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
-// @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @author       Won Choi
 // @match        *://admin.blog.naver.com/BuddyListManage*
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
 // @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function inject_js(opt) {
   return new Promise((resolve, reject) => {
       var el = document.createElement('script'); el.type = 'text/javascript';
@@ -30,7 +40,7 @@ async function inject_js(opt) {
       if(typeof opt === 'function') resolved();
   });
 }
-async function main() {
+GM_App(async function main() {
   GM_donation('.admin_set_buddy');
   await inject_js({ integrity: 'sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==', src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js' });
   await inject_js({ integrity: 'sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==', src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js' });
@@ -318,10 +328,4 @@ async function main() {
       }, 300);
     }, 300);
   })
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
