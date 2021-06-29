@@ -1,21 +1,3 @@
-// ==UserScript==
-// @namespace     https://tampermonkey.myso.kr
-// @exclude       *
-
-// ==UserLibrary==
-// @name          네이버 크리에이터 어드바이저 스크립트
-// @description   네이버 크리에이터 어드바이저 스크립트
-// @copyright     2021, myso (https://openuserjs.org/users/myso)
-// @license       Apache-2.0
-// @version       1.0.0
-
-// ==/UserScript==
-
-// ==/UserLibrary==
-
-// ==OpenUserJS==
-// @author myso
-// ==/OpenUserJS==
 (function(window) {
   class CreatorAdvisorApi {
       constructor(endpoint, defaults) {
