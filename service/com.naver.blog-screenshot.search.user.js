@@ -1,9 +1,11 @@
 // ==UserScript==
-// @name         네이버 블로그 검색결과 캡쳐도구
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 검색결과 캡쳐도구
+// @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-screenshot.search.user.js
-// @description  네이버 블로그에서 발행한 포스팅의 검색결과를 손쉽게 캡쳐하는 도구입니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/PostList*
 // @match        *://blog.naver.com/PostView*
@@ -13,6 +15,10 @@
 // @grant        GM_download
 // @grant        GM_addStyle
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function inject_js(opt) {
     return new Promise((resolve, reject) => {
         var el = document.createElement('script'); el.type = 'text/javascript';

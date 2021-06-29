@@ -1,17 +1,28 @@
 // ==UserScript==
-// @name         네이버 블로그 동영상 다운로더
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 동영상 다운로더
+// @description  네이버 블로그 동영상 다운로드 기능을 활성화됩니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.1.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-video.downloader.user.js
-// @description  네이버 블로그 동영상 다운로드 기능을 활성화됩니다.
 // @author       Won Choi
-// @grant        GM_addStyle
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @match        *://serviceapi.nmv.naver.com/flash/convertIframeTag*
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
+// @connect      naver.com
+// @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @require      https://openuserjs.org/src/libs/myso/GM_App.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addStyle.min.js
+// @require      https://openuserjs.org/src/libs/myso/GM_addScript.min.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
 // ==/UserScript==
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
 async function inject_xhr() {
     const XHR = XMLHttpRequest.prototype, send = XHR.send, open = XHR.open;
     XHR.open = function(method, url) { this.url = url; return open.apply(this, arguments); }
@@ -26,7 +37,7 @@ async function inject_xhr() {
         send.apply(this, arguments);
     };
 };
-async function main() {
+GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addStyle("@import url('https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css')");
     inject_xhr();
@@ -44,10 +55,4 @@ async function main() {
         }
     }, false);
     if(typeof loadUGCPlayer !== 'undefined') loadUGCPlayer();
-}
-function _requestIdleCallback(callback) {
-    if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-    return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.head) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+})
