@@ -5,22 +5,22 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.1.26
-// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/service/com.naver.blog-prologue.keyword.analysis.user.js
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/prologue/PrologueList*
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/donation.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/localforage/1.9.0/localforage.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/donation.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/localforage/1.9.0/localforage.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.js
 // ==/UserScript==
 
 // ==OpenUserJS==

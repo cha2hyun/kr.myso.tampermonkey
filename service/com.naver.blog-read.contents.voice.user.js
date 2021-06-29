@@ -5,25 +5,25 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.0.6
-// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/service/com.naver.blog-read.contents.voice.user.js
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/service/com.naver.blog-read.contents.voice.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-add-style.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-add-script.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-xmlhttp-request-async.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-speech-tts.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/donation.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/lib/naver-blog.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/lib/smart-editor-one.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-speech-tts.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/lib/smart-editor-one.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/sprintf/1.1.2/sprintf.js
 // ==/UserScript==
 
 // ==OpenUserJS==

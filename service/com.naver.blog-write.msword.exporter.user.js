@@ -5,7 +5,7 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.1.36
-// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/service/com.naver.blog-write.msword.exporter.user.js
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/service/com.naver.blog-write.msword.exporter.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.naver.com/*Redirect=Write*
@@ -17,17 +17,17 @@
 // @connect      pstatic.net
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-add-style.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-add-script.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-xmlhttp-request-async.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-xmlhttp-request-cors.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/donation.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/lib/naver-blog.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/lib/smart-editor-one.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-xmlhttp-request-cors.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/lib/smart-editor-one.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js
 // ==/UserScript==
 
 // ==OpenUserJS==
@@ -317,9 +317,9 @@ async function transformDocument(content) {
 GM_App(async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
     GM_addScript('https://unpkg.com/docx@6.0.3/build/index.js');
-    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js');
-    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js');
-    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js');
+    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js');
+    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js');
+    GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.js');
     GM_addStyle(`
     .se-utils > ul > li > button { margin-top: 14px !important; }
     .se-util-button-docx::before {

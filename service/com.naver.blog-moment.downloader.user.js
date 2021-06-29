@@ -5,21 +5,21 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.0.5
-// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/service/com.naver.blog-moment.downloader.user.js
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/service/com.naver.blog-moment.downloader.user.js
 // @author       Won Choi
 // @match        *://m.blog.naver.com/*/moment/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-app.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-add-style.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-add-script.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-xmlhttp-request-async.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-xmlhttp-request-cors.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/vendor/gm-xmlhttp-request-hook.min.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/assets/donation.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.min.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-xmlhttp-request-cors.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/vendor/gm-xmlhttp-request-hook.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/assets/donation.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.js
 // ==/UserScript==
 
 // ==OpenUserJS==

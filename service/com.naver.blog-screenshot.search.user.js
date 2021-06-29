@@ -5,7 +5,7 @@
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
 // @version      1.0.9
-// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.6/service/com.naver.blog-screenshot.search.user.js
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.7/service/com.naver.blog-screenshot.search.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostList*
 // @match        *://blog.naver.com/PostView*
@@ -60,7 +60,7 @@ async function main_search() {
         screenshot.timer = setTimeout(async () => {
             if(!document.querySelector('#naver-splugin-wrap, #wrap')) return screenshot();
             await inject_js(async function () { window.alert = function(){}; });
-            await inject_js({ src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js', integrity: 'sha256-c3RzsUWg+y2XljunEQS0LqWdQ04X1D3j22fd/8JCAKw=' });
+            await inject_js({ src: 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js', integrity: 'sha256-c3RzsUWg+y2XljunEQS0LqWdQ04X1D3j22fd/8JCAKw=' });
             await inject_js(async function () {
                 async function screenshot() { return new Promise((resolve)=>html2canvas(document.body, { allowTaint: false, onrendered: resolve })); }
                 const canvas = await screenshot(), dataURL = canvas.toDataURL("image/png");
