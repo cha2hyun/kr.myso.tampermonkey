@@ -21,11 +21,11 @@
 // @match        *://m.post.editor.naver.com/editor*
 // @match        *://m.post.naver.com/viewer/postView*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=32
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-app.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-style.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-script.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/smart-editor-one.js?v=32
 // ==/UserScript==
 // ---------------------
 GM_App(async function main() {

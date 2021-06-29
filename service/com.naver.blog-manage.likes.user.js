@@ -8,7 +8,7 @@
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
 // @match        https://blog.stat.naver.com/blog/rank/like*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
 // ==/UserScript==
 async function inject_js(opt) {
   return new Promise((resolve, reject) => {

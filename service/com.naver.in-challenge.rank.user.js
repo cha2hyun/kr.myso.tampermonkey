@@ -8,7 +8,7 @@
 // @match        https://in.naver.com/*/challenge*
 // @grant        GM_xmlhttpRequest
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
 // ==/UserScript==
 async function main() {
     main.timer = clearTimeout(main.timer);

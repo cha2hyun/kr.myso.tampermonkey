@@ -10,7 +10,7 @@
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.editor.naver.com/editor*
 // @grant        GM_addStyle
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
 // ==/UserScript==
 async function main() {
     GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);

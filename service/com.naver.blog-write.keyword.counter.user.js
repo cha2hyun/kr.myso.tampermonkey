@@ -17,15 +17,15 @@
 // @match        *://blog.naver.com/lib/smarteditor2/*/smart_editor2_inputarea.html
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-app.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-style.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-add-script.js
-// @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=10
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=6
-// @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=32
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-app.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-style.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-add-script.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/naver-blog.js
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/naver-search-nx.js?v=10
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/naver-search-rx.js?v=6
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/lib/smart-editor-one.js?v=32
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // ==/UserScript==

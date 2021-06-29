@@ -6,7 +6,7 @@
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @author       Won Choi
 // @match        https://admin.blog.naver.com/*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
 // @grant        GM_addStyle
 // ==/UserScript==
 async function search_buddy_me_page(page = 1, results = []) {

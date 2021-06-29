@@ -6,7 +6,7 @@
 // @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @author       Won Choi
 // @match        *://admin.blog.naver.com/BuddyListManage*
-// @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
+// @require      https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.js?v=210613
 // @grant        GM_addStyle
 // ==/UserScript==
 async function inject_js(opt) {
