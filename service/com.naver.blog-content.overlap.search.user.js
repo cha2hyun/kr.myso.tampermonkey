@@ -1,15 +1,23 @@
 // ==UserScript==
-// @name         네이버 블로그 중복문서 검색
 // @namespace    https://tampermonkey.myso.kr/
+// @name         네이버 블로그 중복문서 검색
+// @description  네이버 블로그에서 내 글의 중복문서/짜집기문서를 쉽게 찾기위한 기능을 추가합니다.
+// @copyright    2021, myso (https://tampermonkey.myso.kr)
+// @license      Apache-2.0
 // @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-content.overlap.search.user.js
-// @description  네이버 블로그에서 내 글의 중복문서/짜집기문서를 쉽게 찾기위한 기능을 추가합니다.
 // @author       Won Choi
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
-// @grant        none
+// @grant        GM_addStyle
+// @require      https://openuserjs.org/src/libs/myso/GM_App.js
+// @require      https://openuserjs.org/src/libs/myso/donation.min.js
 // ==/UserScript==
-async function main() {
+
+// ==OpenUserJS==
+// @author myso
+// ==/OpenUserJS==
+GM_App(async function main() {
     const wrappers = Array.from(document.querySelectorAll('[data-post-editor-version]'));
     wrappers.map((wrapper) => {
         const container = wrapper.querySelector('.lyr_overflow_menu');
@@ -30,10 +38,4 @@ async function main() {
         }
         container.prepend(anchor);
     });
-}
-function _requestIdleCallback(callback) {
-  if(typeof requestIdleCallback == 'undefined') return setTimeout(callback, 1000);
-  return requestIdleCallback(callback);
-}
-function checkForDOM() { return (document.body) ? main() : _requestIdleCallback(checkForDOM); }
-_requestIdleCallback(checkForDOM);
+});
