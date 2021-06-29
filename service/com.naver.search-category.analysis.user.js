@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 검색결과 키워드 선호 주제 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.3
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-category.analysis.user.js
 // @description  네이버 검색결과에서 키워드에 대한 생산/소비 선호 주제를 확인할 수 있습니다.
 // @author       Won Choi
