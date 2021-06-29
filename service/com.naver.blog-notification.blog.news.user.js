@@ -29,7 +29,7 @@ GM_App(async function main() {
       repeat.timer = await GM_setTimeout(async () => {
           const timestamp = GM_getValue(repeat.uuid, 0);
           const user = await NB_blogInfo('', 'BlogUserInfo');
-          if(user) {
+          if(user && user.userId) {
               const news = await NB_blogInfo(user.userId, 'NewsList');
               const list = _.get(news, 'newsList', []).filter(o=>o.createTime > timestamp);
               if(list.length) {
