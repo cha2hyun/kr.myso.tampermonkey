@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 문단 단위 키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.analaysis.user.js
 // @description  네이버 블로그로 작성된 문서를 문단 단위로 키워드를 분석하고 문장의 주요 주제를 간략하게 확인할 수 있습니다.
 // @author       Won Choi
@@ -33,11 +33,7 @@ GM_App(async function main() {
   .se-text-paragraph[data-nx-status-keywords]:hover::after { z-index: 10000; background: #b4a996; color: #fff; font-size: 11px; content: attr(data-nx-status-keywords); overflow-y: auto; max-height: 240px; opacity: 1; }
   `);
   const se = SE_parse(document); if(!se.content) return;
-  let docs = document, clip = docs.querySelector('#__clipContent'); if(clip) { docs = new DOMParser().parseFromString(clip.textContent, 'text/html'); }
-  const sectionsV2 = Array.from(docs.querySelectorAll('.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *'));
-  const sectionsV3 = Array.from(docs.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));
-  const sectionsV4 = Array.from(docs.querySelectorAll('#viewTypeSelector .se-component, .se-main-container .se-component, .se-container .se-component'));
-  const sections = [sectionsV2, sectionsV3, sectionsV4].flat();
+  const sections = SE_parseNodes(document);
   const sentences = se.sections.filter((section)=>['text'].includes(section.type));
   await Promise.map(sentences, async (sentence, index) => {
       const section = sections[sentence.offset]; if(!section) return;
