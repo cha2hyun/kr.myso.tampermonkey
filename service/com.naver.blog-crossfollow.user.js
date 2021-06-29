@@ -1,14 +1,13 @@
 // ==UserScript==
+// @namespace    https://tampermonkey.myso.kr/
 // @name         네이버 블로그 나만 이웃 자동 정리
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @namespace    https://tampermonkey.myso.kr/
 // @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @author       Won Choi
 // @match        https://admin.blog.naver.com/*
-// @require      https://cdn.jsdelivr.net/gh/myso-kr/kr.myso.tampermonkey/assets/donation.js
 // @grant        GM_addStyle
 // @require      https://openuserjs.org/src/libs/myso/GM_App.js
 // @require      https://openuserjs.org/src/libs/myso/donation.min.js
