@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 보유키워드 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.1.2
+// @version      1.1.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-profile.keyword.counter.user.js
 // @description  네이버 블로그 프로필에서 보유키워드를 확인할 수 있습니다.
 // @author       Won Choi
@@ -15,8 +15,8 @@
 // @require      https://tampermonkey.myso.kr/assets/vendor/gm-xmlhttp-request-async.js
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js?v=4
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=8
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=4
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=10
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=6
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=12
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js

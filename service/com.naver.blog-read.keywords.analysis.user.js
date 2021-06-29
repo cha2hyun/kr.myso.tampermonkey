@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         네이버 블로그 글 제목 키워드 추출 분석
 // @namespace    https://tampermonkey.myso.kr/
-// @version      1.0.0
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.keywords.analysis.user.js
 // @description  네이버 블로그의 글 제목을 기반으로 모든 키워드를 추출하고 분석결과를 제공합니다.
 // @author       Won Choi
@@ -16,8 +16,8 @@
 // @require      https://tampermonkey.myso.kr/assets/donation.js?v=210613
 // @require      https://tampermonkey.myso.kr/assets/lib/smart-editor-one.js?v=31
 // @require      https://tampermonkey.myso.kr/assets/lib/naver-blog.js
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=9
-// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=5
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-nx.js?v=10
+// @require      https://tampermonkey.myso.kr/assets/lib/naver-search-rx.js?v=6
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
