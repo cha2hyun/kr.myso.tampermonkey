@@ -4,8 +4,8 @@
 // @description  네이버 블로그의 최근 유입 키워드의 노출순위를 모니터링 할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.25
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-prologue.keyword.analysis.user.js
+// @version      1.1.26
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.blog-prologue.keyword.analysis.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/prologue/PrologueList*
 // @connect      naver.com

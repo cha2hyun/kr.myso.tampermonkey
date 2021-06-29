@@ -4,8 +4,8 @@
 // @description  네이버 페이의 포인트 혜택 클릭보상 이벤트를 전부 확인하고, 공유 할 수 있도록 리스트를 복사합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.1
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.pay-share.events.user.js
+// @version      1.0.2
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.pay-share.events.user.js
 // @author       Won Choi
 // @connect      naver.com
 // @match        *://www.naver.com/

@@ -4,8 +4,8 @@
 // @description  네이버 검색결과에서 상대평가 지수를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.12
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-rank.analysis.user.js
+// @version      1.0.13
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.search-rank.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
 // @match        *://m.search.naver.com/search.naver?*

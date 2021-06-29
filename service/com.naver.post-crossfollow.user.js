@@ -4,8 +4,8 @@
 // @description  네이버 포스트에서 맞구독 상태를 검증합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.4
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.post-crossfollow.user.js
+// @version      1.1.5
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.post-crossfollow.user.js
 // @author       Won Choi
 // @match        *://post.naver.com/my/followingList*
 // @match        *://m.post.naver.com/my/followingList*

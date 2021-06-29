@@ -4,8 +4,8 @@
 // @description  네이버 블로그 모먼트 영상을 다운로드 합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.3
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-moment.downloader.user.js
+// @version      1.0.5
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.blog-moment.downloader.user.js
 // @author       Won Choi
 // @match        *://m.blog.naver.com/*/moment/*
 // @grant        GM_addStyle

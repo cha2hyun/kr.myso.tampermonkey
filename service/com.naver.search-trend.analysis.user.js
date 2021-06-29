@@ -4,8 +4,8 @@
 // @description  네이버 검색결과에서 데이터랩의 검색어 트렌드 정보를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.3
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
+// @version      1.0.4
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.search-trend.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
 // @match        *://m.search.naver.com/search.naver?*

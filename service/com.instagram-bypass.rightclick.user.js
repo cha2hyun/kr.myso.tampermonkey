@@ -4,8 +4,8 @@
 // @description  인스타그램에서 이미지의 우클릭 기능이 활성화됩니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.10
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.instagram-bypass.rightclick.user.js
+// @version      1.0.11
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.instagram-bypass.rightclick.user.js
 // @author       Won Choi
 // @grant        GM_addStyle
 // @match        *://instagram.com

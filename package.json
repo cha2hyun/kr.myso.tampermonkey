@@ -1,6 +1,6 @@
 {
   "name": "kr.myso.tampermonkey",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Tampermonkey scripts",
   "repository": {
     "type": "git",

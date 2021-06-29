@@ -4,8 +4,8 @@
 // @description  네이버 스마트에디터 ONE에서 다양한 단말기 해상도에 맞게 글을 작성하게 도와줍니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.6
-// @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.viewport.user.js
+// @version      1.0.7
+// @updateURL    https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@latest/service/com.naver.blog-write.viewport.user.js
 // @author       Won Choi
 // @match        *://blog.naver.com/PostWriteForm*
 // @match        *://blog.naver.com/PostUpdateForm*
