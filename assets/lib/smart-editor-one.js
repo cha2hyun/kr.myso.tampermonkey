@@ -321,9 +321,9 @@
     }
     window.SE_parseNodes = function SE_parseNodes(document) {
         const clipContent = document.querySelector('#__clipContent'); if(clipContent) { document = new DOMParser().parseFromString(clipContent.textContent, 'text/html'); }
-        const sectionsV2 = Array.from(wrapper.querySelectorAll('.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *'));
-        const sectionsV3 = Array.from(wrapper.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));
-        const sectionsV4 = Array.from(wrapper.querySelectorAll('#viewTypeSelector .se-component, .se-viewer .se-component, .se-main-container .se-component, .se-container .se-component'));
+        const sectionsV2 = Array.from(document.querySelectorAll('.post_tit_area + #viewTypeSelector > *, body.se2_inputarea > *'));
+        const sectionsV3 = Array.from(document.querySelectorAll('#viewTypeSelector .se_component, .se_doc_viewer .se_component, .editor-canvas-wrap .se_component, #se_canvas_wrapper .se_component, .se_card_container .se_component'));
+        const sectionsV4 = Array.from(document.querySelectorAll('#viewTypeSelector .se-component, .se-viewer .se-component, .se-main-container .se-component, .se-container .se-component'));
         return [sectionsV2, sectionsV3, sectionsV4].flat();
     }
     window.SE_parse = function SE_parse(document, info) {
