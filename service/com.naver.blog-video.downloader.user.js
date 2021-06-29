@@ -17,7 +17,7 @@
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-add-style.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-add-script.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/donation.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==

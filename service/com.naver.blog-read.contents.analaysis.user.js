@@ -20,9 +20,9 @@
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/lib/naver-search-nx.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/lib/naver-search-rx.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/lib/smart-editor-one.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==

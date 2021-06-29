@@ -17,9 +17,9 @@
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-xmlhttp-request-cors.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-xmlhttp-request-hook.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/donation.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.20/lodash.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/downloadjs/1.4.8/download.min.js
 // ==/UserScript==
 
 // ==OpenUserJS==
