@@ -4,22 +4,24 @@
 // @description  네이버 웹사이트를 열고 있는 동안, 블로그 소식을 PC에서 실시간으로 받아 볼 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.5
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-notification.blog.news.user.js
 // @author       Won Choi
-// @match        *://*.naver.com/*
+// @match-        *://*.naver.com/*
+// @match        https://blog.naver.com/cw4196
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest
+// @grant        GM_addValueChangeListener
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-timer.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/donation.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.10/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.10/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.10/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.10/assets/vendor/gm-timer.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.10/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.10/assets/lib/naver-blog.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==
@@ -31,11 +33,12 @@ GM_App(async function main() {
     if(window.top !== window.self) return;
     (GM_donationApp(async function repeat() {
         repeat.uuid = 'NS_newsNotification';
-        repeat.timer = await GM_clearTimeout(repeat.timer, repeat.uuid);
-        repeat.timer = await GM_setTimeout(async () => {
+        repeat.timer = GM_clearTimeout(repeat.timer, repeat.uuid);
+        repeat.timer = GM_setTimeout(async () => {
             const timestamp = parseInt(GM_getValue(repeat.uuid, 0));
             const diffstamp = Date.now() - timestamp;
-            if(diffstamp >= 1000 * 60 * 60 * 1) {
+            if(diffstamp >= 1000 * 60 * 30) {
+                GM_setValue('NS_newsNotification', Date.now());
                 const user = await NB_blogInfo('', 'BlogUserInfo');
                 if(user && user.userId) {
                     const news = await NB_blogInfo(user.userId, 'NewsList');
@@ -43,10 +46,10 @@ GM_App(async function main() {
                     if(list.length) {
                         GM_notification(`${list.length}건의 새로운 소식이 있습니다.`, '네이버 블로그 소식 알림', 'https://blog.naver.com/favicon.ico', () => window.open('https://m.blog.naver.com/News.naver', repeat.uuid));
                     }
-                    GM_setValue('NS_newsNotification', Date.now());
+                    
                 }
             }
             return repeat();
-        }, 1000 * 15, repeat.uuid);
+        }, 1000 * 5, repeat.uuid);
     }))();
   });

@@ -7,7 +7,7 @@
 // @description   네이버 스마트에디터 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.0
+// @version       1.0.8
 
 // ==/UserScript==
 
