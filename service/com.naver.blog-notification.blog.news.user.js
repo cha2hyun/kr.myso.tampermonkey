@@ -37,14 +37,12 @@ GM_App(async function main() {
             const timestamp = parseInt(GM_getValue(repeat.uuid, 0));
             const diffstamp = Date.now() - timestamp;
             if(diffstamp >= 1000 * 60 * 30) {
-                GM_setValue(repeat.uuid, Date.now());
                 const user = await NB_blogInfo('', 'BlogUserInfo');
                 if(user && user.userId) {
                     const news = await NB_blogInfo(user.userId, 'NewsList');
                     const list = _.get(news, 'newsList', []).filter(o=>o.createTime > timestamp);
-                    if(list.length) {
-                        GM_notification(`${list.length}건의 새로운 소식이 있습니다.`, '네이버 블로그 소식 알림', 'https://blog.naver.com/favicon.ico', () => window.open('https://m.blog.naver.com/News.naver', repeat.uuid));
-                    }
+                    if(list.length) GM_notification(`${list.length}건의 새로운 소식이 있습니다.`, '네이버 블로그 소식 알림', 'https://blog.naver.com/favicon.ico', () => window.open('https://m.blog.naver.com/News.naver', repeat.uuid));
+                    GM_setValue(repeat.uuid, Date.now());
                 }
             }
             return repeat();
