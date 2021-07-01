@@ -4,7 +4,7 @@
 // @description  네이버 블로그 스마트에디터ONE의 편집 내용을 MSWord문서(*.docx)로 내보낼 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.38
+// @version      1.1.39
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.msword.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.msword.exporter.user.js
 // @author       Won Choi
@@ -353,14 +353,18 @@ GM_App(async function main() {
                         const cfrm = confirm('광고 차단 플러그인이 발견 되었습니다!\n브라우저의 광고 차단 설정을 해제해주세요.\n\n개발자 최원의 모든 프로그램은\n후원 및 광고 수익을 조건으로 무료로 제공됩니다.\n\nhttps://blog.naver.com/cw4196\n후원계좌 : 최원 3333-04-6073417 카카오뱅크');
                         if(cfrm) window.open('https://in.naverpp.com/donation');
                     } else {
-                        let imgs;
+                        let imgs, slides;
                         do {
-                            const cnt = document.querySelector('.se-content');
-                            cnt.scrollTo({ top: 0 });
-                            cnt.scrollTo({ top: cnt.scrollHeight, behavior: 'smooth' });
-                            imgs = Array.from(cnt.querySelectorAll('img[src^="data:"]'));
+                            const content = document.querySelector('.se-content');
+                            content.scrollTo({ top: 0 });
+                            content.scrollTo({ top: content.scrollHeight, behavior: 'smooth' });
+                            slides = Array.from(content.querySelectorAll('.se-imageGroup-container'));
+                            slides.map((el)=>el.style.overflow = 'auto');
+                            imgs = Array.from(content.querySelectorAll('img[src^="data:"]'));
+                            imgs.map((el)=>el.scrollIntoView());
                             await Promise.delay(1000);
                         } while (imgs.length);
+                        slides.map((el)=>el.style.overflow = 'hidden');
                         const data = SE_parse(document, { user, blog });
                         const json = JSON.stringify(data);
                         GM_addScript(`async () => {
