@@ -4,7 +4,7 @@
 // @description  네이버 블로그 게시물 최근 유입 통계를 확인합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog.article.stat.referrer.advanced.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog.article.stat.referrer.advanced.user.js
 // @author       Won Choi
@@ -89,7 +89,7 @@ GM_App(async function main() {
                   </li>
                   {{#each detail.refererDetail}}
                   <li class="keyword-analysis-listitem">
-                    <h4>{{#if searchQuery}}{{searchQuery}}{{else}}{{referrerUrl}}{{/if}}</h4>
+                    <h4>{{#if searchQuery}}[{{searchQuery}}] {{/if}}{{referrerUrl}}</h4>
                     <a href="{{referrerUrl}}" target="_blank" rel="noopener noreferrer">
                       <span class="keyword-analysis-value">{{cv}}건의 유입</span>
                     </a>
@@ -105,7 +105,7 @@ GM_App(async function main() {
       `);
       const html = tmpl(data);
       const blob = new Blob([html], {type : 'text/html'});
-      return window.open(URL.createObjectURL(blob), '_readKeywords', 'width=600, height=960');
+      return window.open(URL.createObjectURL(blob), '_readReferrer', 'width=600, height=960');
   }
   async function start(event, contentId, range) {
       const dates = _.range(range).map(o=>moment().subtract(o, 'days').toISOString(true));
@@ -113,6 +113,13 @@ GM_App(async function main() {
           const total = await NB_blogPostStat(contentId, 'referer/total', date, 'DATE');
           const stats = await Promise.map(total.refererTotal, async (item) => {
               const detail = await NB_blogPostStat(contentId, 'referer/total/detail', date, 'DATE', { searchEngine: item.referrerSearchEngine, refererDomain: item.referrerDomain })
+              if(detail && detail.refererDetail){
+                  detail.refererDetail = detail.refererDetail.map((item)=>{
+                      const uri = ((url)=>{ try { return new URL(url); } catch(e) {} })(item.referrerUrl);
+                      const qry = item.searchQuery = ['query', 'q', 'keyword', 'searchKeyword'].reduce((r, k)=>r||(uri && uri.searchParams.get('query')), '') || item.searchQuery || '';
+                      return item;
+                  });
+              }
               return Object.assign({}, item, { detail });
           });
           return Object.assign({ date: moment(date).format('YYYY-MM-DD'), stats });
@@ -120,7 +127,6 @@ GM_App(async function main() {
       const head = _.head(items);
       const tail = _.last(items);
       popup({ head, tail, items });
-      console.log(items);
   }
   async function handler(event) {
       const wrappers = Array.from(document.querySelectorAll('[data-post-editor-version]'));
