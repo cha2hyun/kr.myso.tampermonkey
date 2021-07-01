@@ -7,7 +7,7 @@
 // @description   MYSO 템퍼몽키 후원 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.0
+// @version       1.0.13
 
 // ==/UserScript==
 
@@ -21,7 +21,7 @@
     let key = {};
     window.GM_addStyle = window.GM_addStyle || (function(){});
     window.GM_xmlhttpRequest = window.GM_xmlhttpRequest || (function(){});
-    window.GM_addStyle(`@import url(https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/assets/donation.css?t=${time_now})`);
+    window.GM_addStyle(`@import url(https://tampermonkey.myso.kr/assets/donation.css?t=${time_now})`);
     window.GM_detectAdBlock = function(callback) {
         async function detectAdBlock() {
             let adBlockEnabled = false
