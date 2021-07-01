@@ -6,7 +6,9 @@
 // @license      Apache-2.0
 // @version      1.0.11
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-challenge.rank.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-challenge.rank.user.js
 // @author       Won Choi
+// @connect      naver.com
 // @match        https://in.naver.com/*/challenge*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest

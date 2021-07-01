@@ -6,7 +6,9 @@
 // @license      Apache-2.0
 // @version      1.0.12
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-content.overlap.search.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-content.overlap.search.user.js
 // @author       Won Choi
+// @connect      naver.com
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
 // @grant        GM_addStyle

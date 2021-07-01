@@ -6,11 +6,12 @@
 // @license      Apache-2.0
 // @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
 // @author       Won Choi
-// @match        *://search.naver.com/search.naver?*
-// @match        *://m.search.naver.com/search.naver?*
 // @connect      naver.com
 // @connect      ryo.co.kr
+// @match        *://search.naver.com/search.naver?*
+// @match        *://m.search.naver.com/search.naver?*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-app.js

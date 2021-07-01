@@ -6,7 +6,9 @@
 // @license      Apache-2.0
 // @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
 // @author       Won Choi
+// @connect      naver.com
 // @match        https://blog.stat.naver.com/blog/rank/like*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest

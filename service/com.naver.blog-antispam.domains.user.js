@@ -6,7 +6,9 @@
 // @license      Apache-2.0
 // @version      1.0.11
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-antispam.domains.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-antispam.domains.user.js
 // @author       Won Choi
+// @connect      naver.com
 // @match        https://admin.blog.naver.com/AdminUserFilter*
 // @grant        GM_addStyle
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-app.js

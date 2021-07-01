@@ -6,9 +6,10 @@
 // @license      Apache-2.0
 // @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-notification.blog.news.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-notification.blog.news.user.js
 // @author       Won Choi
-// @match        *://*.naver.com/*
 // @connect      naver.com
+// @match        *://*.naver.com/*
 // @grant        GM_addStyle
 // @grant        GM_notification
 // @grant        GM_xmlhttpRequest

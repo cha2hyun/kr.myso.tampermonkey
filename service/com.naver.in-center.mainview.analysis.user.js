@@ -6,6 +6,7 @@
 // @license      Apache-2.0
 // @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-center.mainview.analysis.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.in-center.mainview.analysis.user.js
 // @author       Won Choi
 // @connect      naver.com
 // @match        *://influencercenter.naver.com/my

@@ -6,6 +6,7 @@
 // @license      Apache-2.0
 // @version      2.1.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.creator-advisor.user.js
 // @author       Won Choi
 // @connect      naver.com
 // @match        *://creator-advisor.naver.com/*

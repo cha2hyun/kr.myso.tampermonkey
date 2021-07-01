@@ -6,7 +6,9 @@
 // @license      Apache-2.0
 // @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.viewport.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.viewport.user.js
 // @author       Won Choi
+// @connect      naver.com
 // @match        *://blog.naver.com/PostWriteForm*
 // @match        *://blog.naver.com/PostUpdateForm*
 // @match        *://blog.naver.com/*/postwrite*

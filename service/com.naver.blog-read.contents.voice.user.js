@@ -6,10 +6,11 @@
 // @license      Apache-2.0
 // @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.contents.voice.user.js
 // @author       Won Choi
+// @connect      naver.com
 // @match        *://blog.naver.com/PostView*
 // @match        *://blog.naver.com/PostList*
-
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-app.js

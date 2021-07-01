@@ -6,7 +6,9 @@
 // @license      Apache-2.0
 // @version      1.0.12
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.instagram-bypass.rightclick.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.instagram-bypass.rightclick.user.js
 // @author       Won Choi
+// @connect      instagram.com
 // @grant        GM_addStyle
 // @match        *://instagram.com
 // @match        *://instagram.com/*

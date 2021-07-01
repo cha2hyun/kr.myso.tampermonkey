@@ -6,6 +6,7 @@
 // @license      Apache-2.0
 // @version      1.0.11
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.msexcel.exporter.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-analytics.msexcel.exporter.user.js
 // @author       Won Choi
 // @connect      naver.com
 // @match        *://admin.blog.naver.com/*/stat/*

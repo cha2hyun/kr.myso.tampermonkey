@@ -6,7 +6,10 @@
 // @license      Apache-2.0
 // @version      1.1.19
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
+// @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.text.counter.user.js
 // @author       Won Choi
+// @connect      naver.com
+// @connect      pstatic.net
 // @match        *://blog.naver.com/*/*
 // @match        *://blog.naver.com/*/postwrite*
 // @match        *://blog.naver.com/*Redirect=Write*
