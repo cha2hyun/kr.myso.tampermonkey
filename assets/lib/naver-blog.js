@@ -7,7 +7,7 @@
 // @description   네이버 블로그 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.8
+// @version       1.0.14
 
 // ==/UserScript==
 
@@ -56,19 +56,6 @@
         const D = `0000${time.getDate()}`.substr(-2);
         return `${Y}-${M}-${D}`;
     }
-    window.NB_blogStat = async function NB_blogStat(blogId, action, date = curr, dimension = 'DATE', params = {}) {
-        const referer = `https://m.blog.naver.com/${blogId}`;
-        const uri = new URL(`https://blog.stat.naver.com/api/blog/${action}`);
-        uri.searchParams.set('timeDimension', dimension.toUpperCase());
-        uri.searchParams.set('startDate', date_format(date));
-        uri.searchParams.set('exclude', '');
-        Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
-        uri.searchParams.set('_', Date.now());
-        console.info('loading...', uri.toString());
-        const res = await GM_xmlhttpRequestAsync(uri.toString(), { headers: { referer } });
-        const data = eval(`(${res.responseText})`);
-        return data && data.result && data.result.statDataList;
-    }
     function NB_blogStatFuncGroup(defaultDate, dimensionDefault, defaults = {}) {
         const group = async function(blogId, date = defaultDate, dimension = dimensionDefault, params) {
             const data = {};
@@ -82,7 +69,7 @@
     }
     function NB_blogStatFunc(action, defaultDate, dimensionDefault, defaults = {}) {
         return async function(blogId, date = defaultDate, dimension = dimensionDefault, params) {
-            return NB_blogStatObject(await NB_blogStat(blogId, action, date, dimension, Object.assign({}, defaults, params)));
+            return NB_blogStat(blogId, action, date, dimension, Object.assign({}, defaults, params));
         }
     }
     function NB_blogStatObject(resp) {
@@ -94,6 +81,19 @@
             resp[item.dataId] = headdata ? headdata.map((nil, idx) => cols.reduce((r, key)=>(r[key] = rows[key][idx], r), {})) : data;
         });
         return resp;
+    }
+    window.NB_blogStat = async function NB_blogStat(blogId, action, date = curr, dimension = 'DATE', params = {}) {
+        const referer = `https://m.blog.naver.com/${blogId}`;
+        const uri = new URL(`https://blog.stat.naver.com/api/blog/${action}`);
+        uri.searchParams.set('timeDimension', dimension.toUpperCase());
+        uri.searchParams.set('startDate', date_format(date));
+        uri.searchParams.set('exclude', '');
+        Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
+        uri.searchParams.set('_', Date.now());
+        console.info('loading...', uri.toString());
+        const res = await GM_xmlhttpRequestAsync(uri.toString(), { headers: { referer } });
+        const data = eval(`(${res.responseText})`);
+        return NB_blogStatObject(data && data.result && data.result.statDataList);
     }
     // 요약
     window.NB_blogStat['요약'] = NB_blogStatFunc('daily/weekAndMonthAnalysis');
