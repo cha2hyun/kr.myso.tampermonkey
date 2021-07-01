@@ -7,7 +7,7 @@
 // @description   네이버 스마트에디터 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.8
+// @version       1.0.12
 
 // ==/UserScript==
 
@@ -203,6 +203,12 @@
             section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
         }
         if(component.classList.contains('se-imageStrip')) {
+            section.type = 'image';
+            section.image = Array.from(component.querySelectorAll('.se-image-resource')).map(el=>el.src || '');
+            section.description = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
+            section.placeholder = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_placeholder);
+        }
+        if(component.classList.contains('se-imageGroup')) {
             section.type = 'image';
             section.image = Array.from(component.querySelectorAll('.se-image-resource')).map(el=>el.src || '');
             section.description = Array.from(component.querySelectorAll('.se-text-paragraph')).map(get_text_without_placeholder);
