@@ -4,47 +4,27 @@
 // @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.9
+// @version      1.0.10
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
 // @author       Won Choi
 // @match        *://admin.blog.naver.com/BuddyListManage*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.8/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.11/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.11/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.11/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.11/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.11/assets/donation.js
 // ==/UserScript==
 
 // ==OpenUserJS==
 // @author myso
 // ==/OpenUserJS==
-async function inject_js(opt) {
-  return new Promise((resolve, reject) => {
-      var el = document.createElement('script'); el.type = 'text/javascript';
-      function resolved() {
-          el.parentNode.removeChild(el); resolve();
-      }
-      if(typeof opt === 'string') {
-          el.onload = resolved; el.src = opt;
-      }
-      if(typeof opt === 'object') {
-          el.onload = resolved; el.src = opt.src; el.integrity = opt.integrity;
-          el.setAttribute('crossorigin', 'anonymous');
-      }
-      if(typeof opt === 'function') el.textContent = `(${opt})();`;
-      if(el.src || el.textContent) {
-          el.onerror = reject;
-          document.head.prepend(el);
-      }else reject();
-      if(typeof opt === 'function') resolved();
-  });
-}
 GM_App(async function main() {
   GM_donation('.admin_set_buddy');
-  await inject_js({ integrity: 'sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==', src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js' });
-  await inject_js({ integrity: 'sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==', src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js' });
-  await inject_js(() => {
+  GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js');
+  GM_addScript('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js');
+  GM_addScript(() => {
     async function delete_buddy(selfishes) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
       const uri = new URL('https://admin.blog.naver.com/BuddyDelete.nhn');
@@ -55,7 +35,7 @@ GM_App(async function main() {
     }
     window.delete_buddy = delete_buddy;
   })
-  await inject_js(() => {
+  GM_addScript(() => {
     async function search_buddy_page(callback, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
       const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.nhn?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
@@ -107,7 +87,7 @@ GM_App(async function main() {
     }
     window.search_buddy = search_buddy_page;
   })
-  await inject_js(() => {
+  GM_addScript(() => {
     async function search_buddy_me_page(callback, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
       const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.nhn?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
@@ -152,7 +132,7 @@ GM_App(async function main() {
     }
     window.search_buddy_me = search_buddy_me_page;
   })
-  await inject_js(() => {
+  GM_addScript(() => {
     const html = `
     <!DOCTYPE html>
     <html ng-app="app">
