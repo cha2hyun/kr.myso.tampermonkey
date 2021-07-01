@@ -34,7 +34,7 @@
 // ==/OpenUserJS==
 GM_App(async function main() {
   moment.tz.setDefault("Asia/Seoul");
-  GM_donation('#_root');
+  GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
   GM_addStyle(`a._readReferrer .ico_spd { display: block; position: absolute; right: 13px; top: 13px; width: 20px; height: 20px; text-align: center; line-height: 20px; font-size:11px; font-weight: bold; }`);
   async function popup(data) {
       const tmpl = Handlebars.compile(`
