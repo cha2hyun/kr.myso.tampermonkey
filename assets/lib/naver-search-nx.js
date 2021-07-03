@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.15
+// @version       1.0.17
 
 // ==/UserScript==
 
@@ -25,23 +25,23 @@
 })(window);
 // ---------------------
 (function(window){
-    async function NX_Request(keyword, start = 1, where = 'm_blog', mode = 'normal', type = '') {
+    async function NX_Request(keyword, start = 1, where = 'm_blog', mode = 'normal', params = {}) {
         const endpoints = [];
         endpoints.push({ url: 'https://s.search.naver.com/p/review/search.naver', where: ['view', 'm_view'] });
         endpoints.push({ url: 'https://s.search.naver.com/p/blog/search.naver', where: ['blog', 'm_blog'] });
         const endpoint = endpoints.find(o=>o.where.includes(where)) || 'https://s.search.naver.com/p/blog/search.naver';
         const ref = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=mtb_jum&query=');
         const uri = new URL(endpoint.url);
-        if(start) uri.searchParams.set('start', start);
-        uri.searchParams.set('where', where);
         uri.searchParams.set('mode', mode);
-        uri.searchParams.set('type', type);
+        uri.searchParams.set('start', start);
+        uri.searchParams.set('where', where);
         uri.searchParams.set('query', keyword);
         ref.searchParams.set('query', keyword);
+        Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
         return GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
     }
-    window.NX_info = async function NX_info(keyword, start, where, mode) {
-        const res = await NX_Request(keyword, start, where, mode);
+    window.NX_info = async function NX_info(keyword, start, where, mode, params) {
+        const res = await NX_Request(keyword, start, where, mode, params);
         const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
         const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
         const ret = map.reduce((r, { k, v }) => {
@@ -53,13 +53,17 @@
         }, {});
         return ret;
     }
-    window.NX_count = async function NX_count(keyword, where, mode) {
-        const res = await NX_Request(keyword, 1, where, mode, '11');
-        const obj = eval(`(${res.responseText})`);
-        return obj && obj.total;
+    window.NX_count = async function NX_count(keyword, where, mode, params) {
+        try {
+            const res = await NX_Request(keyword, 1, where, mode, params);
+            const obj = eval(`(${res.responseText})`);
+            return parseInt(String(obj.total).replace(/[^\d]+/g, ''));
+        }catch(e){
+            console.error(e);
+        }
     }
-    window.NX_score = async function NX_score(keyword, start, where, mode) {
-        const res = await NX_info(keyword, start, where, mode).catch(e=>null);
+    window.NX_score = async function NX_score(keyword, start, where, mode, params) {
+        const res = await NX_info(keyword, start, where, mode, params).catch(e=>null);
         const rnk = Object.keys(res || {}).filter(k=>/^r[\d]+$/.test(k)).map(k=>res[k]);
         return rnk.map((data)=>{
             let [[[crArea]], [[crGdid]], [[o1, a, b, c]]] = data;
@@ -83,8 +87,8 @@
         return terms.flat();
         //return chunk.length ? (await Promise.all(chunk.map(NX_terms))).flat() : [];
     }
-    window.NX_items = async function NX_items(keyword, start, where = 'view', mode) {
-        const res = await NX_Request(keyword, start, where, mode);
+    window.NX_items = async function NX_items(keyword, start, where = 'view', mode, params) {
+        const res = await NX_Request(keyword, start, where, mode, params);
         const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
         const listview = Array.from(doc.querySelectorAll('.lst_total > li'));
         return listview.map((listitem, offset) => {
