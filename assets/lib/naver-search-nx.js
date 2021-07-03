@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.8
+// @version       1.0.15
 
 // ==/UserScript==
 
@@ -25,7 +25,7 @@
 })(window);
 // ---------------------
 (function(window){
-    async function NX_Request(keyword, start = 1, where = 'm_blog', mode = 'normal') {
+    async function NX_Request(keyword, start = 1, where = 'm_blog', mode = 'normal', type = '') {
         const endpoints = [];
         endpoints.push({ url: 'https://s.search.naver.com/p/review/search.naver', where: ['view', 'm_view'] });
         endpoints.push({ url: 'https://s.search.naver.com/p/blog/search.naver', where: ['blog', 'm_blog'] });
@@ -35,6 +35,7 @@
         if(start) uri.searchParams.set('start', start);
         uri.searchParams.set('where', where);
         uri.searchParams.set('mode', mode);
+        uri.searchParams.set('type', type);
         uri.searchParams.set('query', keyword);
         ref.searchParams.set('query', keyword);
         return GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
@@ -51,6 +52,11 @@
             return (r[k] = v, r);
         }, {});
         return ret;
+    }
+    window.NX_count = async function NX_count(keyword, where, mode) {
+        const res = await NX_Request(keyword, 1, where, mode, '11');
+        const obj = eval(`(${res.responseText})`);
+        return obj && obj.total;
     }
     window.NX_score = async function NX_score(keyword, start, where, mode) {
         const res = await NX_info(keyword, start, where, mode).catch(e=>null);

@@ -7,7 +7,7 @@
 // @description   GM_setValue, GM_getValue, GM_deleteValue 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.0
+// @version       1.0.9
 
 // ==/UserScript==
 
