@@ -31,7 +31,7 @@ GM_App(async function main() {
     function format_number(number) { return number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ); }
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword) {
-        const uri = new URL('https://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/, ''));
+        const uri = new URL('https://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, ''));
         const res = await GM_xmlhttpRequestAsync(uri.toString());
         function update_keyword_analysis(data){
             const resp = {}; if(!data) return;
