@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 데이터랩의 검색어 트렌드 정보를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -31,7 +31,7 @@ GM_App(async function main() {
     function format_number(number) { return number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ); }
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword) {
-        const uri = new URL('https://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, ''));
+        const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, ''));
         const res = await GM_xmlhttpRequestAsync(uri.toString());
         function update_keyword_analysis(data){
             const resp = {}; if(!data) return;

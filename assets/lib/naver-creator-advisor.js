@@ -7,7 +7,7 @@
 // @description   네이버 크리에이터 어드바이저 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.8
+// @version       1.0.18
 
 // ==/UserScript==
 
@@ -33,8 +33,9 @@
       exec(data) {
           const endpoint = new URL(this.endpoint);
           const params = Object.assign({}, this.defaults, data || {}); Object.entries(params).map(([k,v])=>endpoint.searchParams.set(k, v));
-          const headers = { 'Cookie': document.cookie, 'Referer': location.href };
-          return GM_xmlhttpRequestAsync('https://creator-advisor.naver.com/', { headers }).then(xhr=>(xhr.status == 200) && GM_xmlhttpRequestAsync(endpoint, { headers }).then(r=>JSON.parse(r.response))).catch(e=>null);
+          const referer = 'https://creator-advisor.naver.com/';
+          const headers = { 'Cookie': document.cookie, 'Referer': referer };
+          return GM_xmlhttpRequestAsync(referer, { headers }).then(xhr=>(xhr.status == 200) && GM_xmlhttpRequestAsync(endpoint, { headers }).then(r=>JSON.parse(r.response))).catch(e=>null);
       }
   }
   class CreatorAdvisor {
