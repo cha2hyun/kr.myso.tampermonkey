@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 상위 5개 게시글에 대한 공백을 구분하는 키워드 유입수 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-views.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -112,7 +112,8 @@ GM_App(async function main() {
             const cnv = item.querySelector('div.search_adviser') || document.createElement('div'); cnv.classList.add('search_adviser'); item.append(cnv);
             const contentUrl = ((el)=>el && el.href && new URL(el.href))(title);
             const channelName = ((el)=>el && el.textContent && el.textContent.trim())(item.querySelector('.source_txt, .sub_txt.sub_name'));
-            const popularContents = flats.filter(o=>o.contentId.includes(`${contentUrl.pathname}${contentUrl.search}`) || o.channelName == channelName);
+            //const popularContents = flats.filter(o=>o.contentId.includes(`${contentUrl.pathname}${contentUrl.search}`) || o.channelName == channelName);
+            const popularContents = flats.filter(o=>o.contentId.includes(`${contentUrl.pathname}${contentUrl.search}`));
             if(!popularContents.length) {
                 cnv.innerHTML = `<h2 class="adviser_info adviser_info_empty">${nso.sdate} ~ ${nso.edate} 기간 내에 "${keyword}" 키워드 유입이 없습니다.</h2>`;
                 return;
@@ -137,4 +138,4 @@ GM_App(async function main() {
         });
     }
     const wrp = document.querySelector('ul.lst_total'); if(wrp) observe(wrp);
-  })
+})
