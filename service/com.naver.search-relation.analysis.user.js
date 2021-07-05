@@ -39,6 +39,8 @@ GM_App(async function main() {
     }
     #_related_keywords_aside [data-monthly-qc-cnt]::after { margin-top:0; margin-bottom:0; float: right; }
     tag-toggle .eg-flick-viewport { height: 70px !important; }
+    tag-toggle [data-monthly-qc-cnt]::after { display: none !important; }
+    tag-toggle [data-monthly-qc-cnt]:hover::after { display: block !important; }
     `);
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword, errors = 0) {
@@ -67,8 +69,8 @@ GM_App(async function main() {
     }
     async function rel_keyword2() {
         const keyword = (new URL(location.href)).searchParams.get('query'); if(!keyword) return;
-        const kwd = Array.from(document.querySelectorAll('tag-toggle a > .txt'));
-        await Promise.mapSeries(kwd, async (el) => Object.assign(el.dataset, await get_keyword_count(`${keyword} ${el.innerText}`)));
+        const kwd = Array.from(document.querySelectorAll('tag-toggle a > .txt')).slice(1);
+        await Promise.mapSeries(kwd, async (el) => Object.assign(el.dataset, await get_keyword_count(el.innerText)));
     }
     await rel_keyword('#main_pack', '#nx_footer_related_keywords');
     await rel_keyword('#sub_pack', '#nx_right_related_keywords');
