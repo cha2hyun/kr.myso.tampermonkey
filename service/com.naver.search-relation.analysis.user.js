@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 연관 검색어와 관련된 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-relation.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -30,16 +30,18 @@ GM_App(async function main() {
     GM_donation('#container', 0);
     GM_addStyle(`
     .lst_related_srch { max-height: none !important; }
-    [data-monthly-qc-cnt] { position: relative; }
+    [data-monthly-qc-cnt] { position: relative; overflow: visible !important; }
     [data-monthly-qc-cnt]::after {
-      margin-top:-0.5em; margin-bottom:0.5em; overflow: hidden;
-      font-size:10px; color:#0099e5; border-radius:0.2em; white-space: pre; line-height: 1em; text-align: right;
-      content: attr(data-monthly-mobile-qc-cnt) ':모\\A' attr(data-monthly-pc-qc-cnt) ':데' !important; display: block !important;
+      display: block !important; position: absolute; top: 0; right: 8px; bottom: 0;
+      font-size:12px; color:#0099e5; border-radius:0.2em; white-space: pre; line-height: 12px; text-align: right;
+      content: attr(data-monthly-mobile-qc-cnt) ':모\\A' attr(data-monthly-pc-qc-cnt) ':데' !important;
     }
-    #_related_keywords_aside [data-monthly-qc-cnt]::after { margin-top:0; margin-bottom:0; float: right; }
-    tag-toggle .eg-flick-viewport { height: 70px !important; }
-    tag-toggle [data-monthly-qc-cnt]::after { display: none !important; }
-    tag-toggle [data-monthly-qc-cnt]:hover::after { display: block !important; }
+    [data-monthly-qc-cnt] .clip_left { display: block !important; left: 8px !important; }
+    [data-monthly-qc-cnt] .clip_right { display: none !important; }
+    tag-toggle [data-monthly-qc-cnt] { margin-bottom: 8px; }
+    tag-toggle [data-monthly-qc-cnt]::after { position: relative; }
+    .lst_related_srch [data-monthly-qc-cnt] { margin-bottom: 8px; }
+    .lst_related_srch [data-monthly-qc-cnt]::after { position: relative; right: 0; }
     `);
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword, errors = 0) {
@@ -63,7 +65,10 @@ GM_App(async function main() {
         const wrp = document.querySelector(selector1); if(!wrp) return;
         const rel = document.querySelector(selector2); if(!rel) return;
         wrp.prepend(rel); rel.classList.add('open');
-        const kwd = Array.from(document.querySelectorAll('.lst_related_srch a > .tit, .keyword > a'));
+        const kwd = [];
+        if(!kwd.length) kwd.push(...document.querySelectorAll('.lst_related_srch a > .tit'));
+        if(!kwd.length) kwd.push(...document.querySelectorAll('.keyword .clip_wrap'));
+        if(!kwd.length) kwd.push(...document.querySelectorAll('.keyword > a'));
         await Promise.mapSeries(kwd, async (el) => Object.assign(el.dataset, await get_keyword_count(el.innerText)));
     }
     async function rel_keyword2() {
@@ -73,6 +78,6 @@ GM_App(async function main() {
     }
     await rel_keyword('#main_pack', '#nx_footer_related_keywords');
     await rel_keyword('#sub_pack', '#nx_right_related_keywords');
-    await rel_keyword('#snb', '#_related_keywords_aside');
+    await rel_keyword('#snb', '#_related_keywords, #_related_keywords_aside');
     await rel_keyword2();
 })
