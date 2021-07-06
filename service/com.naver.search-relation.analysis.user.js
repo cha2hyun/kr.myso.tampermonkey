@@ -42,6 +42,7 @@ GM_App(async function main() {
     .lst_related_srch [data-monthly-qc-cnt]::after { position: relative; right: 0; }
     tag-toggle [data-monthly-qc-cnt] { margin-bottom: 8px; }
     tag-toggle [data-monthly-qc-cnt]::after { position: relative; }
+    tag-toggle .flick_bx [data-monthly-qc-cnt]::after { position: relative; right: 0; }
     tag-toggle .eg-flick-viewport { height: 80px !important; }
     tag-toggle .eg-flick-panel [data-monthly-qc-cnt]::after { display: none !important; position: relative; right: 0; }
     tag-toggle .eg-flick-panel:hover [data-monthly-qc-cnt]::after { display: block !important;  }
