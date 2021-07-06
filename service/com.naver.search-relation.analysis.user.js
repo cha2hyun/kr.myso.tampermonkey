@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 연관 검색어와 관련된 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-relation.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -38,10 +38,13 @@ GM_App(async function main() {
     }
     [data-monthly-qc-cnt] .clip_left { display: block !important; left: 8px !important; }
     [data-monthly-qc-cnt] .clip_right { display: none !important; }
-    tag-toggle [data-monthly-qc-cnt] { margin-bottom: 8px; }
-    tag-toggle [data-monthly-qc-cnt]::after { position: relative; }
     .lst_related_srch [data-monthly-qc-cnt] { margin-bottom: 8px; }
     .lst_related_srch [data-monthly-qc-cnt]::after { position: relative; right: 0; }
+    tag-toggle [data-monthly-qc-cnt] { margin-bottom: 8px; }
+    tag-toggle [data-monthly-qc-cnt]::after { position: relative; }
+    tag-toggle .eg-flick-viewport { height: 80px !important; }
+    tag-toggle .eg-flick-panel [data-monthly-qc-cnt]::after { display: none !important; position: relative; right: 0; }
+    tag-toggle .eg-flick-panel:hover [data-monthly-qc-cnt]::after { display: block !important;  }
     `);
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword, errors = 0) {
