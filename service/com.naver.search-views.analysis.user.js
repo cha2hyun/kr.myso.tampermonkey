@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 상위 5개 게시글에 대한 공백을 구분하는 키워드 유입수 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-views.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -62,6 +62,7 @@ GM_App(async function main() {
         list.push({ where: ['nexearch', 'm'], channels: ['naver_blog', 'naver_post'] });
         list.push({ where: ['view', 'm_view'], channels: ['naver_blog', 'naver_post'] });
         list.push({ where: ['blog', 'm_blog'], channels: ['naver_blog'] });
+        list.push({ where: ['influencer', 'm_influencer'], channels: ['influencer'] });
         const item = list.find(item=>item.where.includes(where));
         return item ? item.channels : [];
     }
@@ -99,23 +100,22 @@ GM_App(async function main() {
     }
     async function update(keyword, start = 1) {
         const nso = get_nso();
-        const items = Array.from(document.querySelectorAll('[data-cr-gdid][data-cr-rank]'));
+        const items = Array.from(document.querySelectorAll('[data-cr-area="rvw*w"], [data-cr-area="rvw*f"], [data-cr-area="rvw*b"], [data-cr-area="blg*a"], ul.keyword_challenge_list [data-space-id]'));
         await Promise.map(items, async (item) => {
-            const title = item.querySelector('a.total_tit'); if(!title) return;
+            const title = item.querySelector('a.total_tit, a.name_link'); if(!title) return;
             const cnv = item.querySelector('div.search_adviser') || document.createElement('div'); cnv.classList.add('search_adviser'); item.append(cnv);
             cnv.innerHTML = `<h2 class="adviser_info adviser_info_loading">${nso.sdate} ~ ${nso.edate} 기간 내의 "${keyword}" 키워드 유입량을 가져오는 중입니다...</h2>`;
         });
         const finds = await find_popular_contents();
         const flats = finds.map(o=>o.popularContents).map(o=>o.map(a=>a.data.map((info)=>({ date: a.date, ...info }))).flat()).flat();
         await Promise.map(items, async (item) => {
-            const title = item.querySelector('a.total_tit'); if(!title) return;
+            const title = item.querySelector('a.total_tit, a.name_link'); if(!title) return;
             const cnv = item.querySelector('div.search_adviser') || document.createElement('div'); cnv.classList.add('search_adviser'); item.append(cnv);
             const contentUrl = ((el)=>el && el.href && new URL(el.href))(title);
-            const channelName = ((el)=>el && el.textContent && el.textContent.trim())(item.querySelector('.source_txt, .sub_txt.sub_name'));
-            //const popularContents = flats.filter(o=>o.contentId.includes(`${contentUrl.pathname}${contentUrl.search}`) || o.channelName == channelName);
-            const popularContents = flats.filter(o=>o.contentId.includes(`${contentUrl.pathname}${contentUrl.search}`));
+            const channelName = ((el)=>el && el.textContent && el.textContent.trim())(item.querySelector('.source_txt, .sub_txt.sub_name, .user_area .name'));
+            const popularContents = flats.filter(o=>contentUrl.hostname == 'in.naver.com' ? o.channelName == channelName : o.contentId.includes(`${contentUrl.pathname}${contentUrl.search}`));
             if(!popularContents.length) {
-                cnv.innerHTML = `<h2 class="adviser_info adviser_info_empty">${nso.sdate} ~ ${nso.edate} 기간 내에 "${keyword}" 키워드 유입이 없습니다.</h2>`;
+                cnv.innerHTML = `<h2 class="adviser_info adviser_info_empty">${nso.sdate} ~ ${nso.edate} 기간 내에 "${keyword}" 키워드 유입을 찾을 수 없습니다.</h2>`;
                 return;
             }
             const popularContentsHead = _.head(popularContents);
@@ -137,5 +137,5 @@ GM_App(async function main() {
             cnv.innerHTML = tmpl(data);
         });
     }
-    const wrp = document.querySelector('ul.lst_total'); if(wrp) observe(wrp);
+    const wrp = document.querySelector('ul.lst_total, ul.keyword_challenge_list'); if(wrp) observe(wrp);
 })
