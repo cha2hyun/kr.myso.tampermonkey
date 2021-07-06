@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 데이터랩의 검색어 트렌드 정보를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.8
+// @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -19,6 +19,7 @@
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.15/assets/vendor/gm-xmlhttp-request-async.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.15/assets/donation.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.15/assets/lib/naver-datalab.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.19/assets/lib/naver-search-ad.js
 // @require      https://cdn.jsdelivr.net/npm/chart.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js
@@ -30,20 +31,8 @@
 GM_App(async function main() {
     function format_number(number) { return number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ); }
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
-    async function get_keyword_count(keyword) {
-        const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, '').toUpperCase());
-        const res = await GM_xmlhttpRequestAsync(uri.toString());
-        function update_keyword_analysis(data){
-            const resp = {}; if(!data) return;
-            resp.monthlyPcQcCnt = parsed_number(data && data.monthlyPcQcCnt);
-            resp.monthlyMobileQcCnt = parsed_number(data && data.monthlyMobileQcCnt);
-            resp.monthlyQcCnt = resp.monthlyPcQcCnt + resp.monthlyMobileQcCnt;
-            return resp;
-        }
-        return eval(res.responseText);
-    }
     async function data_normalize(keyword) {
-        const stat = await get_keyword_count(keyword);
+        const stat = await NA_search(keyword);
         const data = await ND_trend(keyword);
         const sums = data.reduce((r, o)=>r+o.value, 0);
         const tick = stat ? (stat.monthlyQcCnt / sums) : 1;
