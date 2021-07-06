@@ -53,7 +53,7 @@ GM_App(async function main() {
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword, errors = 0) {
         try {
-            const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, ''));
+            const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, '').toUpperCase());
             const res = await GM_xmlhttpRequestAsync(uri.toString());
             function update_keyword_analysis(data){
                 const resp = {}; if(!data) return;
