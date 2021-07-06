@@ -32,7 +32,7 @@ GM_App(async function main() {
     .lst_related_srch { max-height: none !important; }
     [data-monthly-qc-cnt] { position: relative; overflow: visible !important; }
     [data-monthly-qc-cnt]::after {
-      display: block !important; position: absolute; top: 0; right: 8px; bottom: 0;
+      display: block !important; position: absolute; margin: auto; top: 0; right: 8px; bottom: 0; height: 24px;
       font-size:12px; color:#0099e5; border-radius:0.2em; white-space: pre; line-height: 12px; text-align: right;
       content: attr(data-monthly-mobile-qc-cnt) ':모\\A' attr(data-monthly-pc-qc-cnt) ':데' !important;
     }
@@ -45,11 +45,15 @@ GM_App(async function main() {
     tag-toggle .eg-flick-viewport { height: 80px !important; }
     tag-toggle .eg-flick-panel [data-monthly-qc-cnt]::after { display: none !important; position: relative; right: 0; }
     tag-toggle .eg-flick-panel:hover [data-monthly-qc-cnt]::after { display: block !important;  }
+    .search_area[data-monthly-qc-cnt]::after  { left: 80px; right: auto; top: 0; bottom: 0; width: 70px; }
+    .search_input_box[data-monthly-qc-cnt]::after { left: 10px; right: auto; top: 0; bottom: 0; width: 70px; }
+    .search_area[data-monthly-qc-cnt] .greenwindow { margin-left: 155px; }
+    .search_input_box[data-monthly-qc-cnt] .search_input_inner { margin-left: 80px; }
     `);
     function parsed_number(number) { return /^[\d\.]+$/.test(String(number)) ? parseFloat(number) : 0; }
     async function get_keyword_count(keyword, errors = 0) {
         try {
-            const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, '').toUpperCase());
+            const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword='); uri.searchParams.set('keyword', keyword.replace(/[\s]+/g, ''));
             const res = await GM_xmlhttpRequestAsync(uri.toString());
             function update_keyword_analysis(data){
                 const resp = {}; if(!data) return;
@@ -63,6 +67,11 @@ GM_App(async function main() {
             console.error(e);
             if(errors < 1) return Promise.delay(500).then(()=>get_keyword_count(keyword, errors + 1));
         }
+    }
+    async function sch_keyword() {
+        const wrp = document.querySelector('.search_area, .search_input_box'); if(!wrp) return;
+        const uri = new URL(location.href), query = uri.searchParams.get('query'); if(!query) return;
+        Object.assign(wrp.dataset, await get_keyword_count(query));
     }
     async function rel_keyword(selector1, selector2) {
         const wrp = document.querySelector(selector1); if(!wrp) return;
@@ -79,6 +88,7 @@ GM_App(async function main() {
         const kwd = Array.from(document.querySelectorAll('tag-toggle a > .txt')).slice(1);
         await Promise.mapSeries(kwd, async (el) => Object.assign(el.dataset, await get_keyword_count(el.innerText)));
     }
+    await sch_keyword();
     await rel_keyword('#main_pack', '#nx_footer_related_keywords');
     await rel_keyword('#sub_pack', '#nx_right_related_keywords');
     await rel_keyword('#snb', '#_related_keywords, #_related_keywords_aside');
