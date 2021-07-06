@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 상위 5개 게시글에 대한 공백을 구분하는 키워드 유입수 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-views.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -62,7 +62,7 @@ GM_App(async function main() {
     }
     function find_channels(where) {
         const list = [];
-        list.push({ where: ['nexearch', 'm'], channels: ['naver_blog', 'naver_post'] });
+        list.push({ where: ['nexearch', 'm'], channels: ['naver_blog', 'naver_post', 'influencer'] });
         list.push({ where: ['view', 'm_view'], channels: ['naver_blog', 'naver_post'] });
         list.push({ where: ['blog', 'm_blog'], channels: ['naver_blog'] });
         list.push({ where: ['influencer', 'm_influencer'], channels: ['influencer'] });
