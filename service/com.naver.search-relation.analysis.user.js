@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 연관 검색어와 관련된 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-relation.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
