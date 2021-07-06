@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 상위 5개 게시글에 대한 공백을 구분하는 키워드 유입수 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-views.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -105,6 +105,7 @@ GM_App(async function main() {
             const title = item.querySelector('a.total_tit, a.name_link'); if(!title) return;
             const cnv = item.querySelector('div.search_adviser') || document.createElement('div'); cnv.classList.add('search_adviser'); item.append(cnv);
             cnv.innerHTML = `<h2 class="adviser_info adviser_info_loading">${nso.sdate} ~ ${nso.edate} 기간 내의 "${keyword}" 키워드 유입량을 가져오는 중입니다...</h2>`;
+            item.style.height = 'auto';
         });
         const finds = await find_popular_contents();
         const flats = finds.map(o=>o.popularContents).map(o=>o.map(a=>a.data.map((info)=>({ date: a.date, ...info }))).flat()).flat();
