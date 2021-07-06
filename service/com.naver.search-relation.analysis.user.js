@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 연관 검색어와 관련된 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-relation.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -41,10 +41,9 @@ GM_App(async function main() {
     .lst_related_srch [data-monthly-qc-cnt] { margin-bottom: 8px; }
     .lst_related_srch [data-monthly-qc-cnt]::after { position: relative; right: 0; }
     tag-toggle [data-monthly-qc-cnt] { margin-bottom: 8px; }
-    tag-toggle [data-monthly-qc-cnt]::after { position: relative; }
-    tag-toggle .flick_bx [data-monthly-qc-cnt]::after { position: relative; right: 0; }
+    tag-toggle [data-monthly-qc-cnt]::after { position: relative; right: 0; }
     tag-toggle .eg-flick-viewport { height: 80px !important; }
-    tag-toggle .eg-flick-panel [data-monthly-qc-cnt]::after { display: none !important; position: relative; right: 0; }
+    tag-toggle .eg-flick-panel [data-monthly-qc-cnt]::after { display: none !important; }
     tag-toggle .eg-flick-panel:hover [data-monthly-qc-cnt]::after { display: block !important;  }
     .search_area[data-monthly-qc-cnt]::after  { left: 80px; right: auto; top: 0; bottom: 0; width: 70px; }
     .search_input_box[data-monthly-qc-cnt]::after { left: 10px; right: auto; top: 0; bottom: 0; width: 70px; }
