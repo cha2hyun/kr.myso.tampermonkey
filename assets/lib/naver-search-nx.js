@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.17
+// @version       1.0.20
 
 // ==/UserScript==
 
@@ -29,6 +29,7 @@
         const endpoints = [];
         endpoints.push({ url: 'https://s.search.naver.com/p/review/search.naver', where: ['view', 'm_view'] });
         endpoints.push({ url: 'https://s.search.naver.com/p/blog/search.naver', where: ['blog', 'm_blog'] });
+        endpoints.push({ url: 'https://s.search.naver.com/p/cafe/search.naver', where: ['article', 'm_article'] });
         const endpoint = endpoints.find(o=>o.where.includes(where)) || 'https://s.search.naver.com/p/blog/search.naver';
         const ref = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=mtb_jum&query=');
         const uri = new URL(endpoint.url);
