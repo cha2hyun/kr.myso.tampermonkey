@@ -14,7 +14,7 @@
 // @match        *://instagram.com/*
 // @match        *://www.instagram.com
 // @match        *://www.instagram.com/*
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-app.js
 // ==/UserScript==
 
 // ==OpenUserJS==

@@ -7,7 +7,7 @@
 // @description   네이버 크리에이터 어드바이저 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.18
+// @version       1.0.25
 
 // ==/UserScript==
 
@@ -16,6 +16,9 @@
 // ==OpenUserJS==
 // @author myso
 // ==/OpenUserJS==
+// ---------------------
+(function(){Object.fromEntries||Object.defineProperty(Object,"fromEntries",{configurable:!0,value:function r(){var t=arguments[0];return [...t].reduce((o,[k,v])=>(o[k]=v,o), {})},writable:!0})})();
+// ---------------------
 (function(window) {
   window.GM_xmlhttpRequestAsync = function(url, options) {
       return new Promise((resolve, reject) => {

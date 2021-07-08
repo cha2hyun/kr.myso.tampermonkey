@@ -7,7 +7,7 @@
 // @description   네이버 검색 RX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.24
+// @version       1.0.25
 
 // ==/UserScript==
 

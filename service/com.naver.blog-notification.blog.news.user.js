@@ -16,12 +16,12 @@
 // @grant        GM_addValueChangeListener
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/vendor/gm-timer.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/donation.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.24/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-timer.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/lib/naver-blog.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
 // ==/UserScript==
