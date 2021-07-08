@@ -1,0 +1,1 @@
+(function(){String.prototype.matchAll||Object.defineProperty(String.prototype,"matchAll",{configurable:!0,value:function r(){var c=[],a=[],t=arguments[0],r=(typeof t==="string")?new RegExp(t, "g"):new RegExp(t);while ((c = r.exec(this)) !== null) a.push(c || []);return a;},writable:!0})})();
