@@ -4,15 +4,15 @@
 // @description  네이버 블로그에 나만 이웃 중인 이웃을 자동으로 정리해줍니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.12
+// @version      1.0.13
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-crossfollow.user.js
 // @author       Won Choi
 // @connect      naver.com
 // @match        https://admin.blog.naver.com/*
 // @grant        GM_addStyle
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.14/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.14/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/donation.js
 // ==/UserScript==
 
 // ==OpenUserJS==

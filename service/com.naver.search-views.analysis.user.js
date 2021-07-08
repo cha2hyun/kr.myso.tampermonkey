@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 상위 5개 게시글에 대한 공백을 구분하는 키워드 유입수 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-views.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*
@@ -12,12 +12,12 @@
 // @connect      naver.com
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.18/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.18/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.18/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.18/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.18/assets/donation.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.18/assets/lib/naver-creator-advisor.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.21/assets/lib/naver-creator-advisor.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuidv4.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
