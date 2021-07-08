@@ -36,7 +36,9 @@ GM_App(async function main() {
   const canv = wrap.querySelector('.section-item') || document.createElement('div'); canv.setAttribute('style', 'padding:1em; background:#fff; border-radius:6px; border: 1px solid #eee; font-size: 12px;'); wrap.append(canv);
   canv.innerHTML = '검색어 주제 적합성 분석 중...';
   const term = await NX_termsParagraph(keyword);
+  canv.innerHTML = '검색어 주제 적합성 분석 중 2...';
   const role = await NR_termsAll(...term);
+  canv.innerHTML = '검색어 주제 적합성 분석 중 3...';
   const kg_w = role.reduce((r, o)=>(r.push(...o.r_category ? o.r_category.split(',').map(c=>({ query: o.query, category: c.trim() })) : []), r), []);
   const kg_c = role.reduce((r, o)=>(o.theme && o.theme.main && r.push({ query: o.query, theme: o.theme.main.name }), o.theme && o.theme.sub && r.push(...o.theme.sub.map(t=>({ query: o.query, theme: t.name }))), r), []);
   const ka_w = _.orderBy(_.map(_.groupBy(kg_w, 'category'), (a, k)=>({ category: k, items: a, count: a.length, score: ((a.length / role.length) * 100).toFixed(2) })), ['count', 'category'], ['desc', 'asc']);
