@@ -4,7 +4,7 @@
 // @description  네이버 블로그 게시물 최근 유입 통계를 확인합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog.article.stat.referrer.advanced.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog.article.stat.referrer.advanced.user.js
 // @author       Won Choi

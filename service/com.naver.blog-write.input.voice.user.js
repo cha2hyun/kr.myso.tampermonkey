@@ -4,7 +4,7 @@
 // @description  네이버 블로그 스마트에디터ONE에서 마이크를 이용해 글을 쓸 수 있게 됩니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.input.voice.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-write.input.voice.user.js
 // @author       Won Choi

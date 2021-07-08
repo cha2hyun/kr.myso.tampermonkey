@@ -4,7 +4,7 @@
 // @description  네이버 블로그 프로필에서 보유키워드를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.9
+// @version      1.1.10
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-profile.keyword.counter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-profile.keyword.counter.user.js
 // @author       Won Choi

@@ -4,7 +4,7 @@
 // @description  네이버 블로그의 글 제목을 기반으로 모든 키워드를 추출하고 분석결과를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.keywords.analysis.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-read.keywords.analysis.user.js
 // @author       Won Choi

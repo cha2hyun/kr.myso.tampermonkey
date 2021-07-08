@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 제목 또는 문장을 검색하면, 세부 키워드를 추출하여 주제 적합도를 검사해줍니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-subject.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*

@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 상위 5개 게시글에 대한 공백을 구분하는 키워드 유입수 통계를 제공합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.8
+// @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-views.analysis.user.js
 // @author       Won Choi
 // @match        *://search.naver.com/search.naver?*

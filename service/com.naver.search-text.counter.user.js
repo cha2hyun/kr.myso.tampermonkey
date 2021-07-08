@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 블로그&포스트 글자수 세기를 활성화합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.21
+// @version      1.0.22
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-text.counter.user.js
 // @author       Won Choi
