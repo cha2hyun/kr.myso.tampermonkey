@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.25
+// @version       1.0.26
 
 // ==/UserScript==
 
@@ -46,9 +46,7 @@
         Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
         return GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
     }
-    window.NX_info = async function NX_info(keyword, start, where, mode, params) {
-        const res = await NX_Request(keyword, start, where, mode, params);
-        const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
+    function $NX_info(doc) {
         const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
         const ret = map.reduce((r, { k, v }) => {
             if(typeof v === 'string' && v.includes(',')) v = v.split(',').map(r=>r.split(',').map(v=>decodeURIComponent(v).split(':').map(v=>decodeURIComponent(v))));
@@ -58,6 +56,43 @@
             return (r[k] = v, r);
         }, {});
         return ret;
+    }
+    function $NX_score(doc) {
+        const res = $NX_info(doc);
+        const rnk = Object.keys(res || {}).filter(k=>/^r[\d]+$/.test(k)).map(k=>res[k]);
+        return rnk.map((data)=>{
+            let [[[crArea]], [[crGdid]], [[o1, a, b, c]]] = data;
+            let crScoreA = parseFloat(a); if(crScoreA == 0 || crScoreA > 1600000000) crScoreA = '?';
+            let crScoreB = parseFloat(b); if(crScoreB == 0 || crScoreB > 1600000000) crScoreB = '?';
+            let crScoreC = parseFloat(c); if(crScoreC == 0 || crScoreC > 1600000000) crScoreC = '?';
+            return { crGdid, crArea, crScoreA, crScoreB, crScoreC };
+        });
+    }
+    function $NX_list(doc) {
+        const listview = Array.from(doc.querySelectorAll('.lst_total > li'));
+        return listview.map((listitem, offset) => {
+            const el_n = listitem.querySelector('.sub_name');
+            const el_t = listitem.querySelector('.total_tit');
+            const el_d = listitem.querySelector('.dsc_txt');
+            if(!el_n || !el_t || !el_d) return;
+            const uri = new URL(el_t.href), params = Object.fromEntries(uri.searchParams.entries());
+            if(!uri.hostname.includes('blog.naver.com')) return;
+            const seg = uri.pathname.split('/');
+            return {
+                ...params,
+                ...listitem.dataset,
+                rank: offset + 1,
+                blogId: seg[1],
+                logNo: uri.searchParams.get('logNo') || seg[2],
+                briefContents: el_t.textContent,
+                titleWithInspectMessage: el_t.textContent,
+            }
+        }).filter(v=>!!v);
+    }
+    window.NX_info = async function NX_info(keyword, start, where, mode, params) {
+        const res = await NX_Request(keyword, start, where, mode, params);
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
+        return $NX_info(doc);
     }
     window.NX_count = async function NX_count(keyword, where, mode, params) {
         try {
@@ -69,15 +104,9 @@
         }
     }
     window.NX_score = async function NX_score(keyword, start, where, mode, params) {
-        const res = await NX_info(keyword, start, where, mode, params).catch(e=>null);
-        const rnk = Object.keys(res || {}).filter(k=>/^r[\d]+$/.test(k)).map(k=>res[k]);
-        return rnk.map((data)=>{
-            let [[[crArea]], [[crGdid]], [[o1, a, b, c]]] = data;
-            let crScoreA = parseFloat(a); if(crScoreA == 0 || crScoreA > 1600000000) crScoreA = '?';
-            let crScoreB = parseFloat(b); if(crScoreB == 0 || crScoreB > 1600000000) crScoreB = '?';
-            let crScoreC = parseFloat(c); if(crScoreC == 0 || crScoreC > 1600000000) crScoreC = '?';
-            return { crGdid, crArea, crScoreA, crScoreB, crScoreC };
-        });
+        const res = await NX_Request(keyword, start, where, mode, params);
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
+        return $NX_score(doc);
     }
     window.NX_terms = async function NX_terms(keyword) {
         const res = await NX_info(keyword).catch(e=>null);
@@ -96,22 +125,9 @@
     window.NX_items = async function NX_items(keyword, start, where = 'view', mode, params) {
         const res = await NX_Request(keyword, start, where, mode, params);
         const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
-        const listview = Array.from(doc.querySelectorAll('.lst_total > li'));
-        return listview.map((listitem, offset) => {
-            const el_n = listitem.querySelector('.sub_name');
-            const el_t = listitem.querySelector('.total_tit');
-            const el_d = listitem.querySelector('.dsc_txt');
-            if(!el_n || !el_t || !el_d) return;
-            const uri = new URL(el_t.href), params = Object.fromEntries(uri.searchParams.entries());
-            if(!uri.hostname.includes('blog.naver.com')) return;
-            return {
-                ...params,
-                rank: offset + 1,
-                blogId: uri.pathname.split('/')[1],
-                briefContents: el_t.textContent,
-                titleWithInspectMessage: el_t.textContent,
-            }
-        }).filter(v=>!!v);
+        const nx_info = $NX_score(doc);
+        const nx_list = $NX_list(doc);
+        return nx_list.map(item=>Object.assign({}, item, nx_info.find(info=>info.crGdid == item.crGdid)));
     }
     window.NX_itemsAll = async function NX_itemsAll(...keywords) {
         const uniqs = keywords.filter((word, index, keywords)=>keywords.indexOf(word) == index);
