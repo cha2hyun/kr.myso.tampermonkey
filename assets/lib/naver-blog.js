@@ -7,7 +7,7 @@
 // @description   네이버 블로그 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.14
+// @version       1.0.27
 
 // ==/UserScript==
 
@@ -90,7 +90,6 @@
         uri.searchParams.set('exclude', '');
         Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
         uri.searchParams.set('_', Date.now());
-        console.info('loading...', uri.toString());
         const res = await GM_xmlhttpRequestAsync(uri.toString(), { headers: { referer } });
         const data = eval(`(${res.responseText})`);
         return NB_blogStatObject(data && data.result && data.result.statDataList);
