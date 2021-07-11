@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.1
+// @version      1.0.2
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -128,11 +128,47 @@ GM_App(async function main() {
     // Main
     async function download(data) {
         voice(`블로그 진단 지표를 저장중입니다...`);
-        const { BlogInfo, BlogStat, BlogPostList } = data;
+        const { BlogInfo, BusinessInfo, BlogIntroduce, BlogStat, BlogPostList } = data;
         const date = moment(data.timestamp).format('YYYY-MM-DD');
         const zip = new JSZip();
         const zip_opts = { type:"blob" };
         const zip_name = `블로그진단지표_${BlogInfo.nickName}_${BlogInfo.blogId}_${date}.zip`;
+        { // copyrigyht
+            zip.file("안내사항.txt", [
+                '이 진단지표는 개발자 최원(cw4196)의 <블로그 진단 키트>로 작성되었습니다.',
+                '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+                '□ 배포주소 - https://blog.naver.com/cw4196',
+                '□ 채팅문의 - https://help.myso.kr',
+                '□ 메일문의 - help@myso.kr',
+                '□ 공식카페 - https://cafe.naver.com/influencerz',
+                '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+                '■ 블로그 진단 키트 사용안내',
+                '각 엑셀의 시트를 기준으로, 피봇테이블, 플로우차트, 표준편차차트, 분포차트 등 다양한 조건을 바탕으로 활용하실 수 있습니다.',
+                '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+                '■ 블로그 진단 키트 분석지원',
+                '지표자료 분석 활용이 제한되는 분들을 위해 공식카페에서 고급진단 지원서비스를 무상 또는 유상으로 제공중입니다.',
+                '카페를 통해 분석지원을 요청하시는 경우 블로그 진단 결과를 익명으로 공개하는 것에 동의한 것으로 간주합니다.',
+                '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+                '■ 블로그 진단 키트 주의사항',
+                '이 진단지표는 매우 민감한 통계 데이터를 대량으로 포함하고 있습니다.',
+                '무분별한 공유를 통해 키워드 유입경쟁이 심화되는 등의 간접적인 피해에 대해서는 책임을 지지 않습니다.',
+                '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+                'Copyright (c) Choi Won. powered by Naver Blog.',
+            ].join('\r\n'));
+        }
+        { // information
+            zip.file(`${BlogInfo.displayNickName}.txt`, [
+                `사용자이름 - ${BlogInfo.displayNickName}`,
+                `사용자소개 - ${BlogIntroduce.introduce}`,
+                `등록연락처 - ${BlogIntroduce.phoneNumber}`,
+                `등록주소지 - ${BlogIntroduce.address}`,
+                `블로그제목 - ${BlogInfo.blogName}`,
+                `블로그주제 - ${BlogInfo.blogDirectoryName}`,
+                `블로그주소 - https://blog.naver.com/${BlogInfo.blogId}`,
+                `누적방문자 - ${BlogInfo.totalVisitorCount}`,
+                `누적이웃수 - ${BlogInfo.subscriberCount}`,
+            ].join('\r\n'));
+        }
         { // global analytics
             const name = `블로그진단지표_${BlogInfo.nickName}_${BlogInfo.blogId}_${date}.xlsx`;
             const file = await generate_xlsx_analytics(data); zip.file(name, file);
