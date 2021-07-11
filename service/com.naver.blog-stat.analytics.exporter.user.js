@@ -128,7 +128,7 @@ GM_App(async function main() {
     TOAST_TYPES.map((k)=>toast[k]=toast.bind(null, k));
     // Main
     async function download_report(e) {
-        console.error(e); toast.error(`오류: ${e.message || ''}`);
+        console.error(e); toast.error(`오류: ${e.message || e}`);
         const date = moment().format('YYYY-MM-DD');
         const zip = new JSZip();
         const zip_opts = { type:"blob" };
@@ -141,7 +141,8 @@ GM_App(async function main() {
             '□ 메일문의 - help@myso.kr',
             '□ 공식카페 - https://cafe.naver.com/influencerz',
             '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
-            `${e.stack || e.meesage || '알 수 없는 오류'}`,
+            '■ 오류내용',
+            `${e.stack || e.meesage || e}`,
             '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
             'Copyright (c) Choi Won. powered by Naver Blog.',
         ].join('\r\n'));
