@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -126,6 +126,15 @@ GM_App(async function main() {
     function toast(className, text, duration = 1000 * 60, gravity = 'bottom', position = 'right') { voice(text); return Toastify(Object.assign({ className }, { text, duration, gravity, position })).showToast(); }
     TOAST_TYPES.map((k)=>toast[k]=toast.bind(null, k));
     // Main
+    async function download_report(e) {
+        console.error(e); toast.error(`오류: ${e.message || ''}`);
+        const date = moment().format('YYYY-MM-DD');
+        const zip = new JSZip();
+        const zip_opts = { type:"blob" };
+        const zip_name = `블로그진단지표_오류로그_${date}.zip`;
+        zip.file('에러.txt', e.stack || e.meesage);
+        saveAs(await zip.generateAsync({type:"blob"}), zip_name);
+    }
     async function download(data) {
         voice(`블로그 진단 지표를 저장중입니다...`);
         const { BlogInfo, BusinessInfo, BlogIntroduce, BlogStat, BlogPostList } = data;
@@ -504,7 +513,7 @@ GM_App(async function main() {
             voice(`블로그 진단 데이터를 읽어오는 중...`);
             main.loading = true;
             noti.dataset.timestamp = Date.now();
-            await crawler().catch(e=>(console.error(e), toast.error(`오류: ${e.message || ''}`)));
+            await crawler().catch(e=>download_report(e)).catch(e=>null);
             delete noti.dataset.timestamp;
             main.loading = false;
         }
