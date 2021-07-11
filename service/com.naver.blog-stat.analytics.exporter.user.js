@@ -374,8 +374,6 @@ GM_App(async function main() {
             item.rank.subject = Object.assign(item.rank.subject || {}, await NB_blogStat['순위']['조회수']['주제'](BlogInfo.blogId, date, 'WEEK'));
             voice(`${date} 분석 지표 가져오는 중... (유입키워드)`);
             item.user = Object.assign(item.user || {}, await NB_blogStat['사용자분석']['유입분석']['검색'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 분석 지표 가져오는 중... (유입경로)`);
-            item.hour = Object.assign(item.hour || {}, await NB_blogStat['시간대분석']['유입경로']['검색'](BlogInfo.blogId, date, 'WEEK'));
             voice(`${date} 분석 지표 가져오는 중... (이웃증감)`);
             item.rels = Object.assign(item.rels || {}, await NB_blogStat['사용자분석']['이웃증감수'](BlogInfo.blogId, date, 'WEEK'));
             return item;
@@ -467,26 +465,6 @@ GM_App(async function main() {
         if(main.loading) {
             toast.warn('이미 진단 데이터를 수집중입니다. 잠시 기다려주세요.');
         } else {
-            const message = [
-                '<진단키트 안내사항>',
-                '- 수집이 진행되는 동안 모든 작업을 중지할 것을 권장합니다.',
-                '- 수집이 진행되는 동안 진행중인 화면을 최상단에 유지해야 빠르게 완료됩니다.',
-                '- 수집이 진행되는 동안 대량의 트래픽이 발생하므로, 안정적인 인터넷 환경을 권장합니다.',
-                '- 수집이 완료되면 데이터를 브라우저에 저장하며, 과트래픽 방지를 위해 7일간 재사용합니다.',
-                '',
-                '<오류관련 안내사항>',
-                '- 콘텐츠 생산량 및 유입량에 따라 24시간 이상 소요될 수 있습니다.',
-                '- 수집 중 오류 발생 시, 개발자 최원(cw4196)에게 문의바랍니다.',
-                '',
-                '<서비스 이용동의>',
-                '- 블로그 주요 지표를 모두 수집하며, 제3자를 통한 공유로 발생가능한 피해는 책임지지 않습니다.',
-                '',
-                '<통계지표 활용동의>',
-                '이 프로그램은 블로그 진단을 위해 네이버 블로그 통계에서 아래와 같은 정보를 수집합니다.',
-                '- 네이버 블로그에 작성된 최근 90일 분량의 모든 게시물',
-                '- 네이버 블로그에 유입된 최근 90일 분량의 모든 통계'
-            ].join('\n');
-            if(!confirm(message)) return;
             voice(`블로그 진단 데이터를 읽어오는 중...`);
             main.loading = true;
             noti.dataset.timestamp = Date.now();
