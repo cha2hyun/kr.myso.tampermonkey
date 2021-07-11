@@ -202,6 +202,9 @@ GM_App(async function main() {
                 ]);
                 return rows;
             },
+            '본문': (rows) => {
+                return content.split(/[\r\n]+/g).map(line=>[line]);
+            },
             '유입경로': (rows)=>{
                 rows.push(['날짜', '검색여부', '사이트', '사이트 유입수', '사이트 유입수 비율', '유입경로', '유입수', '유입수 비율', '키워드']);
                 rows.push(...statsReferrerTotal.map(item=>{
@@ -236,9 +239,6 @@ GM_App(async function main() {
                     }
                 });
                 return _.orderBy(keywords_sheet, ['순위', '전문성', '신뢰성', '관련성', '검색량', '키워드'], ['asc', 'desc', 'desc', 'desc', 'desc', 'asc']);
-            },
-            '본문': (rows) => {
-                return content.split(/[\r\n]+/g).map(line=>[line]);
             },
         });
     }
