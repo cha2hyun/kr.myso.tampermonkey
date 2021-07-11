@@ -289,11 +289,6 @@ GM_App(async function main() {
                     '게시글번호': `${logNo}`,
                     '카테고리': categoryName,
                     '제목': titleWithInspectMessage,
-                    // 지수정보
-                    '검색순위': (titleWithInspectMessageScore && titleWithInspectMessageScore.rank) || 0,
-                    '전문성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreA) || 0,
-                    '신뢰성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreB) || 0,
-                    '관련성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreC) || 0,
                     // 유입정보
                     '유입키워드': statsReferrerTotalKeywords.join('\r\n'),
                     '유효키워드': ownedKeywords.map(o=>o.query).join('\r\n'),
@@ -311,6 +306,11 @@ GM_App(async function main() {
                     '검색허용': searchYn,
                     '블라인드': postBlocked,
                     '공유허용': outSideAllow,
+                    // 지수정보
+                    '검색순위': (titleWithInspectMessageScore && titleWithInspectMessageScore.rank) || 0,
+                    '전문성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreA) || 0,
+                    '신뢰성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreB) || 0,
+                    '관련성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreC) || 0,
                 };
             }),
             '게시물순위': () => BlogStat.map(item=>item.rank.article.rankCv).flat(),
