@@ -133,7 +133,18 @@ GM_App(async function main() {
         const zip = new JSZip();
         const zip_opts = { type:"blob" };
         const zip_name = `블로그진단지표_오류로그_${date}.zip`;
-        zip.file('에러.txt', e.stack || e.meesage);
+        zip.file('에러.txt', [
+            '<블로그 진단 키트>의 동작과정에서 오류가 발생하였습니다. 개발자 최원(cw4196)에게 해당 내용을 전달해주시기 바랍니다.',
+            '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+            '□ 배포주소 - https://blog.naver.com/cw4196',
+            '□ 채팅문의 - https://help.myso.kr',
+            '□ 메일문의 - help@myso.kr',
+            '□ 공식카페 - https://cafe.naver.com/influencerz',
+            '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+            `${e.stack || e.meesage || '알 수 없는 오류'}`,
+            '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-',
+            'Copyright (c) Choi Won. powered by Naver Blog.',
+        ].join('\r\n'));
         saveAs(await zip.generateAsync({type:"blob"}), zip_name);
     }
     async function download(data) {
