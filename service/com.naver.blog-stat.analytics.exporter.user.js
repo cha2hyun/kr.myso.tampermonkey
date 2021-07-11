@@ -374,7 +374,7 @@ GM_App(async function main() {
             item.rank.subject = Object.assign(item.rank.subject || {}, await NB_blogStat['순위']['조회수']['주제'](BlogInfo.blogId, date, 'WEEK'));
             voice(`${date} 분석 지표 가져오는 중... (유입키워드)`);
             item.user = Object.assign(item.user || {}, await NB_blogStat['사용자분석']['유입분석']['검색'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 분석 지표 가져오는 중... (이웃증감)`);
+            voice(`${date} 분석 지표 가져오는 중... (이웃증감수)`);
             item.rels = Object.assign(item.rels || {}, await NB_blogStat['사용자분석']['이웃증감수'](BlogInfo.blogId, date, 'WEEK'));
             return item;
         }, { concurrency: 10 });
