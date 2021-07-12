@@ -516,7 +516,7 @@ GM_App(async function main() {
             return item;
         }, { concurrency: 3 });
         voice(`블로그 진단 데이터 수집이 완료되었습니다. ${moment(data.timestamp).fromNow()} 시작 됨`);
-        localforage.setItem('NB_ANALYTICS', data);
+        localforage.setItem('NB_ANALYTICS', data).catch(e=>console.error(e));
         return download(data);
     }
     async function main() {
