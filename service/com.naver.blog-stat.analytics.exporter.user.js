@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -45,6 +45,7 @@
 // @author myso
 // ==/OpenUserJS==
 GM_App(async function main() {
+    function md5(d){var r = M(V(Y(X(d),8*d.length)));return r.toLowerCase()};function M(d){for(var _,m="0123456789ABCDEF",f="",r=0;r<d.length;r++)_=d.charCodeAt(r),f+=m.charAt(_>>>4&15)+m.charAt(15&_);return f}function X(d){for(var _=Array(d.length>>2),m=0;m<_.length;m++)_[m]=0;for(m=0;m<8*d.length;m+=8)_[m>>5]|=(255&d.charCodeAt(m/8))<<m%32;return _}function V(d){for(var _="",m=0;m<32*d.length;m+=8)_+=String.fromCharCode(d[m>>5]>>>m%32&255);return _}function Y(d,_){d[_>>5]|=128<<_%32,d[14+(_+64>>>9<<4)]=_;for(var m=1732584193,f=-271733879,r=-1732584194,i=271733878,n=0;n<d.length;n+=16){var h=m,t=f,g=r,e=i;f=md5_ii(f=md5_ii(f=md5_ii(f=md5_ii(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_hh(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_gg(f=md5_ff(f=md5_ff(f=md5_ff(f=md5_ff(f,r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+0],7,-680876936),f,r,d[n+1],12,-389564586),m,f,d[n+2],17,606105819),i,m,d[n+3],22,-1044525330),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+4],7,-176418897),f,r,d[n+5],12,1200080426),m,f,d[n+6],17,-1473231341),i,m,d[n+7],22,-45705983),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+8],7,1770035416),f,r,d[n+9],12,-1958414417),m,f,d[n+10],17,-42063),i,m,d[n+11],22,-1990404162),r=md5_ff(r,i=md5_ff(i,m=md5_ff(m,f,r,i,d[n+12],7,1804603682),f,r,d[n+13],12,-40341101),m,f,d[n+14],17,-1502002290),i,m,d[n+15],22,1236535329),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+1],5,-165796510),f,r,d[n+6],9,-1069501632),m,f,d[n+11],14,643717713),i,m,d[n+0],20,-373897302),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+5],5,-701558691),f,r,d[n+10],9,38016083),m,f,d[n+15],14,-660478335),i,m,d[n+4],20,-405537848),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+9],5,568446438),f,r,d[n+14],9,-1019803690),m,f,d[n+3],14,-187363961),i,m,d[n+8],20,1163531501),r=md5_gg(r,i=md5_gg(i,m=md5_gg(m,f,r,i,d[n+13],5,-1444681467),f,r,d[n+2],9,-51403784),m,f,d[n+7],14,1735328473),i,m,d[n+12],20,-1926607734),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+5],4,-378558),f,r,d[n+8],11,-2022574463),m,f,d[n+11],16,1839030562),i,m,d[n+14],23,-35309556),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+1],4,-1530992060),f,r,d[n+4],11,1272893353),m,f,d[n+7],16,-155497632),i,m,d[n+10],23,-1094730640),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+13],4,681279174),f,r,d[n+0],11,-358537222),m,f,d[n+3],16,-722521979),i,m,d[n+6],23,76029189),r=md5_hh(r,i=md5_hh(i,m=md5_hh(m,f,r,i,d[n+9],4,-640364487),f,r,d[n+12],11,-421815835),m,f,d[n+15],16,530742520),i,m,d[n+2],23,-995338651),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+0],6,-198630844),f,r,d[n+7],10,1126891415),m,f,d[n+14],15,-1416354905),i,m,d[n+5],21,-57434055),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+12],6,1700485571),f,r,d[n+3],10,-1894986606),m,f,d[n+10],15,-1051523),i,m,d[n+1],21,-2054922799),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+8],6,1873313359),f,r,d[n+15],10,-30611744),m,f,d[n+6],15,-1560198380),i,m,d[n+13],21,1309151649),r=md5_ii(r,i=md5_ii(i,m=md5_ii(m,f,r,i,d[n+4],6,-145523070),f,r,d[n+11],10,-1120210379),m,f,d[n+2],15,718787259),i,m,d[n+9],21,-343485551),m=safe_add(m,h),f=safe_add(f,t),r=safe_add(r,g),i=safe_add(i,e)}return Array(m,f,r,i)}function md5_cmn(d,_,m,f,r,i){return safe_add(bit_rol(safe_add(safe_add(_,d),safe_add(f,i)),r),m)}function md5_ff(d,_,m,f,r,i,n){return md5_cmn(_&m|~_&f,d,_,r,i,n)}function md5_gg(d,_,m,f,r,i,n){return md5_cmn(_&f|m&~f,d,_,r,i,n)}function md5_hh(d,_,m,f,r,i,n){return md5_cmn(_^m^f,d,_,r,i,n)}function md5_ii(d,_,m,f,r,i,n){return md5_cmn(m^(_|~f),d,_,r,i,n)}function safe_add(d,_){var m=(65535&d)+(65535&_);return(d>>16)+(_>>16)+(m>>16)<<16|65535&m}function bit_rol(d,_){return d<<_|d>>>32-_}
     GM_addStyle("@import url('https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.11.0/toastify.min.css')");
     GM_addStyle(".lnb__analytics .lnb__title { color:#0099e5 !important; } .lnb__analytics .lnb__title::after { content:'\\1F4CA'; float: right; }");
     GM_addStyle(".lnb__analytics_share .lnb__title { color:#0099e5 !important; } .lnb__analytics_share .lnb__title::after { content:'\\1F680'; float: right; }");
@@ -155,6 +156,13 @@ GM_App(async function main() {
         const zip = new JSZip();
         const zip_opts = { type:"blob" };
         const zip_name = `블로그진단지표_${BlogInfo.nickName}_${BlogInfo.blogId}_${date}.zip`;
+        {
+            zip.file("수집시각.txt", [
+                `■ 시작시간 - ${moment(data.timestart || data.timestamp).toISOString(true)}`,
+                `■ 종료시간 - ${moment(data.timestamp).toISOString(true)}`,
+                `■ 소요시간 - ${moment(data.timestamp).diff(data.timestart || data.timestamp, 'minutes')}분`,
+            ].join('\r\n'));
+        }
         { // copyrigyht
             zip.file("안내사항.txt", [
                 '이 진단지표는 개발자 최원(cw4196)의 <블로그 진단 키트>로 작성되었습니다.',
@@ -216,6 +224,8 @@ GM_App(async function main() {
             return xlsx_sheet_data;
         }
         async function xlsx_sheet_append(xlsx_sheet_name, xlsx_sheet_data = []) {
+            let xlsx_valid_data = xlsx_sheet_data.filter(o=>!Array.isArray(o));
+            if(xlsx_valid_data.length) console.log(xlsx_sheet_name, xlsx_valid_data);
             let xlsx_sheet = XLSX.utils.aoa_to_sheet(xlsx_sheet_data);
             XLSX.utils.book_append_sheet(xlsx, xlsx_sheet, xlsx_sheet_name);
         }
@@ -303,16 +313,16 @@ GM_App(async function main() {
     async function generate_xlsx_analytics(data) {
         const { BlogInfo, BlogStat, BlogPostList } = data;
         return generate_xlsx({
-            '조회수': ()=>BlogStat.map(item=>item.visit.cv).flat().filter((v,i,a)=>v.total && a.findIndex(o=>o.date==v.date) == i),
-            '순방문자수': ()=>BlogStat.map(item=>item.visit.uv).flat().filter((v,i,a)=>v.total && a.findIndex(o=>o.date==v.date) == i),
-            '재방문수': ()=>BlogStat.map(item=>item.visit.revisit).flat().filter((v,i,a)=>v.total && a.findIndex(o=>o.date==v.date) == i),
-            '방문횟수': ()=>BlogStat.map(item=>item.visit.averageVisit).flat().filter((v,i,a)=>v.total && a.findIndex(o=>o.date==v.date) == i),
-            '체류시간': ()=>BlogStat.map(item=>item.visit.averageDuration).flat().filter((v,i,a)=>v.total && a.findIndex(o=>o.date==v.date) == i),
-            '이웃증감': ()=>BlogStat.map(item=>item.rels.relationDelta).flat().filter((v,i,a)=>(v.add || v.friend || v.delete) && a.findIndex(o=>o.date==v.date) == i),
-            '유입경로': ()=>BlogStat.map(item=>item.user.refererDetail).flat(),
-            '유입키워드': ()=>BlogStat.map(item=>item.user.refererSearch).flat(),
+            '조회수': ()=>BlogStat.map(item=>item.visit.cv || []).flat().filter((v,i,a)=>!!v && v.total && a.findIndex(o=>o.date==v.date) == i),
+            '순방문자수': ()=>BlogStat.map(item=>item.visit.uv || []).flat().filter((v,i,a)=>!!v && v.total && a.findIndex(o=>o.date==v.date) == i),
+            '재방문수': ()=>BlogStat.map(item=>item.visit.revisit || []).flat().filter((v,i,a)=>!!v && v.total && a.findIndex(o=>o.date==v.date) == i),
+            '방문횟수': ()=>BlogStat.map(item=>item.visit.averageVisit || []).flat().filter((v,i,a)=>!!v && v.total && a.findIndex(o=>o.date==v.date) == i),
+            '체류시간': ()=>BlogStat.map(item=>item.visit.averageDuration || []).flat().filter((v,i,a)=>!!v && v.total && a.findIndex(o=>o.date==v.date) == i),
+            '이웃증감': ()=>BlogStat.map(item=>item.rels.relationDelta || []).flat().filter((v,i,a)=>!!v && (v.add || v.friend || v.delete) && a.findIndex(o=>o.date==v.date) == i),
+            '유입경로': ()=>BlogStat.map(item=>item.user.refererDetail || []).flat().filter((v)=>!!v),
+            '유입키워드': ()=>BlogStat.map(item=>item.user.refererSearch || []).flat().filter((v)=>!!v),
             '유효키워드': ()=>{
-                const keywords = BlogPostList.map(item=>item.ownedKeywords).flat();
+                const keywords = BlogPostList.map(item=>item.ownedKeywords || []).flat().filter((v)=>!!v && v.query);
                 const keywords_uniqs = keywords.filter((item, index, list)=>list.findIndex(o=>o.query==item.query)==index);
                 const keywords_sorts = _.orderBy(keywords_uniqs, 'query');
                 const keywords_sheet = keywords_sorts.map(item=>{
@@ -371,153 +381,229 @@ GM_App(async function main() {
                     '관련성': (titleWithInspectMessageScore && titleWithInspectMessageScore.crScoreC) || 0,
                 };
             }),
-            '게시물순위': () => BlogStat.map(item=>item.rank.article.rankCv).flat(),
-            '주제순위': () => BlogStat.map(item=>item.rank.subject.rankCv).flat(),
-            '공감순위': () => BlogStat.map(item=>item.rank.rankLike).flat(),
-            '댓글순위': () => BlogStat.map(item=>item.rank.rankComment).flat(),
+            '게시물순위': () => BlogStat.map(item=>item.rank.article.rankCv).flat().filter((v)=>!!v),
+            '주제순위': () => BlogStat.map(item=>item.rank.subject.rankCv).flat().filter((v)=>!!v),
+            '공감순위': () => BlogStat.map(item=>item.rank.rankLike).flat().filter((v)=>!!v),
+            '댓글순위': () => BlogStat.map(item=>item.rank.rankComment).flat().filter((v)=>!!v),
         });
     }
-    async function keyword(query) {
-        const name = String(query).replace(/[\s]+/g, '').toUpperCase();
-        const data = await localforage.getItem(`NB_ANALYTICS_${name}`) || {};
-        const time = data.time || Date.now();
-        if(!data.value || Date.now() - time > 1000 * 60 * 60 * 1) { data.time = Date.now(); data.value = await NA_search(name); await localforage.setItem(`NB_ANALYTICS_${name}`, data); }
-        return data.value;
+    async function cache_keyword(query) {
+        const name = String(query).replace(/[\s]+/g, '').toUpperCase(), hash = md5(name);
+        const store = (await localforage.getItem(`NX_KEYWORDS_${hash}`) || {});
+        const cache = _.get(store, hash, {});
+        if(cache.timestamp && moment().diff(cache.timestamp, 'days') < 3) return cache.value;
+        cache.value = await NA_search(name); cache.timestamp = Date.now();
+        _.set(store, hash, cache); await localforage.setItem(`NX_KEYWORDS_${hash}`, store);
+        return cache.value;
+    }
+    async function cache_map(root, path, value) {
+        //Object.assign(root, await localforage.getItem(`NX_DATA`) || {});
+        const store = (await localforage.getItem(`NX_CACHE`) || {});
+        const cache = _.get(store, path, {});
+        if(cache.timestamp && moment().diff(cache.timestamp, 'days') < 3) { return (_.set(root, path, cache.value), cache.value); }
+        cache.value = (typeof value === 'function') ? await value(root, path) : await Promise.resolve(value); cache.timestamp = Date.now();
+        _.set(store, path, cache);
+        _.set(root, path, cache.value);
+        await localforage.setItem(`NX_CACHE`, store);
+        await localforage.setItem(`NX_DATA`, root);
+        return cache.value;
+    }
+    async function cache_map_array(root, path, mapper) {
+        //Object.assign(root, await localforage.getItem(`NX_DATA`));
+        const root_store = (await localforage.getItem(`NX_CACHE`) || {});
+        const root_cache = _.get(root_store, path, {});
+        if(root_cache.timestamp && moment().diff(root_cache.timestamp, 'days') < 3) { return (_.set(root, path, root_cache.value), root_cache.value); }
+        const items = root_cache.value = _.get(root, path, []);
+        async function append(value, ...pk) {
+            const keys = pk; if(keys.length == 0) keys.push(JSON.stringify(value));
+            const hash = md5(keys.map((k)=>_.get(value, k, k)).join('$'));
+            const subpath = `$$.${path}.${hash}`;
+            const cache = _.get(root_store, subpath, {});
+            if(cache.timestamp && moment().diff(cache.timestamp, 'days') < 3) return (items.push(cache.value), items);
+            cache.value = (typeof value === 'function') ? await value(root, subpath) : await Promise.resolve(value); cache.timestamp = Date.now();
+            _.set(root_store, subpath, cache);
+            _.set(root, path, (items.push(cache.value), root_cache.value = items));
+            await localforage.setItem(`NX_CACHE`, root_store);
+            await localforage.setItem(`NX_DATA`, root);
+            return items;
+        }
+        async function next(props, order) {
+            const items = _.get(root, path, []);
+            const sorts = _.orderBy(items, props, order);
+            _.set(root, path, sorts);
+            _.set(root_store, path, (root_cache.timestamp = Date.now(), root_cache));
+            await localforage.setItem(`NX_CACHE`, root_store);
+            await localforage.setItem(`NX_DATA`, root);
+            return sorts;
+        }
+        return mapper(append, next);
     }
     async function crawler() {
-        const data = await localforage.getItem('NB_ANALYTICS') || {};
-        if(data.timestamp && moment().diff(data.timestamp, 'days') < 7) return download(data);
-        data.timestamp = Date.now();
+        //if(confirm('임시 저장된 데이터를 초기화하고 재수집하시겠습니까?')) await localforage.clear();
+        const root = await localforage.getItem('NX_DATA') || {};
+        if(root.timestamp && moment().diff(root.timestamp, 'days') < 7) return download(root);
         const dates = _.range(90).map(o=>moment().subtract(o+1, 'days').format('YYYY-MM-DD'));
+        root.timestart = Date.now();
+        // ------------------------------
         // BlogUserInfo
-        const BlogUserInfo = data.BlogUserInfo = await NB_blogInfo('', 'BlogUserInfo');
+        const BlogUserInfo = await cache_map(root, 'BlogUserInfo', NB_blogInfo('', 'BlogUserInfo'));
         if(!BlogUserInfo) throw new Error('네이버 계정 정보를 가져오지 못했습니다.');
         voice(`${BlogUserInfo.nickname}(${BlogUserInfo.userId})님의 블로그 진단을 시작합니다.`);
         // BlogInfo
-        const BlogInfo = data.BlogInfo = await NB_blogInfo(BlogUserInfo.userId, 'BlogInfo');
+        const BlogInfo = await cache_map(root, 'BlogInfo', NB_blogInfo(BlogUserInfo.userId, 'BlogInfo'));
         if(!BlogInfo) throw new Error('네이버 블로그 정보를 가져오지 못했습니다.');
         voice(`${BlogInfo.blogDirectoryName} 주제가 대표 주제로 설정되어 있습니다.`);
         // BusinessInfo
-        const BusinessInfo = data.BusinessInfo = await NB_blogInfo(BlogInfo.blogId, 'BusinessInfo');
+        const BusinessInfo = await cache_map(root, 'BusinessInfo', NB_blogInfo(BlogInfo.blogId, 'BusinessInfo'));
         if(!BusinessInfo) throw new Error('네이버 블로그 비즈니스 정보를 가져오지 못했습니다.');
         voice(BusinessInfo.existBusinessInfo ? `상업 정보가 등록된 비즈니스 블로그입니다.` : `상업 정보가 등록되지 않은 일반 블로그입니다.`);
         // BlogIntroduce
-        const BlogIntroduce = data.BlogIntroduce = await NB_blogInfo(BlogInfo.blogId, 'Introduce');
+        const BlogIntroduce = await cache_map(root, 'BlogIntroduce', NB_blogInfo(BlogInfo.blogId, 'Introduce'));
         if(!BlogIntroduce) throw new Error('네이버 블로그 설명 정보를 가져오지 못했습니다.');
         voice(BlogIntroduce.phoneNumber ? `연락처 정보가 등록된 상업목적 블로그입니다.` : `연락처 정보가 등록되지 않은 일반 블로그입니다.`);
         voice(BlogIntroduce.address     ? `주소 정보가 등록된 상업목적 블로그입니다.`   : `주소 정보가 등록되지 않은 일반 블로그입니다.`);
-        // BlogStat
+        // ------------------------------
         voice(`최근 3개월 간의 블로그 통계를 분석 중입니다...`);
-        const BlogStat = data.BlogStat = await Promise.map(dates.reduce((r,o,i)=>(i % 7 == 0 && r.push(o), r), []), async (date) => {
-            const item = { date };
-            voice(`${date} 방문분석 지표 가져오는 중... (조회수)`);
-            item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['조회수'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 방문분석 지표 가져오는 중... (순방문자수)`);
-            item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['순방문자수'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 방문분석 지표 가져오는 중... (방문횟수)`);
-            item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['방문횟수'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 방문분석 지표 가져오는 중... (평균방문횟수)`);
-            item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['평균방문횟수'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 방문분석 지표 가져오는 중... (재방문율)`);
-            item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['재방문율'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 방문분석 지표 가져오는 중... (평균사용시간)`);
-            item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['평균사용시간'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 순위 지표 가져오는 중... (공감수)`);
-            item.rank = Object.assign(item.rank || {}, await NB_blogStat['순위']['공감수'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 순위 지표 가져오는 중... (댓글수)`);
-            item.rank = Object.assign(item.rank || {}, await NB_blogStat['순위']['댓글수'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 순위 지표 가져오는 중... (조회수 - 게시물)`);
-            item.rank.article = Object.assign(item.rank.article || {}, await NB_blogStat['순위']['조회수']['게시물'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 순위 지표 가져오는 중... (조회수 - 주제)`);
-            item.rank.subject = Object.assign(item.rank.subject || {}, await NB_blogStat['순위']['조회수']['주제'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 분석 지표 가져오는 중... (유입키워드)`);
-            item.user = Object.assign(item.user || {}, await NB_blogStat['사용자분석']['유입분석']['검색'](BlogInfo.blogId, date, 'WEEK'));
-            voice(`${date} 분석 지표 가져오는 중... (이웃증감수)`);
-            item.rels = Object.assign(item.rels || {}, await NB_blogStat['사용자분석']['이웃증감수'](BlogInfo.blogId, date, 'WEEK'));
-            return item;
-        }, { concurrency: 10 });
-        // BlogPostList
+        const BlogStat = await cache_map_array(root, 'BlogStat', async (append, next, store) => {
+            const range = dates.reduce((r,o,i)=>(i % 7 == 0 && r.push(o), r), []);
+            await Promise.map(range, async (date) => {
+                const item = { date };
+                voice(`${date} 방문분석 지표 가져오는 중... (조회수)`);
+                item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['조회수'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 방문분석 지표 가져오는 중... (순방문자수)`);
+                item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['순방문자수'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 방문분석 지표 가져오는 중... (방문횟수)`);
+                item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['방문횟수'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 방문분석 지표 가져오는 중... (평균방문횟수)`);
+                item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['평균방문횟수'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 방문분석 지표 가져오는 중... (재방문율)`);
+                item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['재방문율'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 방문분석 지표 가져오는 중... (평균사용시간)`);
+                item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['평균사용시간'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 순위 지표 가져오는 중... (공감수)`);
+                item.rank = Object.assign(item.rank || {}, await NB_blogStat['순위']['공감수'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 순위 지표 가져오는 중... (댓글수)`);
+                item.rank = Object.assign(item.rank || {}, await NB_blogStat['순위']['댓글수'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 순위 지표 가져오는 중... (조회수 - 게시물)`);
+                item.rank.article = Object.assign(item.rank.article || {}, await NB_blogStat['순위']['조회수']['게시물'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 순위 지표 가져오는 중... (조회수 - 주제)`);
+                item.rank.subject = Object.assign(item.rank.subject || {}, await NB_blogStat['순위']['조회수']['주제'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 분석 지표 가져오는 중... (유입키워드)`);
+                item.user = Object.assign(item.user || {}, await NB_blogStat['사용자분석']['유입분석']['검색'](BlogInfo.blogId, date, 'WEEK'));
+                voice(`${date} 분석 지표 가져오는 중... (이웃증감수)`);
+                item.rels = Object.assign(item.rels || {}, await NB_blogStat['사용자분석']['이웃증감수'](BlogInfo.blogId, date, 'WEEK'));
+                return append(item, 'date');
+            }, { concurrency: 10 });
+            return next('date', 'desc');
+        });
+        // BlogPostListItems
         voice(`최근 3개월 이내에 등록된 게시글을 가져오는 중... (최대 300개)`);
-        const BlogPostList = await (async () => {
-            let posts = [];
+        const BlogPostListItems = await cache_map_array(root, 'BlogPostListItems', async (append, next, store) => {
             for(let currentPage = 1, skip; currentPage <= 30 && !skip; currentPage++) {
                 let data = await NB_blogInfo(BlogInfo.blogId, 'PostListInfo', { currentPage }).catch(e=>({}));
                 let list = data.postViewList; if(!list || !list.length) break;
-                for(let item of list) { skip = moment().diff(item.addDate, 'days') > dates.length; if(skip) { break; } else { posts.push(item); } }
-                posts.push(...list.filter(v=>!!v && v.merged));
+                let over = list.find(item=>moment().diff(item.addDate, 'days') > dates.length);
+                for(let post of list) {
+                    await append(post, 'logNo');
+                }
+                if(over) break;
             }
-            return posts;
-        })();
+            return next('logNo', 'desc');
+        });
+        // BlogPostListStats
         voice(`최근 3개월 이내에 등록된 게시글을 분석 중...`);
-        data.BlogPostList = await Promise.map(BlogPostList, async (item) => {
-            let { blogId, logNo } = item;
-            voice(`${blogId}/${logNo} 분석 중...`);
-            {
-                voice(`${blogId}/${logNo} 예상 키워드 분석 중...`);
-                let terms = await NX_termsParagraph(item.titleWithInspectMessage), uniqs = terms.filter((o,i,a)=>a.indexOf(o)==i);
-                let cases = uniqs.reduce((function loops(index, cases, word, offset, uniqs){
-                    if(index >= 1) return cases;
-                    const sorts = Array.from(uniqs).sort((curr)=>curr===word?-1:1).slice(1);
-                    const trans = Array.from(sorts).map((next)=>`${word} ${next}`);
-                    const remap = Array.from(sorts).reduce(loops.bind(null, index+1), []).map((next)=>`${word} ${next}`);
-                    cases.push(word, ...trans, ...remap);
-                    return cases.sort().filter((v, i, a)=>a.indexOf(v) == i);
-                }).bind(null, 0), []);
-                item.titleWithInspectMessageCases = cases;
-                item.titleWithInspectMessageUniqs = uniqs;
-            }
-            {
-                voice(`${blogId}/${logNo} 유효 키워드 분석 중...`);
-                item.titleWithInspectMessageScore = (await NX_items(item.titleWithInspectMessage, 1, 'view') || []).find(x=>x.blogId == blogId && x.logNo == logNo);
-                item.titleWithInspectMessageDetail = await Promise.map(NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
-                    voice(`${blogId}/${logNo} 유효 키워드 분석 중... ${item.query}`);
-                    const list = await NX_items(item.query, 1, 'view');
-                    item.myown = list.find(x=>x.blogId == blogId && x.logNo == logNo);
-                    item.search = await keyword(item.query);
-                    return item;
-                }, { concurrency: 3 });
-            }
-            {
-                voice(`${blogId}/${logNo} 본문 분석 중...`);
-                let se = await SE_parseRemote(blogId, logNo);
-                Object.assign(item, { content: se.content, contentLength: se.contentLength, contentLengthTrim: se.contentLengthTrim, contentSections: se.sections });
-            }
-            {
-                voice(`${blogId}/${logNo} 유입 경로 분석 중...`);
-                item.statsReferrerTotal = await Promise.map(dates, async (date) => {
-                    voice(`${blogId}/${logNo} 유입 경로 분석 중... (${date})`);
-                    const total = await NB_blogPostStat(logNo, 'referer/total', date, 'DATE');
-                    const stats = await Promise.map(total.refererTotal, async (item) => {
-                        voice(`${blogId}/${logNo} 유입 경로 분석 중... (${date}, ${item.referrerDomain || '-'})`);
-                        const detail = await NB_blogPostStat(logNo, 'referer/total/detail', date, 'DATE', { searchEngine: item.referrerSearchEngine, refererDomain: item.referrerDomain })
-                        if(detail && detail.refererDetail){
-                            detail.refererDetail = detail.refererDetail.map((item)=>{
-                                const uri = ((url)=>{ try { return new URL(url); } catch(e) {} })(item.referrerUrl);
-                                const qry = item.searchQuery = ['query', 'q', 'keyword', 'searchKeyword'].reduce((r, k)=>r||(uri && uri.searchParams.get('query')), item.searchQuery) || '';
-                                return item;
-                            });
-                        }
-                        return Object.assign({}, item, { detail });
-                    }, { concurrency: 10 });
-                    return Object.assign({ date: moment(date).format('YYYY-MM-DD'), stats });
-                });
-                item.statsReferrerTotalKeywords = item.statsReferrerTotal.map(({ stats })=>stats.map(({ detail }) => (detail?detail.refererDetail:[]).map(({searchQuery})=>searchQuery)).flat()).flat().filter((o,i,a)=>o&&a.indexOf(o)==i);
-                item.statsReferrerTotalKeywordsDetail = await Promise.map(NR_termsAll(...item.statsReferrerTotalKeywords), async (item) => {
-                    voice(`키워드 분석하는 중... ${item.query}`);
-                    item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
-                    item.search = await keyword(item.query);
-                    return item;
-                }, { concurrency: 3 });
-            }
-            {
-                item.ownedKeywords = [...item.titleWithInspectMessageDetail, ...item.statsReferrerTotalKeywordsDetail].filter(o=>o.myown);
-            }
-            voice(`${blogId}/${logNo} 분석 완료.`);
-            return item;
-        }, { concurrency: 3 });
-        voice(`블로그 진단 데이터 수집이 완료되었습니다. ${moment(data.timestamp).fromNow()} 시작 됨`);
-        localforage.setItem('NB_ANALYTICS', data).catch(e=>console.error(e));
-        return download(data);
+        const BlogPostListStats = await cache_map_array(root, 'BlogPostListStats', async (append, next, store)=> {
+            await Promise.map(BlogPostListItems, async (item) => {
+                let { blogId, logNo } = item;
+                voice(`${blogId}/${logNo} 분석 중...`);
+                {
+                    voice(`${blogId}/${logNo} 본문 분석 중...`);
+                    let se = await SE_parseRemote(blogId, logNo);
+                    Object.assign(item, { content: se.content, contentLength: se.contentLength, contentLengthTrim: se.contentLengthTrim, contentSections: se.sections });
+                }
+                {
+                    voice(`${blogId}/${logNo} 유입 경로 분석 중...`);
+                    item.statsReferrerTotal = await Promise.map(dates, async (date) => {
+                        voice(`${blogId}/${logNo} 유입 경로 분석 중... (${date})`);
+                        const total = await NB_blogPostStat(logNo, 'referer/total', date, 'DATE');
+                        const stats = await Promise.map(total.refererTotal, async (item) => {
+                            voice(`${blogId}/${logNo} 유입 경로 분석 중... (${date}, ${item.referrerDomain || '-'})`);
+                            const detail = await NB_blogPostStat(logNo, 'referer/total/detail', date, 'DATE', { searchEngine: item.referrerSearchEngine, refererDomain: item.referrerDomain })
+                            if(detail && detail.refererDetail){
+                                detail.refererDetail = detail.refererDetail.map((item)=>{
+                                    const uri = ((url)=>{ try { return new URL(url); } catch(e) {} })(item.referrerUrl);
+                                    const qry = item.searchQuery = ['query', 'q', 'keyword', 'searchKeyword'].reduce((r, k)=>r||(uri && uri.searchParams.get('query')), item.searchQuery) || '';
+                                    return item;
+                                });
+                            }
+                            return Object.assign({}, item, { detail });
+                        }, { concurrency: 10 });
+                        return Object.assign({ date: moment(date).format('YYYY-MM-DD'), stats });
+                    });
+                    item.statsReferrerTotal = item.statsReferrerTotal.filter(v=>!!v);
+                }
+                voice(`${blogId}/${logNo} 분석 완료.`);
+                return append(item, 'logNo');
+            }, { concurrency: 10 })
+            return next('logNo', 'desc');
+        });
+        // BlogPostStat
+        voice(`최근 3개월 이내에 유입된 키워드를 분석 중...`);
+        const BlogPostList = await cache_map_array(root, 'BlogPostList', async (append, next, store)=>{
+            await Promise.map(BlogPostListStats, async (item) => {
+                let { blogId, logNo } = item, suffix = `${blogId}_${logNo}`;
+                voice(`${blogId}/${logNo} 분석 중...`);
+                {
+                    voice(`예상 키워드 분석 중...`);
+                    item.titleWithInspectMessageTerms = await NX_termsParagraph(item.titleWithInspectMessage);
+                    item.titleWithInspectMessageTerms = item.titleWithInspectMessageTerms.filter(v=>!!v);
+                    item.titleWithInspectMessageUniqs = item.titleWithInspectMessageTerms.filter((o,i,a)=>a.indexOf(o)==i);
+                    item.titleWithInspectMessageUniqs = item.titleWithInspectMessageUniqs.filter(v=>!!v);
+                    item.titleWithInspectMessageCases = item.titleWithInspectMessageUniqs.reduce((function loops(index, cases, word, offset, uniqs){
+                        if(index >= 1) return cases;
+                        const sorts = Array.from(uniqs).sort((curr)=>curr===word?-1:1).slice(1);
+                        const trans = Array.from(sorts).map((next)=>`${word} ${next}`);
+                        const remap = Array.from(sorts).reduce(loops.bind(null, index+1), []).map((next)=>`${word} ${next}`);
+                        cases.push(word, ...trans, ...remap);
+                        return cases.sort().filter((v, i, a)=>a.indexOf(v) == i);
+                    }).bind(null, 0), []);
+                    item.titleWithInspectMessageCases = item.titleWithInspectMessageCases.filter(v=>!!v);
+                }
+                {
+                    voice(`키워드 분석하는 중...`);
+                    item.titleWithInspectMessageScore = (await NX_items(item.titleWithInspectMessage, 1, 'view') || []).find(x=>x.blogId == blogId && x.logNo == logNo);
+                    item.titleWithInspectMessageDetail = await Promise.map(NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
+                        if(!item.query) return;
+                        voice(`키워드 분석하는 중... ${item.query}`);
+                        item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
+                        item.search = await cache_keyword(item.query);
+                        return item;
+                    }, { concurrency: 3 });
+                    item.titleWithInspectMessageDetail = item.titleWithInspectMessageDetail.filter(v=>!!v);
+                }
+                {
+                    voice(`키워드 분석하는 중...`);
+                    item.statsReferrerTotalKeywords = item.statsReferrerTotal.map(({ stats })=>stats.map(({ detail }) => (detail?detail.refererDetail:[]).map(({searchQuery})=>searchQuery)).flat()).flat().filter((o,i,a)=>o&&a.indexOf(o)==i);
+                    item.statsReferrerTotalKeywordsDetail = await Promise.map(NR_termsAll(...item.statsReferrerTotalKeywords), async (item) => {
+                        if(!item.query) return;
+                        voice(`키워드 분석하는 중... ${item.query}`);
+                        item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
+                        item.search = await cache_keyword(item.query);
+                        return item;
+                    }, { concurrency: 3 });
+                    item.statsReferrerTotalKeywordsDetail = item.statsReferrerTotalKeywordsDetail.filter(v=>!!v);
+                }
+                {
+                    item.ownedKeywords = [...item.titleWithInspectMessageDetail, ...item.statsReferrerTotalKeywordsDetail].filter(o=>o.myown);
+                }
+                return append(item, 'logNo');
+            }, { concurrency: 5 })
+            return next('logNo', 'desc');
+        });
+        voice(`블로그 진단 데이터 수집이 완료되었습니다.`);
+        // Download*/
+        await localforage.setItem(`NX_DATA`, (root.timestamp = Date.now(), root));
+        return download(root);
     }
     async function main() {
         if(main.loading) {
