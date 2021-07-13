@@ -570,7 +570,6 @@ GM_App(async function main() {
                     item.titleWithInspectMessageCases = item.titleWithInspectMessageCases.filter(v=>!!v);
                 }
                 {
-                    voice(`키워드 분석하는 중...`);
                     item.titleWithInspectMessageScore = (await NX_items(item.titleWithInspectMessage, 1, 'view') || []).find(x=>x.blogId == blogId && x.logNo == logNo);
                     item.titleWithInspectMessageDetail = await Promise.map(NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
                         if(!item.query) return;
@@ -582,7 +581,6 @@ GM_App(async function main() {
                     item.titleWithInspectMessageDetail = item.titleWithInspectMessageDetail.filter(v=>!!v);
                 }
                 {
-                    voice(`키워드 분석하는 중...`);
                     item.statsReferrerTotalKeywords = item.statsReferrerTotal.map(({ stats })=>stats.map(({ detail }) => (detail?detail.refererDetail:[]).map(({searchQuery})=>searchQuery)).flat()).flat().filter((o,i,a)=>o&&a.indexOf(o)==i);
                     item.statsReferrerTotalKeywordsDetail = await Promise.map(NR_termsAll(...item.statsReferrerTotalKeywords), async (item) => {
                         if(!item.query) return;
