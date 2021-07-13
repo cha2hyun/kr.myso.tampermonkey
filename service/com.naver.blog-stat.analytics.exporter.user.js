@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -466,7 +466,7 @@ GM_App(async function main() {
         voice(`최근 3개월 간의 블로그 통계를 분석 중입니다...`);
         const BlogStat = await cache_map_array(root, 'BlogStat', async (append, next, store) => {
             const range = dates.reduce((r,o,i)=>(i % 7 == 0 && r.push(o), r), []);
-            await Promise.map(range, async (date) => {
+            await Promise.mapSeries(range, async (date) => {
                 const item = { date };
                 voice(`${date} 방문분석 지표 가져오는 중... (조회수)`);
                 item.visit = Object.assign(item.visit || {}, await NB_blogStat['방문분석']['조회수'](BlogInfo.blogId, date, 'WEEK'));
@@ -493,7 +493,7 @@ GM_App(async function main() {
                 voice(`${date} 분석 지표 가져오는 중... (이웃증감수)`);
                 item.rels = Object.assign(item.rels || {}, await NB_blogStat['사용자분석']['이웃증감수'](BlogInfo.blogId, date, 'WEEK'));
                 return append(item, 'date');
-            }, { concurrency: 5 });
+            });
             return next('date', 'desc');
         });
         // BlogPostListItems
@@ -513,7 +513,7 @@ GM_App(async function main() {
         // BlogPostListStats
         voice(`최근 3개월 이내에 등록된 게시글을 분석 중...`);
         const BlogPostListStats = await cache_map_array(root, 'BlogPostListStats', async (append, next, store)=> {
-            await Promise.map(BlogPostListItems, async (item) => {
+            await Promise.mapSeries(BlogPostListItems, async (item) => {
                 let { blogId, logNo } = item;
                 voice(`${blogId}/${logNo} 분석 중...`);
                 {
@@ -544,13 +544,13 @@ GM_App(async function main() {
                 }
                 voice(`${blogId}/${logNo} 분석 완료.`);
                 return append(item, 'logNo');
-            }, { concurrency: 5 })
+            });
             return next('logNo', 'desc');
         });
         // BlogPostStat
         voice(`최근 3개월 이내에 유입된 키워드를 분석 중...`);
         const BlogPostList = await cache_map_array(root, 'BlogPostList', async (append, next, store)=>{
-            await Promise.map(BlogPostListStats, async (item) => {
+            await Promise.mapSeries(BlogPostListStats, async (item) => {
                 let { blogId, logNo } = item, suffix = `${blogId}_${logNo}`;
                 voice(`${blogId}/${logNo} 분석 중...`);
                 {
@@ -578,7 +578,7 @@ GM_App(async function main() {
                         item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
                         item.search = await cache_keyword(item.query);
                         return item;
-                    }, { concurrency: 3 });
+                    }, { concurrency: 5 });
                     item.titleWithInspectMessageDetail = item.titleWithInspectMessageDetail.filter(v=>!!v);
                 }
                 {
@@ -590,14 +590,14 @@ GM_App(async function main() {
                         item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
                         item.search = await cache_keyword(item.query);
                         return item;
-                    }, { concurrency: 3 });
+                    }, { concurrency: 5 });
                     item.statsReferrerTotalKeywordsDetail = item.statsReferrerTotalKeywordsDetail.filter(v=>!!v);
                 }
                 {
                     item.ownedKeywords = [...item.titleWithInspectMessageDetail, ...item.statsReferrerTotalKeywordsDetail].filter(o=>o.myown);
                 }
                 return append(item, 'logNo');
-            }, { concurrency: 5 })
+            })
             return next('logNo', 'desc');
         });
         voice(`블로그 진단 데이터 수집이 완료되었습니다.`);
