@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.7
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -554,7 +554,7 @@ GM_App(async function main() {
                 let { blogId, logNo } = item, suffix = `${blogId}_${logNo}`;
                 voice(`${blogId}/${logNo} 분석 중...`);
                 {
-                    voice(`${blogId}/${logNo} 예상 키워드 분석 중...`);
+                    voice(`${blogId}/${logNo} 키워드 추출 중...`);
                     item.titleWithInspectMessageTerms = await NX_termsParagraph(item.titleWithInspectMessage);
                     item.titleWithInspectMessageTerms = item.titleWithInspectMessageTerms.filter(v=>!!v);
                     item.titleWithInspectMessageUniqs = item.titleWithInspectMessageTerms.filter((o,i,a)=>a.indexOf(o)==i);
@@ -570,10 +570,11 @@ GM_App(async function main() {
                     item.titleWithInspectMessageCases = item.titleWithInspectMessageCases.filter(v=>!!v);
                 }
                 {
+                    voice(`${blogId}/${logNo} 예상 키워드 분석 중...`);
                     item.titleWithInspectMessageScore = (await NX_items(item.titleWithInspectMessage, 1, 'view') || []).find(x=>x.blogId == blogId && x.logNo == logNo);
                     item.titleWithInspectMessageDetail = await Promise.map(NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
                         if(!item.query) return;
-                        voice(`${blogId}/${logNo} 키워드 분석하는 중... ${item.query}`);
+                        voice(`${blogId}/${logNo} 예상 키워드 분석하는 중... ${item.query}`);
                         item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
                         item.search = await cache_keyword(item.query);
                         return item;
@@ -581,10 +582,11 @@ GM_App(async function main() {
                     item.titleWithInspectMessageDetail = item.titleWithInspectMessageDetail.filter(v=>!!v);
                 }
                 {
+                    voice(`${blogId}/${logNo} 유입 키워드 분석 중...`);
                     item.statsReferrerTotalKeywords = item.statsReferrerTotal.map(({ stats })=>stats.map(({ detail }) => (detail?detail.refererDetail:[]).map(({searchQuery})=>searchQuery)).flat()).flat().filter((o,i,a)=>o&&a.indexOf(o)==i);
                     item.statsReferrerTotalKeywordsDetail = await Promise.map(NR_termsAll(...item.statsReferrerTotalKeywords), async (item) => {
                         if(!item.query) return;
-                        voice(`${blogId}/${logNo} 키워드 분석하는 중... ${item.query}`);
+                        voice(`${blogId}/${logNo} 유입 키워드 분석하는 중... ${item.query}`);
                         item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
                         item.search = await cache_keyword(item.query);
                         return item;
