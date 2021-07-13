@@ -493,7 +493,7 @@ GM_App(async function main() {
                 voice(`${date} 분석 지표 가져오는 중... (이웃증감수)`);
                 item.rels = Object.assign(item.rels || {}, await NB_blogStat['사용자분석']['이웃증감수'](BlogInfo.blogId, date, 'WEEK'));
                 return append(item, 'date');
-            }, { concurrency: 10 });
+            }, { concurrency: 5 });
             return next('date', 'desc');
         });
         // BlogPostListItems
@@ -544,7 +544,7 @@ GM_App(async function main() {
                 }
                 voice(`${blogId}/${logNo} 분석 완료.`);
                 return append(item, 'logNo');
-            }, { concurrency: 10 })
+            }, { concurrency: 5 })
             return next('logNo', 'desc');
         });
         // BlogPostStat
