@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -85,10 +85,20 @@ GM_App(async function main() {
     // Toast
     const TOAST_TYPES = ['log', 'info', 'warn', 'error'];
     function voice(text) {
+        if(voice.error) throw new Error(voice.error);
+        voice.timer = clearTimeout(voice.timer);
+        voice.timer = setTimeout(()=>voice.error = '작업 시간을 초과하였습니다. 잠시 후 다시 시도해주십시오.', 1000 * 60 * 5);
         const timestamp = noti.dataset.timestamp = parseInt(noti.dataset.timestamp || Date.now());
+        const countdown = {};
+        countdown.t = Date.now() - timestamp;
+        countdown.d = `00${Math.floor((countdown.t / (1000 * 60 * 60 * 24)))}`;
+        countdown.h = `00${Math.floor((countdown.t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))}`;
+        countdown.m = `00${Math.floor((countdown.t % (1000 * 60 * 60)) / (1000 * 60))}`;
+        countdown.s = `00${Math.floor((countdown.t % (1000 * 60)) / (1000))}`;
+        countdown.i = `00${Math.floor((countdown.t % (1000)))}`;
         noti.innerHTML = `
         <div class="alt__analytics_body">
-          <small>${moment(timestamp).fromNow()}</small>
+          <small>${countdown.d.substr(-2)}:${countdown.h.substr(-2)}:${countdown.m.substr(-2)}:${countdown.s.substr(-2)}.${countdown.i.substr(-3)}</small>
           <h2>블로그 진단 키트가 통계를 수집중입니다...</h2>
           <div class="alt__analytics_message">
            <p>${text}</p>
