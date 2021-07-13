@@ -572,25 +572,25 @@ GM_App(async function main() {
                 {
                     voice(`${blogId}/${logNo} 예상 키워드 분석 중...`);
                     item.titleWithInspectMessageScore = (await NX_items(item.titleWithInspectMessage, 1, 'view') || []).find(x=>x.blogId == blogId && x.logNo == logNo);
-                    item.titleWithInspectMessageDetail = await Promise.map(NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
+                    item.titleWithInspectMessageDetail = await Promise.map(await NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
                         if(!item.query) return;
                         voice(`${blogId}/${logNo} 예상 키워드 분석하는 중... ${item.query}`);
                         item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
                         item.search = await cache_keyword(item.query);
                         return item;
-                    }, { concurrency: 5 });
+                    }, { concurrency: 1 });
                     item.titleWithInspectMessageDetail = item.titleWithInspectMessageDetail.filter(v=>!!v);
                 }
                 {
                     voice(`${blogId}/${logNo} 유입 키워드 분석 중...`);
                     item.statsReferrerTotalKeywords = item.statsReferrerTotal.map(({ stats })=>stats.map(({ detail }) => (detail?detail.refererDetail:[]).map(({searchQuery})=>searchQuery)).flat()).flat().filter((o,i,a)=>o&&a.indexOf(o)==i);
-                    item.statsReferrerTotalKeywordsDetail = await Promise.map(NR_termsAll(...item.statsReferrerTotalKeywords), async (item) => {
+                    item.statsReferrerTotalKeywordsDetail = await Promise.map(await NR_termsAll(...item.statsReferrerTotalKeywords), async (item) => {
                         if(!item.query) return;
                         voice(`${blogId}/${logNo} 유입 키워드 분석하는 중... ${item.query}`);
                         item.myown = (await NX_items(item.query, 1, 'view')).find(x=>x.blogId == blogId && x.logNo == logNo);
                         item.search = await cache_keyword(item.query);
                         return item;
-                    }, { concurrency: 5 });
+                    }, { concurrency: 1 });
                     item.statsReferrerTotalKeywordsDetail = item.statsReferrerTotalKeywordsDetail.filter(v=>!!v);
                 }
                 {
