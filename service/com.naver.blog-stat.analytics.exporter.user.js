@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -87,7 +87,7 @@ GM_App(async function main() {
     function voice(text) {
         if(voice.error) throw new Error(voice.error);
         voice.timer = clearTimeout(voice.timer);
-        voice.timer = setTimeout(()=>alert(voice.error = '작업 시간을 초과하였습니다. 잠시 후 다시 시도해주십시오.'), 1000 * 60 * 5);
+        voice.timer = setTimeout(()=>alert(voice.error = '작업 시간을 초과하였습니다. 잠시 후 다시 시도해주십시오.'), 1000 * 60 * 30);
         const timestamp = noti.dataset.timestamp = parseInt(noti.dataset.timestamp || Date.now());
         const countdown = {};
         countdown.t = Date.now() - timestamp;
