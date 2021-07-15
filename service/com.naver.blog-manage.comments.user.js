@@ -31,118 +31,118 @@
 // @author myso
 // ==/OpenUserJS==
 GM_App(async function main() {
-  moment.tz.setDefault("Asia/Seoul");
-  GM_donation('.u_ni_stats_detail_wrap');
-  const tmpl = Handlebars.compile(`
-  <!DOCTYPE HTML>
-  <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-usVBAd66/NpVNfBge19gws2j6JZinnca12rAe2l+d+QkLU9fiG02O1X8Q6hepIpr/EYKZvKx/I9WsnujJuOmBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <style>.loading { pointer-events: none; opacity: 0.5; }</style>
-      <title>네이버 블로그 댓글수 순위 어드밴스드</title>
-    </head>
-    <body>
-      <script>
-        function form_update(form) {
-          const { sdate, edate } = form;
-          window.opener.postMessage({ action: 'kr.myso.tampermonkey.com.naver.blog.manage.comments.update', sdate: sdate.value, edate: edate.value }, '*');
-        }
-      </script>
-      <form onsubmit="form_update(this); return false;">
-        <div class="input-group mb-3">
-          <input type="date" class="form-control" name="sdate" value="{{{sdate}}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-search">
-          <input type="date" class="form-control" name="edate" value="{{{edate}}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-search">
-          <button class="btn btn-outline-secondary" type="submit" id="button-search">검색</button>
-        </div>
-      </form>
-      {{#each items}}
-      <div class="border-bottom">
-        <table class="table table-striped mb-2">
-          <thead>
-            <tr>
-              <th>게시물 제목</th>
-              <th>댓글수</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><a href="{{{uri}}}" rel="noreferrer" target="_blank">{{title}}</a></td>
-              <td>{{comments.length}}건</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="d-grid gap-2 mb-2">
-          <button class="btn btn-sm btn-primary" type="button" onclick="this.nextElementSibling.classList.toggle('d-none')">댓글 펼치기/접기</button>
-          <table class="table table-striped d-none">
+    moment.tz.setDefault("Asia/Seoul");
+    GM_donation('.u_ni_stats_detail_wrap');
+    const tmpl = Handlebars.compile(`
+    <!DOCTYPE HTML>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-usVBAd66/NpVNfBge19gws2j6JZinnca12rAe2l+d+QkLU9fiG02O1X8Q6hepIpr/EYKZvKx/I9WsnujJuOmBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>.loading { pointer-events: none; opacity: 0.5; }</style>
+        <title>네이버 블로그 댓글수 순위 어드밴스드</title>
+      </head>
+      <body>
+        <script>
+          function form_update(form) {
+            const { sdate, edate } = form;
+            window.opener.postMessage({ action: 'kr.myso.tampermonkey.com.naver.blog.manage.comments.update', sdate: sdate.value, edate: edate.value }, '*');
+          }
+        </script>
+        <form onsubmit="form_update(this); return false;">
+          <div class="input-group mb-3">
+            <input type="date" class="form-control" name="sdate" value="{{{sdate}}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-search">
+            <input type="date" class="form-control" name="edate" value="{{{edate}}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-search">
+            <button class="btn btn-outline-secondary" type="submit" id="button-search">검색</button>
+          </div>
+        </form>
+        {{#each items}}
+        <div class="border-bottom">
+          <table class="table table-striped mb-2">
             <thead>
-              <th>작성자</th>
-              <th>작성시간</th>
-              <th>수정시간</th>
-              <th>내용</th>
+              <tr>
+                <th>게시물 제목</th>
+                <th>댓글수</th>
+              </tr>
             </thead>
             <tbody>
-              {{#each comments}}
               <tr>
-                <td><a href="https://blog.naver.com/{{{profileUserId}}}" rel="noreferrer" target="_blank">{{{userName}}} ({{profileUserId}})</a></td>
-                <td>{{regTime}}</td>
-                <td>{{modTime}}</td>
-                <td>{{{contents}}}</td>
+                <td><a href="{{{uri}}}" rel="noreferrer" target="_blank">{{title}}</a></td>
+                <td>{{comments.length}}건</td>
               </tr>
-              {{/each}}
             </tbody>
           </table>
+          <div class="d-grid gap-2 mb-2">
+            <button class="btn btn-sm btn-primary" type="button" onclick="this.nextElementSibling.classList.toggle('d-none')">댓글 펼치기/접기</button>
+            <table class="table table-striped d-none">
+              <thead>
+                <th>작성자</th>
+                <th>작성시간</th>
+                <th>수정시간</th>
+                <th>내용</th>
+              </thead>
+              <tbody>
+                {{#each comments}}
+                <tr>
+                  <td><a href="https://blog.naver.com/{{{profileUserId}}}" rel="noreferrer" target="_blank">{{{userName}}} ({{profileUserId}})</a></td>
+                  <td>{{regTime}}</td>
+                  <td>{{modTime}}</td>
+                  <td>{{{contents}}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+          <div class="d-grid gap-2 mb-2">
+            <button class="btn btn-sm btn-primary" type="button" onclick="this.nextElementSibling.classList.toggle('d-none')">통계 펼치기/접기</button>
+            <table class="table table-striped d-none">
+              <thead>
+                <th>날짜</th>
+                <th>순위</th>
+                <th>댓글수</th>
+              </thead>
+              <tbody>
+                {{#each stats}}
+                <tr>
+                  <td>{{date}}</td>
+                  <td>{{rank}}</td>
+                  <td>{{{event}}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="d-grid gap-2 mb-2">
-          <button class="btn btn-sm btn-primary" type="button" onclick="this.nextElementSibling.classList.toggle('d-none')">통계 펼치기/접기</button>
-          <table class="table table-striped d-none">
-            <thead>
-              <th>날짜</th>
-              <th>순위</th>
-              <th>댓글수</th>
-            </thead>
-            <tbody>
-              {{#each stats}}
-              <tr>
-                <td>{{date}}</td>
-                <td>{{rank}}</td>
-                <td>{{{event}}}</td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      {{/each}}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js" integrity="sha512-72WD92hLs7T5FAXn3vkNZflWG6pglUDDpm87TeQmfSg8KnrymL2G30R7as4FmTwhgu9H7eSzDCX3mjitSecKnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    </body>
-  </html>
-  `);
-  window.addEventListener('message', (e)=>{
-      if(e.origin !== location.origin) return;
-      const { data } = e, { action, sdate, edate } = data;
-      if(action != 'kr.myso.tampermonkey.com.naver.blog.manage.comments.update') return;
-      update(edate, sdate);
-  });
-  async function popup(data) {
-      const html = tmpl(data);
-      const blob = new Blob([html], { type: 'text/html' });
-      const blob_url = URL.createObjectURL(blob);
-      window.open(blob_url, 'kr.myso.tampermonkey.com.naver.blog.manage.comments', 'width=1024, height=960');
-  }
-  async function update(edate, sdate) {
-      sdate = moment(sdate).format('YYYY-MM-DD');
-      edate = moment(edate).format('YYYY-MM-DD');
-      const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user || !user.userId) return alert('오류: 사용자 정보를 알 수 없습니다.');
-      const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog || !blog.blogId) return alert('오류: 블로그 정보를 알 수 없습니다.');
-      const diff = moment(edate).diff(sdate, 'days') || 1;
-      const range = _.range(diff).map(i=>moment(edate).subtract(i, 'days').format('YYYY-MM-DD'));
-      const stats = await Promise.map(range, async (date)=>({ date, stat: await NB_blogStat['순위']['댓글수'](blog.blogId, date) }), { concurrency: 10 });
-      const group = _.orderBy(_.map(_.groupBy(stats.map(item=>item.stat.rankComment).flat(), 'uri'), (stats)=>({ ..._.head(stats), event: _.sumBy(stats, 'event'), stats })), 'event', 'desc');
-      const cmnts = await Promise.map(group, async (item)=>(item.comments = await NB_blogPostCommentsAll(blog.blogId, blog.blogNo, _.last(item.uri.split('/'))), item), { concurrency: 10 });
-      const items = cmnts.map(item=>(item.comments = item.comments.filter(o=>range.includes(moment(o.regTime).format('YYYY-MM-DD'))), item));
-      return popup({ sdate, edate, items });
-  }
-  await update();
-})
+        {{/each}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js" integrity="sha512-72WD92hLs7T5FAXn3vkNZflWG6pglUDDpm87TeQmfSg8KnrymL2G30R7as4FmTwhgu9H7eSzDCX3mjitSecKnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      </body>
+    </html>
+    `);
+    window.addEventListener('message', (e)=>{
+        if(e.origin !== location.origin) return;
+        const { data } = e, { action, sdate, edate } = data;
+        if(action != 'kr.myso.tampermonkey.com.naver.blog.manage.comments.update') return;
+        update(edate, sdate);
+    });
+    async function popup(data) {
+        const html = tmpl(data);
+        const blob = new Blob([html], { type: 'text/html' });
+        const blob_url = URL.createObjectURL(blob);
+        window.open(blob_url, 'kr.myso.tampermonkey.com.naver.blog.manage.comments', 'width=1024, height=960');
+    }
+    async function update(edate, sdate) {
+        sdate = moment(sdate).format('YYYY-MM-DD');
+        edate = moment(edate).format('YYYY-MM-DD');
+        const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user || !user.userId) return alert('오류: 사용자 정보를 알 수 없습니다.');
+        const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog || !blog.blogId) return alert('오류: 블로그 정보를 알 수 없습니다.');
+        const diff = moment(edate).diff(sdate, 'days') || 1;
+        const range = _.range(diff).map(i=>moment(edate).subtract(i, 'days').format('YYYY-MM-DD'));
+        const stats = await Promise.map(range, async (date)=>({ date, stat: await NB_blogStat['순위']['댓글수'](blog.blogId, date) }), { concurrency: 10 });
+        const group = _.orderBy(_.map(_.groupBy(stats.map(item=>item.stat.rankComment).flat(), 'uri'), (stats)=>({ ..._.head(stats), event: _.sumBy(stats, 'event'), stats })), 'event', 'desc');
+        const cmnts = await Promise.map(group, async (item)=>(item.comments = await NB_blogPostCommentsAll(blog.blogId, blog.blogNo, _.last(item.uri.split('/'))), item), { concurrency: 10 });
+        const items = cmnts.map(item=>(item.comments = item.comments.filter(o=>range.includes(moment(o.regTime).format('YYYY-MM-DD'))), item));
+        return popup({ sdate, edate, items });
+    }
+    await update();
+  })
