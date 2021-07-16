@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.0
+// @version      1.0.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -112,7 +112,7 @@ GM_App(async function main() {
                 const data = await Promise.props({
                     blog: await creator_advisor_visits(keyword_norm, date, 'naver_blog'),
                     post: await creator_advisor_visits(keyword_norm, date, 'naver_post'),
-                    infl: await creator_advisor_visits(keyword_norm, date, 'naver_infl'),
+                    infl: await creator_advisor_visits(keyword_norm, date, 'influencer'),
                 });
                 return { keyword, date, ...data }
             });
