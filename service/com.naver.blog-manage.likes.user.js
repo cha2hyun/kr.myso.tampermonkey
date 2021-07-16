@@ -4,7 +4,7 @@
 // @description  네이버 블로그의 공감수 순위 기능을 확장합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.9
+// @version      1.1.0
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.likes.user.js
 // @author       Won Choi
@@ -12,244 +12,137 @@
 // @match        https://blog.stat.naver.com/blog/rank/like*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/lib/naver-blog-content.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/lib/naver-blog-content-like.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.31/assets/donation.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js
 // ==/UserScript==
-
 // ==OpenUserJS==
 // @author myso
 // ==/OpenUserJS==
-async function inject_js(opt) {
-  return new Promise((resolve, reject) => {
-      var el = document.createElement('script'); el.type = 'text/javascript';
-      function resolved() {
-          el.parentNode.removeChild(el); resolve();
-      }
-      if(typeof opt === 'string') {
-          el.onload = resolved; el.src = opt;
-      }
-      if(typeof opt === 'object') {
-          el.onload = resolved; el.src = opt.src; el.integrity = opt.integrity;
-          el.setAttribute('crossorigin', 'anonymous');
-      }
-      if(typeof opt === 'function') el.textContent = `(${opt})();`;
-      if(el.src || el.textContent) {
-          el.onerror = reject;
-          document.head.prepend(el);
-      }else reject();
-      if(typeof opt === 'function') resolved();
-  });
-}
 GM_App(async function main() {
+  moment.tz.setDefault("Asia/Seoul");
   GM_donation('.u_ni_stats_detail_wrap');
-  document.addEventListener('GM_xmlhttpRequest', async (e) => {
-    const detail = await new Promise((resolve, reject) => GM_xmlhttpRequest({ ...e.detail, onerror: reject, onload: resolve, })).catch(e=>null);
-    document.dispatchEvent(new CustomEvent(`GM_xmlhttpRequest.${e.detail.uuid}`, { detail }));
-  })
-  await inject_js(() => {
-    function GM_xmlhttpRequest(detail = {}) {
-      const uuid = detail.uuid = Math.floor(Math.random() * 999999999);
-      return new Promise((resolve, reject) => {
-        function callback(e){
-          document.removeEventListener(`GM_xmlhttpRequest.${uuid}`, callback, false);
-          return e.detail ? resolve(e.detail) : reject();
+  const tmpl = Handlebars.compile(`
+  <!DOCTYPE HTML>
+  <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css" integrity="sha512-usVBAd66/NpVNfBge19gws2j6JZinnca12rAe2l+d+QkLU9fiG02O1X8Q6hepIpr/EYKZvKx/I9WsnujJuOmBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+      <style>.loading { pointer-events: none; opacity: 0.5; }</style>
+      <title>네이버 블로그 공감수 순위 어드밴스드</title>
+    </head>
+    <body>
+      <script>
+        function form_update(form) {
+          const { sdate, edate } = form;
+          window.opener.postMessage({ action: 'kr.myso.tampermonkey.com.naver.blog.manage.likes.update', sdate: sdate.value, edate: edate.value }, '*');
         }
-        document.addEventListener(`GM_xmlhttpRequest.${uuid}`, callback, false);
-        document.dispatchEvent(new CustomEvent(`GM_xmlhttpRequest`, { detail }));
-      })
-    }
-    window.GM_xmlhttpRequest = window.GM_xmlhttpRequest || GM_xmlhttpRequest;
-  })
-  await inject_js({ integrity: 'sha512-TFp7JOp8so/oHJrngLI0kn9diZrc0YDr1NrGj1YbzbvSBdGfligjYVRp1xtqlmNCPWpx4xJDhiWSGgUYvqCbBg==', src: 'https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js' });
-  await inject_js({ integrity: 'sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==', src: 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js' });
-  await inject_js({ integrity: 'sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==', src: 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js' });
-  await inject_js(() => {
-    async function rank_like(startDate, endDate) {
-      const rangeDateStart = moment(startDate).toDate();
-      const rangeDateLimit = moment(endDate || startDate).add(1, 'ms').toDate();
-      const rangeDate = _.range(rangeDateStart, rangeDateLimit, 1000 * 60 * 60 * 24).map(ts=>moment(ts).toDate());
-      return Promise.reduce(rangeDate, async (r, date) => r.concat(await rank_like_per_date(date)), []);
-    }
-    async function rank_like_per_date(startDate) {
-      const uri = new URL('https://blog.stat.naver.com/api/blog/rank/likePc?timeDimension=DATE&startDate=&exclude=');
-      uri.searchParams.set('startDate', moment(startDate).format('YYYY-MM-DD'));
-      const res = await fetch(uri).then(r=>r.json());
-      const statDataList = _.get(res, 'result.statDataList', []);
-      return statDataList.reduce((r, item) => {
-        const columnInfo = _.get(item, 'data.columnInfo', []);
-        const rows = _.get(item, 'data.rows', { rank: [] });
-        _.map(rows.rank, (rank, offset) => {
-          const values = columnInfo.map((column)=>_.chain(rows).get(column).nth(offset).value());
-          const item = _.zipObject(columnInfo, values);
-          item.createDate = moment(item.createDate, 'YYYY.MM.DD. HH.mm').toISOString(true);
-          item.date = moment(item.date, 'YYYY-MM-DD').toISOString(true);
-          r.push(item);
-        });
-        return r;
-      }, []);
-    }
-
-    window.rank_like = rank_like;
-    window.rank_like_per_date = rank_like_per_date;
-  })
-  await inject_js(() => {
-    async function likes(logNo, pageNo = 1, results = []) {
-      const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
-      
-      const ref = new URL('https://m.blog.naver.com/SympathyHistoryList.nhn?blogId=&logNo=&categoryId=POST');
-      ref.searchParams.set('blogId', blogId);
-      ref.searchParams.set('logNo', logNo);
-
-      const uri = new URL('https://m.blog.naver.com/rego/SympathyHistoryListJson.nhn?blogId=&logNo=&pageNo=&categoryId=POST');
-      uri.searchParams.set('blogId', blogId);
-      uri.searchParams.set('logNo', logNo);
-      uri.searchParams.set('pageNo', pageNo);
-
-      const resp = await GM_xmlhttpRequest({ url: uri.toString(), headers: { 'referer': ref.toString() } });
-      const res = JSON.parse(resp.responseText.replace(/^[\]\)\]\}\'\,\s\r\n]+/, ''));
-      const totalPage = _.get(res, 'result.totalPage', 1);
-      const sympathyHistoryList = _.get(res, 'result.sympathyHistoryList', []);
-      results.push(...sympathyHistoryList);
-      return (totalPage > pageNo) ? likes(logNo, pageNo + 1, results) : results;
-    }
-
-    window.likes = likes;
-  })
-  await inject_js(() => {
-    const html = `
-    <!DOCTYPE html>
-    <html ng-app="app">
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css" integrity="sha512-thoh2veB35ojlAhyYZC0eaztTAUhxLvSZlWrNtlV01njqs/UdY3421Jg7lX0Gq9SRdGVQeL8xeBp9x1IPyL1wQ==" crossorigin="anonymous" />
-        <style>.loading { pointer-events: none; opacity: 0.5; }</style>
-        <title>네이버 블로그 공감수 순위 어드밴스드</title>
-      </head>
-      <body>
-        <div ng-controller="main" class="container-fluid">
-          <div class="p-1">
-            <div class="row p-1">
-              <div class="col">
-                <div class="input-group mb-3">
-                  <input type="date" ng-model="filter.start" class="form-control" aria-label="등록일 시작">
-                  <input type="date" ng-model="filter.limit" class="form-control" aria-label="등록일 종료">
-                </div>
-              </div>
-              <div class="col-2">
-                <div class="d-grid">
-                  <button ng-click="search()" class="btn btn-block btn-warning">조회</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="p-1">
-            <table class="table table-striped" ng-class="{loading: loading}" ng-repeat="(date, rows) in articles">
-              <thead>
-                <tr>
-                  <th scope="col" colspan="6"><h4>{{ date.substr(0, 10) }}</h4></th>
-                </tr>
-                <tr>
-                  <th scope="col">순위</th>
-                  <th scope="col">제목</th>
-                  <th scope="col">공감수</th>
-                  <th scope="col">타입</th>
-                  <th scope="col">작성일</th>
-                  <th scope="col">기능</th>
-                </tr>
-              </thead>
-              <tbody ng-repeat="row in rows">
-                <tr>
-                  <td scope="col">{{ row.rank }}</td>
-                  <td>{{ row.title }}</td>
-                  <td>{{ row.event }}</td>
-                  <td>{{ row.type }}</td>
-                  <td>{{ row.createDate.substr(0, 10) }}</td>
-                  <td>
-                    <div class="d-grid">
-                      <button ng-click="likes(row)" class="btn btn-sm btn-info">목록보기</button>
-                    </div>
-                  </td>
-                </tr>
-                <tr ng-if="row.likes && row.likes.length">
-                  <td colspan="6">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th scope="col">닉네임 (아이디)</th>
-                          <th scope="col">등록일</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr ng-repeat="like in row.likes | filterLikeDate:filter.start:filter.limit">
-                          <td>
-                            <div>{{ like.userNickName }} ({{like.userId}})</div>
-                            <div><small><a target="_blank" ng-href="https://blog.naver.com/{{like.userId}}">{{like.userBlogName}}</a></small></div>
-                          </td>
-                          <td>{{ like.addDate }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      </script>
+      <form onsubmit="form_update(this); return false;">
+        <div class="input-group mb-3">
+          <input type="date" class="form-control" name="sdate" value="{{{sdate}}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-search">
+          <input type="date" class="form-control" name="edate" value="{{{edate}}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-search">
+          <button class="btn btn-outline-secondary" type="submit" id="button-search">검색</button>
         </div>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-90vH1Z83AJY9DmlWa8WkjkV79yfS2n2Oxhsi2dZbIv0nC4E6m5AbH8Nh156kkM7JePmqD6tcZsfad1ueoaovww==" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.bundle.min.js" integrity="sha512-q2vREMvON/xrz1KuOj5QKWmdvcHtM4XNbNer+Qbf4TOj+RMDnul0Fg3VmmYprdf3fnL1gZgzKhZszsp62r5Ugg==" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js" integrity="sha512-7oYXeK0OxTFxndh0erL8FsjGvrl2VMDor6fVqzlLGfwOQQqTbYsGPv4ZZ15QHfSk80doyaM0ZJdvkyDcVO7KFA==" crossorigin="anonymous"></script>
-        <script>
-          const app = angular.module('app', []);
-          app.constant('_', window._);
-          app.constant('moment', window.moment);
-          app.run(($rootScope) => {
-            $rootScope._ = window._;
-            $rootScope.moment = window.moment;
-          })
-          app.filter('filterLikeDate', () => {
-            return function (likes, start, limit) {
-              return likes.filter((like) => {
-                const addDate = (/^[\\d\\.]+$/i.test(like.addDate) ? moment(like.addDate, 'YYYY.MM.DD.') : moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 })).toDate();
-                return start <= addDate && addDate <= limit;
-              })
-            }
-          })
-          app.controller('main', ($scope) => {
-            $scope.loading = true;
-            document.addEventListener('append.start', (e)=>($scope.loading = true, $scope.$apply()), false);
-            document.addEventListener('append.finish', (e)=>($scope.loading = false, $scope.$apply()), false);
-
-            $scope.filter = $scope.filter || {};
-            $scope.filter.start = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toDate();
-            $scope.filter.limit = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).toDate();
-
-            $scope.articles = [];
-            $scope.search = async () => {
-              $scope.articles = _.groupBy(await window.opener.rank_like($scope.filter.start, $scope.filter.limit), 'date');
-              $scope.$apply();
-            }
-            $scope.likes = async (row) => {
-              row.likes = await window.opener.likes(_.last(row.uri.split('/')));
-              $scope.$apply();
-            }
-          });
-          angular.bootstrap(document, ['app']);
-        </script>
-      </body>
-    </html>
-    `;
-    const $window = window.open('about:blank', '_likes_window', 'width=960,height=720');
-    setTimeout(async ()=>{
-      $window.document.write(html);
-      setTimeout(async () => {
-        $window.document.dispatchEvent(new CustomEvent('append.start'));
-        $window.document.dispatchEvent(new CustomEvent('append.finish'));
-      }, 300);
-    }, 300);
-  })
-});
+      </form>
+      {{#each items}}
+      <div class="border-bottom">
+        <table class="table table-striped mb-2">
+          <thead>
+            <tr>
+              <th>게시물 제목</th>
+              <th class="text-end">공감수</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="{{{uri}}}" rel="noreferrer" target="_blank">{{title}}</a></td>
+              <td class="text-end">{{likes.length}}건</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-grid gap-2 mb-2">
+          <button class="btn btn-sm btn-secondary" type="button" onclick="this.nextElementSibling.classList.toggle('d-none')">공감 펼치기/접기</button>
+          <table class="table table-striped d-none">
+            <thead>
+              <th>사용자</th>
+              <th class="text-end">공감날짜</th>
+            </thead>
+            <tbody>
+              {{#each likes}}
+              <tr>
+                <td><a href="https://blog.naver.com/{{{userId}}}" rel="noreferrer" target="_blank">{{{userNickName}}} ({{userId}})</a></td>
+                <td class="text-end">{{addDate}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        <div class="d-grid gap-2 mb-2">
+          <button class="btn btn-sm btn-secondary" type="button" onclick="this.nextElementSibling.classList.toggle('d-none')">통계 펼치기/접기</button>
+          <table class="table table-striped d-none">
+            <thead>
+              <th>날짜</th>
+              <th class="text-end">순위</th>
+              <th class="text-end">공감수</th>
+            </thead>
+            <tbody>
+              {{#each stats}}
+              <tr>
+                <td>{{date}}</td>
+                <td class="text-end">{{rank}}위</td>
+                <td class="text-end">{{{event}}}건</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{/each}}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js" integrity="sha512-72WD92hLs7T5FAXn3vkNZflWG6pglUDDpm87TeQmfSg8KnrymL2G30R7as4FmTwhgu9H7eSzDCX3mjitSecKnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </body>
+  </html>
+  `);
+  window.addEventListener('message', (e)=>{
+      if(e.origin !== location.origin) return;
+      const { data } = e, { action, sdate, edate } = data;
+      if(action != 'kr.myso.tampermonkey.com.naver.blog.manage.likes.update') return;
+      update(edate, sdate);
+  });
+  function deformat(date) {
+      if(date.includes('분 전')) return moment().subtract(parseInt(date), 'minutes').format('YYYY-MM-DD');
+      if(date.includes('시간 전')) return moment().subtract(parseInt(date), 'hours').format('YYYY-MM-DD');
+      return moment(date, 'YYYY.MM.DD').format('YYYY-MM-DD');
+  }
+  async function popup(data) {
+      const html = tmpl(data);
+      const blob = new Blob([html], { type: 'text/html' });
+      const blob_url = URL.createObjectURL(blob);
+      window.open(blob_url, 'kr.myso.tampermonkey.com.naver.blog.manage.likes', 'width=1024, height=960');
+  }
+  async function update(edate, sdate) {
+      sdate = moment(sdate).format('YYYY-MM-DD');
+      edate = moment(edate).format('YYYY-MM-DD');
+      const user = await NB_blogInfo('', 'BlogUserInfo'); if(!user || !user.userId) return alert('오류: 사용자 정보를 알 수 없습니다.');
+      const blog = await NB_blogInfo(user.userId, 'BlogInfo'); if(!blog || !blog.blogId) return alert('오류: 블로그 정보를 알 수 없습니다.');
+      const diff = moment(edate).diff(sdate, 'days') || 1;
+      const range = _.range(diff).map(i=>moment(edate).subtract(i, 'days').format('YYYY-MM-DD'));
+      const stats = await Promise.map(range, async (date)=>({ date, stat: await NB_blogStat['순위']['공감수'](blog.blogId, date) }), { concurrency: 10 });
+      const group = _.orderBy(_.map(_.groupBy(stats.map(item=>item.stat.rankLike).flat(), 'uri'), (stats)=>({ ..._.head(stats), event: _.sumBy(stats, 'event'), stats })), 'event', 'desc');
+      const likes = await Promise.map(group, async (item)=>(item.likes = await NB_blogPostLikesAll(blog.blogId, _.last(item.uri.split('/'))), item), { concurrency: 10 });
+      const items = likes.map(item=>(item.likes = item.likes.map(o=>(o.addDate = deformat(o.addDate), o)).filter(o=>range.includes(moment(o.addDate).format('YYYY-MM-DD'))), item));
+      return popup({ sdate, edate, items });
+  }
+  await update();
+})
