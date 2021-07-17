@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.7
+// @version      1.0.8
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -70,10 +70,13 @@ GM_App(async function main() {
     .custom-keyword-planner .custom-basic-column[data-tooltip]:hover { outline: 3px solid red; }
     .custom-keyword-planner .custom-basic-column[data-tooltip]:hover::after { content: attr(data-tooltip); white-space: pre; padding: 1em; position: absolute; z-index: 100000; right: 50%; top: 50%; font-size: 12px; background-color: #c4dff6; border: 1px solid #333; max-width: 400px; max-height: 200px; overflow-y: auto; text-align: left; }
     .custom-keyword-planner .custom-basic-column.custom-tooltip-right[data-tooltip]:hover::after { right: auto; left: 50%; }
-    .custom-keyword-planner .custom-basic-column[data-tooltip]::before { content: ''; width: 0; height: 0; border-style: solid; border-width: 0 5px 5px 0; border-color: transparent #f00 transparent transparent; right: 0; top: 0; position: absolute; }
+    .custom-keyword-planner .custom-basic-column::before { content: ''; position: absolute; top: 0; left: 0; border-color: transparent; border-style: solid; color: #fff; font-size: 12px; text-align:center; justify-content: center; align-items: center; display: flex; }
+    .custom-keyword-planner .custom-basic-column[data-tooltip]::before { border-width: 0.25em; border-left-color: red; border-top-color: red; }
     .custom-keyword-planner .custom-basic-column[data-tooltip=""]::before { display: none !important; }
     .custom-keyword-planner .custom-basic-column[data-tooltip=""]:hover { outline: 0; }
     .custom-keyword-planner .custom-basic-column[data-tooltip=""]:hover::after { display: none !important; }
+    .custom-keyword-planner .custom-basic-column[data-warning="true"]::before { content: ''; border-width: 0.25em; border-left-color: red; border-top-color: red; width: 100%; height: 100%; background-color:rgba(255,0,0,0.2); dipslay: block !important; }
+    .custom-keyword-planner .custom-basic-column[data-warning="true"][data-tooltip]:hover::after { color:#fff; background-color: #fd5c63; content: '* 위험! 비정상수치가 발견되었습니다.\\A* 검색유입 트래픽 조작이 의심되는 키워드입니다.\\A* 네이버 데이터랩 검색어 트렌드 추가 검증이 필요합니다.\\A------------\\A\\A' attr(data-tooltip); }
     .custom-keyword-planner .col-keyword-query { max-width: 100% !important; flex: 0 0 100% !important; }
     .custom-keyword-planner .col-keyword-select { display: none !important; }
     .custom-keyword-planner .custom-table thead tr:nth-child(1) th:nth-child(1) > *,
@@ -81,8 +84,9 @@ GM_App(async function main() {
     .custom-keyword-planner .table-holder { overflow-y: visible !important; }
     `);
     // --------------------
+    function valid_percent(percent) { return percent >= 0 && percent <= 100; }
     function hsl_col_perc(percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsl(${c}, 100%, 50%)`; }
-    function hsla_col_perc(alpha, percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsla(${c}, 100%, 50%, ${alpha})`; }
+    function hsla_col_perc(alpha, percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsla(${c}, 100%, 50%, ${Math.max(0, Math.min(1, alpha * (valid_percent(percent) ? 1 : 2)))})`; }
     function format_number(number) { return typeof number === 'number' ? number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ) : number; }
     // --------------------
     const wrap = document.querySelector('elena-tool-wrap'); if(!wrap) return;
@@ -213,6 +217,9 @@ GM_App(async function main() {
                 keyword_visit_blog_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_blog_per, 0, 128);
                 keyword_visit_post_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_post_per, 0, 128);
                 keyword_visit_infl_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_infl_per, 0, 128);
+                keyword_visit_blog_col.dataset.warning = !valid_percent(keyword_visit_blog_per);
+                keyword_visit_post_col.dataset.warning = !valid_percent(keyword_visit_post_per);
+                keyword_visit_infl_col.dataset.warning = !valid_percent(keyword_visit_infl_per);
                 keyword_visit_blog_col.dataset.tooltip = keyword_visit_blog_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
                 keyword_visit_post_col.dataset.tooltip = keyword_visit_post_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
                 keyword_visit_infl_col.dataset.tooltip = keyword_visit_infl_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
@@ -228,7 +235,7 @@ GM_App(async function main() {
                 const keyword_write_blog_msg = `<span>${format_number(data.blog_count_1w)}</span>`;
                 const keyword_write_post_msg = `<span>${format_number(data.post_count_1w)}</span>`;
                 const keyword_write_cafe_msg = `<span>${format_number(data.cafe_count_1w)}</span>`;
-                const keyword_write_item_msg = `<span style="text-align:left"><small>${(100 - keyword_write_item_per).toFixed(2)}%</small></span><span>${format_number(data.view_count_1w)}</span>`;
+                const keyword_write_item_msg = `<span style="text-align:left"><small>${Math.max(0, 100 - keyword_write_item_per).toFixed(2)}%</small></span><span>${format_number(data.view_count_1w)}</span>`;
                 const keyword_write_blog_col = tbody_append(row, 'col-view-writes-nblog', keyword_write_blog_msg);
                 const keyword_write_post_col = tbody_append(row, 'col-view-writes-npost', keyword_write_post_msg);
                 const keyword_write_cafe_col = tbody_append(row, 'col-view-writes-ncafe', keyword_write_cafe_msg);
@@ -267,6 +274,9 @@ GM_App(async function main() {
                 ranking_nblog_col.style.backgroundColor = hsla_col_perc(0.2, ranking_nblog_per, 0, 128);
                 ranking_npost_col.style.backgroundColor = hsla_col_perc(0.2, ranking_npost_per, 0, 128);
                 ranking_ninfl_col.style.backgroundColor = hsla_col_perc(0.2, ranking_ninfl_per, 0, 128);
+                ranking_nblog_col.dataset.warning = !valid_percent(ranking_nblog_per);
+                ranking_npost_col.dataset.warning = !valid_percent(ranking_npost_per);
+                ranking_nblog_col.dataset.warning = !valid_percent(ranking_ninfl_per);
                 if(ranking_nblog.rank) ranking_nblog_col.dataset.tooltip = `채널명: ${ranking_nblog.channelName}\n글제목: ${ranking_nblog.titleWithInspectMessage}\n글주소: ${ranking_nblog.uri}\n전문성: ${ranking_nblog.crScoreA}\n신뢰성: ${ranking_nblog.crScoreB}\n관련성: ${ranking_nblog.crScoreC}`;
                 if(ranking_npost.rank) ranking_npost_col.dataset.tooltip = `채널명: ${ranking_npost.channelName}\n글제목: ${ranking_npost.titleWithInspectMessage}\n글주소: ${ranking_npost.uri}`;
                 if(ranking_ninfl.rank) ranking_ninfl_col.dataset.tooltip = `채널명: ${ranking_ninfl.channelName}\n글제목: ${ranking_ninfl.titleWithInspectMessage}\n글주소: ${ranking_ninfl.uri}`;
