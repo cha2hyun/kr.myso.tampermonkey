@@ -201,7 +201,7 @@ GM_App(async function main() {
                 if(terms.theme && terms.theme.main) view.push(terms.theme.main.name);
                 if(terms.theme && terms.theme.sub)  view.push(...terms.theme.sub.map(o=>o.name));
                 const keyword_subject_prod_col = tbody_append(row, 'col-view-subject-prod', `<span>${prod.join(', ')}</span>`); keyword_subject_prod_col.dataset.tooltip = prod.join('\n');
-                const keyword_subject_view_col = tbody_append(row, 'col-view-subject-view', `<span>${view.join(', ')}</span>`); keyword_subject_view_col.dataset.tooltip = view.join('\n');
+                const keyword_subject_view_col = tbody_append(row, 'col-view-subject-view', `<span>${view.join(', ')}</span>`); keyword_subject_prod_col.dataset.tooltip = view.join('\n');
             }
             await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject()]);
         }, { concurrency: 5 });
