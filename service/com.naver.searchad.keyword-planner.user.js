@@ -133,7 +133,12 @@ GM_App(async function main() {
             if(!keyword || keyword == keyword_last) { return; } else { row.dataset.lastRowId = keyword; }
             async function viewRelKeywords(){
                 const el = row.querySelector('.elenaColumn-relKeyword'); el.classList.add('custom-basic-column', 'custom-tooltip-right');
-                const kd = await NA_keywordRelations(keyword); el.dataset.tooltip = kd.join(', ');
+                const msgs = [];
+                const auto = await NA_keywordAutocomplete(keyword);
+                const rels = await NA_keywordRelations(keyword);
+                if(auto.length) msgs.push(`[자동] ${auto.join(', ')}`);
+                if(rels.length) msgs.push(`[연관] ${rels.join(', ')}`);
+                el.dataset.tooltip = msgs.join('\n');
             }
             async function viewVisitsWeek(){
                 const keyword_qc_p = parseInt(row.querySelector('.elenaColumn-monthlyPcQcCnt').textContent.replace(/[^\d]+/g, ''));
