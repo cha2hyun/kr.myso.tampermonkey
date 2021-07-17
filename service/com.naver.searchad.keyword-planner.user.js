@@ -48,7 +48,7 @@ GM_App(async function main() {
     .custom-keyword-planner .custom-basic-column-item { display: flex; flex-direction: row; }
     .custom-keyword-planner .custom-basic-column-item > * { flex-grow: 1; }
     .custom-keyword-planner .custom-basic-column[data-tooltip]:hover { outline: 3px solid red; }
-    .custom-keyword-planner .custom-basic-column[data-tooltip]:hover::after { content: attr(data-tooltip); white-space: pre; padding: 1rem; position: absolute; z-index: 100000; right: 50%; top: 50%; font-size: 11px; background-color: #c4dff6; border: 1px solid #333; min-width: 480px; max-width: 720px; max-height: 200px; overflow-y: auto; text-align: left; }
+    .custom-keyword-planner .custom-basic-column[data-tooltip]:hover::after { content: attr(data-tooltip); white-space: pre; padding: 1rem; position: absolute; z-index: 100000; right: 50%; top: 50%; font-size: 11px; background-color: #c4dff6; border: 1px solid #333; max-width: 720px; max-height: 200px; overflow-y: auto; text-align: left; }
     .custom-keyword-planner .custom-basic-column.custom-tooltip-right[data-tooltip]:hover::after { right: auto; left: 50%; }
     .custom-keyword-planner .custom-basic-column[data-tooltip]::before { content: ''; width: 0; height: 0; border-style: solid; border-width: 0 5px 5px 0; border-color: transparent #f00 transparent transparent; right: 0; top: 0; position: absolute; }
     .custom-keyword-planner .custom-basic-column[data-tooltip=""]::before { display: none !important; }
