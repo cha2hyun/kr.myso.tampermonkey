@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.8
+// @version      1.0.9
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -132,7 +132,7 @@ GM_App(async function main() {
         const thead_view_writes_nblog = thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
         const thead_view_writes_npost = thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
         const thead_view_writes_ncafe = thead_append(thead2, 'col-view-writes-ncafe', '<span>카페</span>');
-        const thead_view_writes_ratio = thead_append(thead2, 'col-view-writes-ratio', '<span>포화도</span>');
+        const thead_view_writes_ratio = thead_append(thead2, 'col-view-writes-ratio', '<span>경쟁률</span>');
         const thead_view_subject = thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
         const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산</span>');
         const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비</span>');
@@ -144,6 +144,7 @@ GM_App(async function main() {
         thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         thead_view_clicks_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_writes_ratio.dataset.tooltip = '생산된 글이 VIEW탭 상위 5위안에 포함되기 위한 경쟁률입니다.\n- 배경색상: VIEW탭 등록 난이도 (녹색: 쉬움, 적색: 어려움)';
         thead_view_ranking.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
         thead_view_ranking_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         thead_view_ranking_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
@@ -231,11 +232,12 @@ GM_App(async function main() {
                     post_count_1w: NX_count(keyword_norm, 'post', 'normal', { term: 'w' }),
                     cafe_count_1w: NX_count(keyword_norm, 'article', 'normal', { prmore: 1, nso: 'so:r,p:1w' }),
                 });
-                const keyword_write_item_per = (data.view_count_1w / (data.blog_count_1w + data.post_count_1w + data.cafe_count_1w)) * 100;
+                const keyword_write_item_all = data.blog_count_1w + data.post_count_1w + data.cafe_count_1w;
+                const keyword_write_item_per = (data.view_count_1w / keyword_write_item_all) * 100;
                 const keyword_write_blog_msg = `<span>${format_number(data.blog_count_1w)}</span>`;
                 const keyword_write_post_msg = `<span>${format_number(data.post_count_1w)}</span>`;
                 const keyword_write_cafe_msg = `<span>${format_number(data.cafe_count_1w)}</span>`;
-                const keyword_write_item_msg = `<span style="text-align:left"><small>${Math.max(0, 100 - keyword_write_item_per).toFixed(2)}%</small></span><span>${format_number(data.view_count_1w)}</span>`;
+                const keyword_write_item_msg = `<span>${Math.max(1, Math.ceil(keyword_write_item_all / 5)).toFixed(0)}:1</span>`;
                 const keyword_write_blog_col = tbody_append(row, 'col-view-writes-nblog', keyword_write_blog_msg);
                 const keyword_write_post_col = tbody_append(row, 'col-view-writes-npost', keyword_write_post_msg);
                 const keyword_write_cafe_col = tbody_append(row, 'col-view-writes-ncafe', keyword_write_cafe_msg);
