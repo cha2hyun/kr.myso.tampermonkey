@@ -56,7 +56,7 @@ GM_App(async function main() {
     .custom-keyword-planner .custom-basic-column[data-tooltip=""]:hover::after { display: none !important; }
     .custom-keyword-planner .col-keyword-query { max-width: 100% !important; flex: 0 0 100% !important; }
     .custom-keyword-planner .col-keyword-select { display: none !important; }
-    .custom-keyword-planner .custom-table thead tr th:nth-child(1) > *,
+    .custom-keyword-planner .custom-table thead tr:nth-child(1) th:nth-child(1) > *,
     .custom-keyword-planner .custom-table tbody tr td:nth-child(1) > * { display: none !important; }
     .custom-keyword-planner .table-holder { overflow-y: visible !important; }
     `);
