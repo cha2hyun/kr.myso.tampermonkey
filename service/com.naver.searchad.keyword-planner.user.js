@@ -131,11 +131,12 @@ GM_App(async function main() {
         await Promise.map(tbody.reverse(), async (row, i) => {
             const keyword = row.getAttribute('row-id'), keyword_last = row.dataset.lastRowId;
             if(!keyword || keyword == keyword_last) { return; } else { row.dataset.lastRowId = keyword; }
+            const keyword_norm = await NA_keywordAutocompleteNormalize(keyword);
             async function viewRelKeywords(){
                 const el = row.querySelector('.elenaColumn-relKeyword'); el.classList.add('custom-basic-column', 'custom-tooltip-right');
                 const msgs = [];
-                const auto = await NA_keywordAutocomplete(keyword);
-                const rels = await NA_keywordRelations(keyword);
+                const auto = await NA_keywordAutocomplete(keyword_norm);
+                const rels = await NA_keywordRelations(keyword_norm);
                 if(auto.length) msgs.push(`[자동] ${auto.join(', ')}`);
                 if(rels.length) msgs.push(`[연관] ${rels.join(', ')}`);
                 el.dataset.tooltip = msgs.join('\n');
@@ -144,7 +145,6 @@ GM_App(async function main() {
                 const keyword_qc_p = parseInt(row.querySelector('.elenaColumn-monthlyPcQcCnt').textContent.replace(/[^\d]+/g, ''));
                 const keyword_qc_m = parseInt(row.querySelector('.elenaColumn-monthlyMobileQcCnt').textContent.replace(/[^\d]+/g, ''));
                 const keyword_qc = keyword_qc_p + keyword_qc_m;
-                const keyword_norm = await NA_keywordAutocompleteNormalize(keyword);
                 const keyword_visit = await Promise.map(range, async (date)=>{
                     const data = await Promise.props({
                         blog: await creator_advisor_visits(keyword_norm, date, 'naver_blog'),
@@ -183,10 +183,10 @@ GM_App(async function main() {
             }
             async function viewWritesWeek(){
                 const data = await Promise.props({
-                    view_count_1w: NX_count(keyword, 'view', 'normal', { api_type: 11, nso: 'so:r,p:1w' }),
-                    blog_count_1w: NX_count(keyword, 'blog', 'normal', { api_type: 1, nso: 'so:r,p:1w' }),
-                    post_count_1w: NX_count(keyword, 'post', 'normal', { term: 'w' }),
-                    cafe_count_1w: NX_count(keyword, 'article', 'normal', { prmore: 1, nso: 'so:r,p:1w' }),
+                    view_count_1w: NX_count(keyword_norm, 'view', 'normal', { api_type: 11, nso: 'so:r,p:1w' }),
+                    blog_count_1w: NX_count(keyword_norm, 'blog', 'normal', { api_type: 1, nso: 'so:r,p:1w' }),
+                    post_count_1w: NX_count(keyword_norm, 'post', 'normal', { term: 'w' }),
+                    cafe_count_1w: NX_count(keyword_norm, 'article', 'normal', { prmore: 1, nso: 'so:r,p:1w' }),
                 });
                 const keyword_write_item_per = Math.max(0, Math.min(100, (data.view_count_1w / (data.blog_count_1w + data.post_count_1w + data.cafe_count_1w)) * 100));
                 const keyword_write_blog_msg = `<span>${format_number(data.blog_count_1w)}</span>`;
@@ -200,7 +200,7 @@ GM_App(async function main() {
                 keyword_write_item_col.style.backgroundColor = hsla_col_perc(0.2, keyword_write_item_per, 0, 240);
             }
             async function relSubject() {
-                const terms = await NR_terms(keyword);
+                const terms = await NR_terms(keyword_norm);
                 const prod = [], view = [];
                 if(terms.r_category) prod.push(terms.r_category)
                 if(terms.theme && terms.theme.main) view.push(terms.theme.main.name);
