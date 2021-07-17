@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.9
+// @version      1.0.11
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -42,8 +42,8 @@ GM_App(async function main() {
     GM_addStyle(`
     .custom-keyword-planner {}
     .custom-keyword-planner.custom-keyword-planner-loading { pointer-events: none !important; cursor: wait !important; opacity: 0.8 !important; }
-    .custom-keyword-planner .custom-table table { table-layout: fixed; width: 100%; }
-    .custom-keyword-planner .custom-table table colgroup col:nth-child(1) { display: none; }
+    .custom-keyword-planner .custom-table { table-layout: fixed; width: 100%; position: relative; }
+    .custom-keyword-planner .custom-table thead { position: sticky; top: 110px; z-index: 1000; }
     .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(2),
     .custom-keyword-planner .custom-table tbody > tr > td:nth-child(1) { width: 300px !important; }
     .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(1),
@@ -85,8 +85,8 @@ GM_App(async function main() {
     `);
     // --------------------
     function valid_percent(percent) { return percent >= 0 && percent <= 100; }
-    function hsl_col_perc(percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsl(${c}, 100%, 50%)`; }
-    function hsla_col_perc(alpha, percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsla(${c}, 100%, 50%, ${Math.max(0, Math.min(1, alpha * (valid_percent(percent) ? 1 : 2)))})`; }
+    function hsl_col_perc(percent, start, end) { if(typeof percent !== 'number' || !percent){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsl(${c}, 100%, 50%)`; }
+    function hsla_col_perc(alpha, percent, start, end) { if(typeof percent !== 'number' || !percent){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsla(${c}, 100%, 50%, ${Math.max(0, Math.min(1, alpha * (valid_percent(percent) ? 1 : 2)))})`; }
     function format_number(number) { return typeof number === 'number' ? number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ) : number; }
     // --------------------
     const wrap = document.querySelector('elena-tool-wrap'); if(!wrap) return;
