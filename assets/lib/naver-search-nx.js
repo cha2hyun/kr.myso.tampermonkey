@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.26
+// @version       1.0.39
 
 // ==/UserScript==
 
@@ -95,10 +95,22 @@
         return $NX_info(doc);
     }
     window.NX_count = async function NX_count(keyword, where, mode, params) {
+        const where_post = ['post', 'm_post'];
         try {
-            const res = await NX_Request(keyword, 1, where, mode, params);
-            const obj = eval(`(${res.responseText})`);
-            return parseInt(String(obj.total).replace(/[^\d]+/g, ''));
+            if(where_post.includes(where)) {
+                const referer = 'https://m.post.naver.com/search/default.naver';
+                const uri = new URL('https://m.post.naver.com/search/post.naver?keyword=&sortType=createDate.dsc&range=&term=&navigationType=current');
+                uri.searchParams.set('keyword', keyword)
+                Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
+                const res = await GM_xmlhttpRequestAsync(uri, { headers: { referer } });
+                const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+                const cnt = doc.querySelector('.sorting_area .sorting_inner_wrap .txt em');
+                return cnt ? parseInt(String(cnt.textContent).replace(/[^\d]+/g, '')) : 0;
+            } else {
+                const res = await NX_Request(keyword, 1, where, mode, params);
+                const obj = eval(`(${res.responseText})`);
+                return parseInt(String(obj.total).replace(/[^\d]+/g, ''));
+            }
         }catch(e){
             console.error(e);
         }

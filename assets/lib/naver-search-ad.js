@@ -7,7 +7,7 @@
 // @description   네이버 검색 RX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.38
+// @version       1.0.40
 
 // ==/UserScript==
 
@@ -47,6 +47,15 @@
             console.error(e);
             if(errors) return Promise.delay(500).then(()=>NA_search(keyword, --errors));
         }
+    }
+    window.NA_keywordRelations = async function NA_keywordRelations(keyword) {
+        const referer = 'https://m.naver.com/';
+        const uri = new URL('https://m.search.naver.com/search.naver?sm=mtb_hty.top&where=m&query=');
+        uri.searchParams.set('query', keyword);
+        const res = await GM_xmlhttpRequestAsync(uri, { headers: { referer } });
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+        const kwd = Array.from(doc.querySelectorAll('.lst_related_srch a > .tit, .keyword .clip_wrap, .keyword > a')).map(el=>el.textContent.trim());
+        return kwd.filter((v,i,a)=>a.indexOf(v)===i);
     }
     window.NA_keywordAutocomplete = async function NA_keywordAutocomplete(keyword) {
         const referer = 'https://m.naver.com/';
