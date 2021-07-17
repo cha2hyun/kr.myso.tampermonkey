@@ -99,18 +99,18 @@ GM_App(async function main() {
         }
         const thead_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column', 'custom-basic-column-header']); }
         const tbody_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column']); }
-        thead_append(thead1, 'col-view-clicks', '<span>VIEW주간조회수</span>', { colspan: 3 });
-        thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>');
-        thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>');
-        thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>');
-        thead_append(thead1, 'col-view-writes', '<span>VIEW주간생산량</span>', { colspan: 4 });
-        thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
-        thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
-        thead_append(thead2, 'col-view-writes-ncafe', '<span>카페</span>');
-        thead_append(thead2, 'col-view-writes-ratio', '<span>콘텐츠포화도</span>');
-        thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
-        thead_append(thead2, 'col-view-subject-prod', '<span>생산선호주제</span>');
-        thead_append(thead2, 'col-view-subject-view', '<span>소비선호주제</span>');
+        const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>VIEW주간조회수</span>', { colspan: 3 });
+        const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>'); thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n인플루언서 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>'); thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n인플루언서 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>'); thead_view_clicks_ninfl.dataset.tooltip = '인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n인플루언서 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        const thead_view_writes = thead_append(thead1, 'col-view-writes', '<span>VIEW주간생산량</span>', { colspan: 4 });
+        const thead_view_writes_nblog = thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
+        const thead_view_writes_npost = thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
+        const thead_view_writes_ncafe = thead_append(thead2, 'col-view-writes-ncafe', '<span>카페</span>');
+        const thead_view_writes_ratio = thead_append(thead2, 'col-view-writes-ratio', '<span>콘텐츠포화도</span>');
+        const thead_view_subject = thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
+        const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산선호주제</span>');
+        const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비선호주제</span>');
         // reset
         await Promise.map(tbody, async (row, i) => {
             const keyword = row.getAttribute('row-id'), keyword_last = row.dataset.lastRowId;
