@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.6
+// @version      1.0.7
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -210,9 +210,9 @@ GM_App(async function main() {
                 const keyword_visit_blog_col = tbody_append(row, 'col-view-clicks-nblog', keyword_visit_blog_msg);
                 const keyword_visit_post_col = tbody_append(row, 'col-view-clicks-npost', keyword_visit_post_msg);
                 const keyword_visit_infl_col = tbody_append(row, 'col-view-clicks-ninfl', keyword_visit_infl_msg);
-                keyword_visit_blog_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_blog_per, 0, 240);
-                keyword_visit_post_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_post_per, 0, 240);
-                keyword_visit_infl_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_infl_per, 0, 240);
+                keyword_visit_blog_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_blog_per, 0, 128);
+                keyword_visit_post_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_post_per, 0, 128);
+                keyword_visit_infl_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_infl_per, 0, 128);
                 keyword_visit_blog_col.dataset.tooltip = keyword_visit_blog_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
                 keyword_visit_post_col.dataset.tooltip = keyword_visit_post_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
                 keyword_visit_infl_col.dataset.tooltip = keyword_visit_infl_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
@@ -233,7 +233,7 @@ GM_App(async function main() {
                 const keyword_write_post_col = tbody_append(row, 'col-view-writes-npost', keyword_write_post_msg);
                 const keyword_write_cafe_col = tbody_append(row, 'col-view-writes-ncafe', keyword_write_cafe_msg);
                 const keyword_write_item_col = tbody_append(row, 'col-view-writes-ratio', keyword_write_item_msg);
-                keyword_write_item_col.style.backgroundColor = hsla_col_perc(0.2, keyword_write_item_per, 0, 240);
+                keyword_write_item_col.style.backgroundColor = hsla_col_perc(0.2, keyword_write_item_per, 0, 128);
             }
             async function relSubject() {
                 const terms = await NR_terms(keyword_norm);
@@ -264,9 +264,9 @@ GM_App(async function main() {
                 const ranking_nblog_col = tbody_append(row, 'col-view-ranking-nblog', ranking_nblog_msg);
                 const ranking_npost_col = tbody_append(row, 'col-view-ranking-npost', ranking_npost_msg);
                 const ranking_ninfl_col = tbody_append(row, 'col-view-ranking-ninfl', ranking_ninfl_msg);
-                ranking_nblog_col.style.backgroundColor = hsla_col_perc(0.2, ranking_nblog_per, 0, 240);
-                ranking_npost_col.style.backgroundColor = hsla_col_perc(0.2, ranking_npost_per, 0, 240);
-                ranking_ninfl_col.style.backgroundColor = hsla_col_perc(0.2, ranking_ninfl_per, 0, 240);
+                ranking_nblog_col.style.backgroundColor = hsla_col_perc(0.2, ranking_nblog_per, 0, 128);
+                ranking_npost_col.style.backgroundColor = hsla_col_perc(0.2, ranking_npost_per, 0, 128);
+                ranking_ninfl_col.style.backgroundColor = hsla_col_perc(0.2, ranking_ninfl_per, 0, 128);
                 if(ranking_nblog.rank) ranking_nblog_col.dataset.tooltip = `채널명: ${ranking_nblog.channelName}\n글제목: ${ranking_nblog.titleWithInspectMessage}\n글주소: ${ranking_nblog.uri}\n전문성: ${ranking_nblog.crScoreA}\n신뢰성: ${ranking_nblog.crScoreB}\n관련성: ${ranking_nblog.crScoreC}`;
                 if(ranking_npost.rank) ranking_npost_col.dataset.tooltip = `채널명: ${ranking_npost.channelName}\n글제목: ${ranking_npost.titleWithInspectMessage}\n글주소: ${ranking_npost.uri}`;
                 if(ranking_ninfl.rank) ranking_ninfl_col.dataset.tooltip = `채널명: ${ranking_ninfl.channelName}\n글제목: ${ranking_ninfl.titleWithInspectMessage}\n글주소: ${ranking_ninfl.uri}`;
