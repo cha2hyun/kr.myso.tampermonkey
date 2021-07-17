@@ -115,15 +115,17 @@ GM_App(async function main() {
         await Promise.map(tbody, async (row, i) => {
             const keyword = row.getAttribute('row-id'), keyword_last = row.dataset.lastRowId;
             if(!keyword || keyword == keyword_last) { return; }
-            const keyword_visit_blog_old = tbody_append(row, 'col-view-clicks-nblog', ''); keyword_visit_blog_old.style.backgroundColor = '';
-            const keyword_visit_post_old = tbody_append(row, 'col-view-clicks-npost', ''); keyword_visit_post_old.style.backgroundColor = '';
-            const keyword_visit_infl_old = tbody_append(row, 'col-view-clicks-ninfl', ''); keyword_visit_infl_old.style.backgroundColor = '';
-            const keyword_write_blog_old = tbody_append(row, 'col-view-writes-nblog', ''); keyword_write_blog_old.style.backgroundColor = '';
-            const keyword_write_post_old = tbody_append(row, 'col-view-writes-npost', ''); keyword_write_post_old.style.backgroundColor = '';
-            const keyword_write_cafe_old = tbody_append(row, 'col-view-writes-ncafe', ''); keyword_write_cafe_old.style.backgroundColor = '';
-            const keyword_write_item_old = tbody_append(row, 'col-view-writes-ratio', ''); keyword_write_item_old.style.backgroundColor = '';
-            const keyword_subject_prod_old = tbody_append(row, 'col-view-subject-prod', ''); keyword_subject_prod_old.style.backgroundColor = '';
-            const keyword_subject_view_old = tbody_append(row, 'col-view-subject-view', ''); keyword_subject_view_old.style.backgroundColor = '';
+            function reset(row, className) { const col = tbody_append(row, className, ''); col.style.backgroundColor = ''; col.dataset.tooltip = ''; }
+            const relKeyword = row.querySelector('.elenaColumn-relKeyword'); if(relKeyword) relKeyword.dataset.tooltip = '';
+            reset(row, 'col-view-clicks-nblog');
+            reset(row, 'col-view-clicks-npost');
+            reset(row, 'col-view-clicks-ninfl');
+            reset(row, 'col-view-writes-nblog');
+            reset(row, 'col-view-writes-npost');
+            reset(row, 'col-view-writes-ncafe');
+            reset(row, 'col-view-writes-ratio');
+            reset(row, 'col-view-subject-prod');
+            reset(row, 'col-view-subject-view');
         });
         // update
         await Promise.map(tbody.reverse(), async (row, i) => {
@@ -198,8 +200,8 @@ GM_App(async function main() {
                 if(terms.r_category) prod.push(terms.r_category)
                 if(terms.theme && terms.theme.main) view.push(terms.theme.main.name);
                 if(terms.theme && terms.theme.sub)  view.push(...terms.theme.sub.map(o=>o.name));
-                const keyword_subject_prod_col = tbody_append(row, 'col-view-subject-prod', `<span>${prod.join(', ')}</span>`);
-                const keyword_subject_view_col = tbody_append(row, 'col-view-subject-view', `<span>${view.join(', ')}</span>`);
+                const keyword_subject_prod_col = tbody_append(row, 'col-view-subject-prod', `<span>${prod.join(', ')}</span>`); keyword_subject_prod_col.dataset.tooltip = prod.join('\n');
+                const keyword_subject_view_col = tbody_append(row, 'col-view-subject-view', `<span>${view.join(', ')}</span>`); keyword_subject_view_col.dataset.tooltip = view.join('\n');
             }
             await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject()]);
         }, { concurrency: 5 });
