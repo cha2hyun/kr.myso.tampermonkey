@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.3
+// @version      1.0.4
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -14,18 +14,18 @@
 // @match        *://manage.searchad.naver.com/customers/*/tool/keyword-planner?*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/polyfill/Object.fromEntries.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/polyfill/Array.prototype.flat.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/polyfill/String.prototype.matchAll.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/lib/naver-search-ad.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/lib/naver-search-rx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/lib/naver-search-nx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/lib/naver-creator-advisor.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.40/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/polyfill/Object.fromEntries.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/polyfill/Array.prototype.flat.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/polyfill/String.prototype.matchAll.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-search-ad.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-search-rx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-search-nx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-creator-advisor.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/donation.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -43,12 +43,14 @@ GM_App(async function main() {
     .custom-keyword-planner {}
     .custom-keyword-planner.custom-keyword-planner-loading { pointer-events: none !important; cursor: wait !important; opacity: 0.8 !important; }
     .custom-keyword-planner .custom-table {}
+    .custom-keyword-planner .custom-table th[data-column="relKeyword"] { width: 200px !important; }
     .custom-keyword-planner .custom-basic-column { font-size: 12px; height: 31px; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; white-space: nowrap; color: #4c4c4c; text-align: right; vertical-align: middle !important; border-bottom: 0 !important; position: relative; }
+    .custom-keyword-planner .custom-basic-column span { overflow: hidden !important; display: block !important; }
     .custom-keyword-planner .custom-basic-column-header { font-weight: 700; text-align: center; }
     .custom-keyword-planner .custom-basic-column-item { display: flex; flex-direction: row; }
-    .custom-keyword-planner .custom-basic-column-item > * { flex-grow: 1; }
+    .custom-keyword-planner .custom-basic-column-item > * { flex-grow: 1; overflow: hidden !important; display: block !important; }
     .custom-keyword-planner .custom-basic-column[data-tooltip]:hover { outline: 3px solid red; }
-    .custom-keyword-planner .custom-basic-column[data-tooltip]:hover::after { content: attr(data-tooltip); white-space: pre; padding: 1rem; position: absolute; z-index: 100000; right: 50%; top: 50%; font-size: 11px; background-color: #c4dff6; border: 1px solid #333; max-width: 720px; max-height: 200px; overflow-y: auto; text-align: left; }
+    .custom-keyword-planner .custom-basic-column[data-tooltip]:hover::after { content: attr(data-tooltip); white-space: pre; padding: 1em; position: absolute; z-index: 100000; right: 50%; top: 50%; font-size: 12px; background-color: #c4dff6; border: 1px solid #333; max-width: 720px; max-height: 200px; overflow-y: auto; text-align: left; }
     .custom-keyword-planner .custom-basic-column.custom-tooltip-right[data-tooltip]:hover::after { right: auto; left: 50%; }
     .custom-keyword-planner .custom-basic-column[data-tooltip]::before { content: ''; width: 0; height: 0; border-style: solid; border-width: 0 5px 5px 0; border-color: transparent #f00 transparent transparent; right: 0; top: 0; position: absolute; }
     .custom-keyword-planner .custom-basic-column[data-tooltip=""]::before { display: none !important; }
@@ -99,18 +101,30 @@ GM_App(async function main() {
         }
         const thead_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column', 'custom-basic-column-header']); }
         const tbody_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column']); }
-        const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>VIEW주간조회수</span>', { colspan: 3 });
-        const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>'); thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>'); thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>'); thead_view_clicks_ninfl.dataset.tooltip = '인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        const thead_view_writes = thead_append(thead1, 'col-view-writes', '<span>VIEW주간생산량</span>', { colspan: 4 });
+        const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>주간조회수</span>', { colspan: 3 });
+        const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>');
+        const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>');
+        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>');
+        const thead_view_writes = thead_append(thead1, 'col-view-writes', '<span>주간생산량</span>', { colspan: 4 });
         const thead_view_writes_nblog = thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
         const thead_view_writes_npost = thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
         const thead_view_writes_ncafe = thead_append(thead2, 'col-view-writes-ncafe', '<span>카페</span>');
-        const thead_view_writes_ratio = thead_append(thead2, 'col-view-writes-ratio', '<span>콘텐츠포화도</span>');
+        const thead_view_writes_ratio = thead_append(thead2, 'col-view-writes-ratio', '<span>포화도</span>');
         const thead_view_subject = thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
-        const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산선호주제</span>');
-        const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비선호주제</span>');
+        const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산선호</span>');
+        const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비선호</span>');
+        const thead_view_ranking = thead_append(thead1, 'col-view-ranking', '<span>통합노출순위</span>', { colspan: 3 });
+        const thead_view_ranking_nblog = thead_append(thead2, 'col-view-ranking-nblog', '<span>블로그</span>');
+        const thead_view_ranking_npost = thead_append(thead2, 'col-view-ranking-npost', '<span>포스트</span>');
+        const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플루언서</span>');
+        thead_view_clicks.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
+        thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_clicks_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_ranking.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
+        thead_view_ranking_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_ranking_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_ranking_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         // reset
         await Promise.map(tbody, async (row, i) => {
             const keyword = row.getAttribute('row-id'), keyword_last = row.dataset.lastRowId;
@@ -126,6 +140,9 @@ GM_App(async function main() {
             reset(row, 'col-view-writes-ratio');
             reset(row, 'col-view-subject-prod');
             reset(row, 'col-view-subject-view');
+            reset(row, 'col-view-ranking-nblog');
+            reset(row, 'col-view-ranking-npost');
+            reset(row, 'col-view-ranking-ninfl');
         });
         // update
         await Promise.map(tbody.reverse(), async (row, i) => {
@@ -134,11 +151,11 @@ GM_App(async function main() {
             const keyword_norm = await NA_keywordAutocompleteNormalize(keyword);
             async function viewRelKeywords(){
                 const el = row.querySelector('.elenaColumn-relKeyword'); el.classList.add('custom-basic-column', 'custom-tooltip-right');
-                const msgs = [];
+                const msgs = [`[자동교정] ${keyword_norm}`];
                 const auto = await NA_keywordAutocomplete(keyword_norm);
                 const rels = await NA_keywordRelations(keyword_norm);
-                if(auto.length) msgs.push(`[자동] ${auto.join(', ')}`);
-                if(rels.length) msgs.push(`[연관] ${rels.join(', ')}`);
+                if(auto.length) msgs.push(`[자동완성] ${auto.join(', ')}`);
+                if(rels.length) msgs.push(`[연관검색] ${rels.join(', ')}`);
                 el.dataset.tooltip = msgs.join('\n');
             }
             async function viewVisitsWeek(){
@@ -174,9 +191,9 @@ GM_App(async function main() {
                 const keyword_visit_blog_col = tbody_append(row, 'col-view-clicks-nblog', keyword_visit_blog_msg);
                 const keyword_visit_post_col = tbody_append(row, 'col-view-clicks-npost', keyword_visit_post_msg);
                 const keyword_visit_infl_col = tbody_append(row, 'col-view-clicks-ninfl', keyword_visit_infl_msg);
-                keyword_visit_blog_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_blog_per, 60, 240);
-                keyword_visit_post_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_post_per, 60, 240);
-                keyword_visit_infl_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_infl_per, 60, 240);
+                keyword_visit_blog_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_blog_per, 0, 240);
+                keyword_visit_post_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_post_per, 0, 240);
+                keyword_visit_infl_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_infl_per, 0, 240);
                 keyword_visit_blog_col.dataset.tooltip = keyword_visit_blog_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
                 keyword_visit_post_col.dataset.tooltip = keyword_visit_post_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
                 keyword_visit_infl_col.dataset.tooltip = keyword_visit_infl_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
@@ -208,7 +225,34 @@ GM_App(async function main() {
                 const keyword_subject_prod_col = tbody_append(row, 'col-view-subject-prod', `<span>${prod.join(', ')}</span>`); keyword_subject_prod_col.dataset.tooltip = prod.join('\n');
                 const keyword_subject_view_col = tbody_append(row, 'col-view-subject-view', `<span>${view.join(', ')}</span>`); keyword_subject_view_col.dataset.tooltip = view.join('\n');
             }
-            await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject()]);
+            async function viewRanking() {
+                const props = await Promise.props({
+                    view: NX_items(keyword_norm, 1, 'view'),
+                    infl: NX_items(keyword_norm, 1, 'influencer'),
+                });
+                const channel_nblog = channels.filter(o=>['naver_blog'].includes(o.service));
+                const channel_npost = channels.filter(o=>['naver_post'].includes(o.service));
+                const channel_ninfl = channels.filter(o=>['influencer'].includes(o.service));
+                const ranking_nblog = _.minBy(channel_nblog.map(o=>props.view.filter(p=>p.blogId == o.channelId)).flat(), 'rank') || { rank: 0 };
+                const ranking_npost = _.minBy(channel_npost.map(o=>props.view.filter(p=>p.memberNo == o.channelId)).flat(), 'rank') || { rank: 0 };
+                const ranking_ninfl = _.minBy(channel_ninfl.map(o=>props.infl.filter(p=>p.spaceId == o.channelId)).flat(), 'rank') || { rank: 0 };
+                const ranking_nblog_per = Math.max(0, Math.min(100, ((ranking_nblog.rank / 30) * 100)));
+                const ranking_npost_per = Math.max(0, Math.min(100, ((ranking_npost.rank / 30) * 100)));
+                const ranking_ninfl_per = Math.max(0, Math.min(100, ((ranking_ninfl.rank / 30) * 100)));
+                const ranking_nblog_msg = `<span>${ranking_nblog.rank}위</span>`;
+                const ranking_npost_msg = `<span>${ranking_npost.rank}위</span>`;
+                const ranking_ninfl_msg = `<span>${ranking_ninfl.rank}위</span>`;
+                const ranking_nblog_col = tbody_append(row, 'col-view-ranking-nblog', ranking_nblog_msg);
+                const ranking_npost_col = tbody_append(row, 'col-view-ranking-npost', ranking_npost_msg);
+                const ranking_ninfl_col = tbody_append(row, 'col-view-ranking-ninfl', ranking_ninfl_msg);
+                ranking_nblog_col.style.backgroundColor = hsla_col_perc(0.2, ranking_nblog_per, 0, 240);
+                ranking_npost_col.style.backgroundColor = hsla_col_perc(0.2, ranking_npost_per, 0, 240);
+                ranking_ninfl_col.style.backgroundColor = hsla_col_perc(0.2, ranking_ninfl_per, 0, 240);
+                if(ranking_nblog.rank) ranking_nblog_col.dataset.tooltip = `채널명: ${ranking_nblog.channelName}\n글제목: ${ranking_nblog.titleWithInspectMessage}\n글주소: ${ranking_nblog.uri}\n전문성: ${ranking_nblog.crScoreA}\n신뢰성: ${ranking_nblog.crScoreB}\n관련성: ${ranking_nblog.crScoreC}`;
+                if(ranking_npost.rank) ranking_npost_col.dataset.tooltip = `채널명: ${ranking_npost.channelName}\n글제목: ${ranking_npost.titleWithInspectMessage}\n글주소: ${ranking_npost.uri}`;
+                if(ranking_ninfl.rank) ranking_ninfl_col.dataset.tooltip = `채널명: ${ranking_ninfl.channelName}\n글제목: ${ranking_ninfl.titleWithInspectMessage}\n글주소: ${ranking_ninfl.uri}`;
+            }
+            await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject(), viewRanking()]);
         }, { concurrency: 5 });
     }
     async function redraw(mutations) {

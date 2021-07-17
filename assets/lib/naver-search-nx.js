@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.39
+// @version       1.0.41
 
 // ==/UserScript==
 
@@ -30,11 +30,12 @@
 })(window);
 // ---------------------
 (function(window){
-    async function NX_Request(keyword, start = 1, where = 'm_blog', mode = 'normal', params = {}) {
+    async function NX_Request(keyword, start = 1, where = 'blog', mode = 'normal', params = {}) {
         const endpoints = [];
         endpoints.push({ url: 'https://s.search.naver.com/p/review/search.naver', where: ['view', 'm_view'] });
         endpoints.push({ url: 'https://s.search.naver.com/p/blog/search.naver', where: ['blog', 'm_blog'] });
         endpoints.push({ url: 'https://s.search.naver.com/p/cafe/search.naver', where: ['article', 'm_article'] });
+        endpoints.push({ url: 'https://s.search.naver.com/p/influencer/api/v1/docs?area=ink_kit&display=30&gender=&generation=&is_index_title=0&major-subject=&minor-subject=&nlu_query=&query=&start=1&_callback=resolve', where: ['influencer', 'm_influencer'] })
         const endpoint = endpoints.find(o=>o.where.includes(where)) || 'https://s.search.naver.com/p/blog/search.naver';
         const ref = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=mtb_jum&query=');
         const uri = new URL(endpoint.url);
@@ -44,7 +45,16 @@
         uri.searchParams.set('query', keyword);
         ref.searchParams.set('query', keyword);
         Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
-        return GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
+        const res = await GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
+        if(uri.pathname.includes('/influencer/api')) {
+            const responseJson = await new Promise((resolve)=>eval(res.responseText)).then(o=>o.result);
+            const responseText = (responseJson && responseJson && responseJson.itemList && responseJson.itemList && responseJson.itemList.map(o=>o.html).join('')) || res.responseText;
+            return { responseJson, responseText, response: responseText };
+        } else {
+            const responseJson = ((resp) => { try { return eval(resp); } catch(e) { return resp; } })(res.responseText);
+            const responseText = res.responseText;
+            return { responseJson, responseText, response: responseText };
+        }
     }
     function $NX_info(doc) {
         const map = Array.from(doc.body.childNodes).filter(el=>el.nodeType == 8).map((nx) => Array.from(nx.nodeValue.matchAll(/^(?<k>[^\s\:]+)([\s\:]+)?(?<v>.*)$/igm)).map(o=>Object.assign({}, o.groups))).flat();
@@ -69,48 +79,57 @@
         });
     }
     function $NX_list(doc) {
-        const listview = Array.from(doc.querySelectorAll('.lst_total > li'));
+        const listview = Array.from(doc.querySelectorAll('.lst_total > li, li[data-space-id]'));
         return listview.map((listitem, offset) => {
-            const el_n = listitem.querySelector('.sub_name');
-            const el_t = listitem.querySelector('.total_tit');
-            const el_d = listitem.querySelector('.dsc_txt');
+            const el_n = listitem.querySelector('.sub_name, .user_area .name .txt');
+            const el_t = listitem.querySelector('.total_tit, .detail_box .dsc_area .name_link');
+            const el_d = listitem.querySelector('.dsc_txt, .detail_box .dsc_link .dsc');
             if(!el_n || !el_t || !el_d) return;
             const uri = new URL(el_t.href), params = Object.fromEntries(uri.searchParams.entries());
-            if(!uri.hostname.includes('blog.naver.com')) return;
-            const seg = uri.pathname.split('/');
-            return {
+            const res = {
                 ...params,
                 ...listitem.dataset,
                 rank: offset + 1,
-                blogId: seg[1],
-                logNo: uri.searchParams.get('logNo') || seg[2],
-                briefContents: el_t.textContent,
+                channelName: el_n.textContent,
+                briefContents: el_d.textContent,
                 titleWithInspectMessage: el_t.textContent,
+                uri: uri.toString(),
+            };
+            if(uri.hostname.includes('blog.naver.com')) {
+                const seg = uri.pathname.split('/');
+                Object.assign(res, { blogId: seg[1], logNo: uri.searchParams.get('logNo') || seg[2], });
             }
+            return res;
         }).filter(v=>!!v);
+    }
+    async function $NX_countNaverPost(keyword, params = {}) {
+        const referer = 'https://m.post.naver.com/search/default.naver';
+        const uri = new URL('https://m.post.naver.com/search/post.naver?keyword=&sortType=createDate.dsc&range=&term=&navigationType=current');
+        uri.searchParams.set('keyword', keyword)
+        Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
+        const res = await GM_xmlhttpRequestAsync(uri, { headers: { referer } });
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+        const cnt = doc.querySelector('.sorting_area .sorting_inner_wrap .txt em');
+        return cnt ? parseInt(String(cnt.textContent).replace(/[^\d]+/g, '')) : 0;
     }
     window.NX_info = async function NX_info(keyword, start, where, mode, params) {
         const res = await NX_Request(keyword, start, where, mode, params);
         const doc = new DOMParser().parseFromString(res.responseText, 'text/html')
         return $NX_info(doc);
     }
-    window.NX_count = async function NX_count(keyword, where, mode, params) {
-        const where_post = ['post', 'm_post'];
+    window.NX_count = async function NX_count(keyword, where = 'view', mode = 'normal', params = {}) {
+        const types = [];
+        types.push({ params: { api_type: 11, nso: 'so:r,p:1w' }, where: ['view', 'm_view'] });
+        types.push({ params: { api_type: 1, nso: 'so:r,p:1w' }, where: ['blog', 'm_blog'] });
+        types.push({ params: { prmore: 1, nso: 'so:r,p:1w' }, where: ['article', 'm_article'] });
+        types.push({ params: { term: 'w' }, where: ['post', 'm_post'] });
+        types.push({ params: {}, where: ['influencer', 'm_influencer'] });
+        const type = types.find(o=>o.where.includes(where)) || types[0];
+        Object.assign(params, type.params, params);
         try {
-            if(where_post.includes(where)) {
-                const referer = 'https://m.post.naver.com/search/default.naver';
-                const uri = new URL('https://m.post.naver.com/search/post.naver?keyword=&sortType=createDate.dsc&range=&term=&navigationType=current');
-                uri.searchParams.set('keyword', keyword)
-                Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
-                const res = await GM_xmlhttpRequestAsync(uri, { headers: { referer } });
-                const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
-                const cnt = doc.querySelector('.sorting_area .sorting_inner_wrap .txt em');
-                return cnt ? parseInt(String(cnt.textContent).replace(/[^\d]+/g, '')) : 0;
-            } else {
-                const res = await NX_Request(keyword, 1, where, mode, params);
-                const obj = eval(`(${res.responseText})`);
-                return parseInt(String(obj.total).replace(/[^\d]+/g, ''));
-            }
+            if(['post', 'm_post'].includes(where)) return $NX_countNaverPost(keyword, params);
+            const res = await NX_Request(keyword, 1, where, mode, params);
+            return parseInt(String(res.responseJson.total || res.responseJson.totalCount).replace(/[^\d]+/g, ''));
         }catch(e){
             console.error(e);
         }
@@ -132,7 +151,6 @@
         const chunk = words.reduce((chunk, word, offset)=>{ const index = Math.floor(offset / 5), item = chunk[index] = chunk[index] || []; item.push(word); return chunk }, []).map(item=>item.join(' '));
         const terms = []; while(chunk.length) { terms.push((await Promise.all(chunk.splice(0, 30).map(NX_terms))).flat()); }
         return terms.flat();
-        //return chunk.length ? (await Promise.all(chunk.map(NX_terms))).flat() : [];
     }
     window.NX_items = async function NX_items(keyword, start, where = 'view', mode, params) {
         const res = await NX_Request(keyword, start, where, mode, params);
