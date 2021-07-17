@@ -100,9 +100,9 @@ GM_App(async function main() {
         const thead_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column', 'custom-basic-column-header']); }
         const tbody_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column']); }
         const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>VIEW주간조회수</span>', { colspan: 3 });
-        const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>'); thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n인플루언서 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>'); thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n인플루언서 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>'); thead_view_clicks_ninfl.dataset.tooltip = '인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n인플루언서 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>'); thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>'); thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>'); thead_view_clicks_ninfl.dataset.tooltip = '인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         const thead_view_writes = thead_append(thead1, 'col-view-writes', '<span>VIEW주간생산량</span>', { colspan: 4 });
         const thead_view_writes_nblog = thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
         const thead_view_writes_npost = thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
