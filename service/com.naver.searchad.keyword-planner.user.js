@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.5
+// @version      1.0.6
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -81,8 +81,8 @@ GM_App(async function main() {
     .custom-keyword-planner .table-holder { overflow-y: visible !important; }
     `);
     // --------------------
-    function hsl_col_perc(percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = percent / 50, b = (end - start) * a, c = b + start; return `hsl(${c}, 100%, 50%)`; }
-    function hsla_col_perc(alpha, percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = percent / 50, b = (end - start) * a, c = b + start; return `hsla(${c}, 100%, 50%, ${alpha})`; }
+    function hsl_col_perc(percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsl(${c}, 100%, 50%)`; }
+    function hsla_col_perc(alpha, percent, start, end) { if(typeof percent !== 'number'){ return ''; } let a = Math.max(0, Math.min(100, percent)) / 100, b = (end - start) * a, c = b + start; return `hsla(${c}, 100%, 50%, ${alpha})`; }
     function format_number(number) { return typeof number === 'number' ? number.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( "," ) : number; }
     // --------------------
     const wrap = document.querySelector('elena-tool-wrap'); if(!wrap) return;
@@ -201,9 +201,9 @@ GM_App(async function main() {
                 const keyword_visit_blog_all = _.sumBy(keyword_visit_blog_one, 'metricValue');
                 const keyword_visit_post_all = _.sumBy(keyword_visit_post_one, 'metricValue');
                 const keyword_visit_infl_all = _.sumBy(keyword_visit_infl_one, 'metricValue');
-                const keyword_visit_blog_per = Math.max(0, Math.min(100, ((keyword_visit_blog_all / (keyword_qc / 30 * 7)) * 100)));
-                const keyword_visit_post_per = Math.max(0, Math.min(100, ((keyword_visit_post_all / (keyword_qc / 30 * 7)) * 100)));
-                const keyword_visit_infl_per = Math.max(0, Math.min(100, ((keyword_visit_infl_all / (keyword_qc_m / 30 * 7)) * 100)));
+                const keyword_visit_blog_per = (keyword_visit_blog_all / (keyword_qc / 30 * 7)) * 100;
+                const keyword_visit_post_per = (keyword_visit_post_all / (keyword_qc / 30 * 7)) * 100;
+                const keyword_visit_infl_per = (keyword_visit_infl_all / (keyword_qc_m / 30 * 7)) * 100;
                 const keyword_visit_blog_msg = `<span style="text-align:left"><small >${keyword_visit_blog_per.toFixed(2)}%</small></span><span>${format_number(keyword_visit_blog_all)}</span>`;
                 const keyword_visit_post_msg = `<span style="text-align:left"><small>${keyword_visit_post_per.toFixed(2)}%</small></span><span>${format_number(keyword_visit_post_all)}</span>`;
                 const keyword_visit_infl_msg = `<span style="text-align:left"><small>${keyword_visit_infl_per.toFixed(2)}%</small></span><span>${format_number(keyword_visit_infl_all)}</span>`;
@@ -224,7 +224,7 @@ GM_App(async function main() {
                     post_count_1w: NX_count(keyword_norm, 'post', 'normal', { term: 'w' }),
                     cafe_count_1w: NX_count(keyword_norm, 'article', 'normal', { prmore: 1, nso: 'so:r,p:1w' }),
                 });
-                const keyword_write_item_per = Math.max(0, Math.min(100, (data.view_count_1w / (data.blog_count_1w + data.post_count_1w + data.cafe_count_1w)) * 100));
+                const keyword_write_item_per = (data.view_count_1w / (data.blog_count_1w + data.post_count_1w + data.cafe_count_1w)) * 100;
                 const keyword_write_blog_msg = `<span>${format_number(data.blog_count_1w)}</span>`;
                 const keyword_write_post_msg = `<span>${format_number(data.post_count_1w)}</span>`;
                 const keyword_write_cafe_msg = `<span>${format_number(data.cafe_count_1w)}</span>`;
@@ -255,9 +255,9 @@ GM_App(async function main() {
                 const ranking_nblog = _.minBy(channel_nblog.map(o=>props.view.filter(p=>p.blogId == o.channelId)).flat(), 'rank') || { rank: 0 };
                 const ranking_npost = _.minBy(channel_npost.map(o=>props.view.filter(p=>p.memberNo == o.channelId)).flat(), 'rank') || { rank: 0 };
                 const ranking_ninfl = _.minBy(channel_ninfl.map(o=>props.infl.filter(p=>p.spaceId == o.channelId)).flat(), 'rank') || { rank: 0 };
-                const ranking_nblog_per = Math.max(0, Math.min(100, ((ranking_nblog.rank / 30) * 100)));
-                const ranking_npost_per = Math.max(0, Math.min(100, ((ranking_npost.rank / 30) * 100)));
-                const ranking_ninfl_per = Math.max(0, Math.min(100, ((ranking_ninfl.rank / 30) * 100)));
+                const ranking_nblog_per = (ranking_nblog.rank / 30) * 100;
+                const ranking_npost_per = (ranking_npost.rank / 30) * 100;
+                const ranking_ninfl_per = (ranking_ninfl.rank / 30) * 100;
                 const ranking_nblog_msg = `<span>${ranking_nblog.rank}위</span>`;
                 const ranking_npost_msg = `<span>${ranking_npost.rank}위</span>`;
                 const ranking_ninfl_msg = `<span>${ranking_ninfl.rank}위</span>`;
