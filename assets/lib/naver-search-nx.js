@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.41
+// @version       1.0.42
 
 // ==/UserScript==
 
@@ -47,7 +47,7 @@
         Object.keys(params).map((k)=>uri.searchParams.set(k, params[k]));
         const res = await GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
         if(uri.pathname.includes('/influencer/api')) {
-            const responseJson = await new Promise((resolve)=>eval(res.responseText)).then(o=>o.result);
+            const responseJson = await new Promise((resolve)=>eval(res.responseText)).then(o=>o.result).catch(e=>null);
             const responseText = (responseJson && responseJson && responseJson.itemList && responseJson.itemList && responseJson.itemList.map(o=>o.html).join('')) || res.responseText;
             return { responseJson, responseText, response: responseText };
         } else {
@@ -129,7 +129,7 @@
         try {
             if(['post', 'm_post'].includes(where)) return $NX_countNaverPost(keyword, params);
             const res = await NX_Request(keyword, 1, where, mode, params);
-            return parseInt(String(res.responseJson.total || res.responseJson.totalCount).replace(/[^\d]+/g, ''));
+            return parseInt(String(res.responseJson.total || res.responseJson.totalCount || 0).replace(/[^\d]+/g, ''));
         }catch(e){
             console.error(e);
         }

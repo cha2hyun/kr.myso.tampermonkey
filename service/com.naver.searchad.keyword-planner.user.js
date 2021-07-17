@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.4
+// @version      1.0.5
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -14,18 +14,18 @@
 // @match        *://manage.searchad.naver.com/customers/*/tool/keyword-planner?*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/polyfill/Object.fromEntries.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/polyfill/Array.prototype.flat.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/polyfill/String.prototype.matchAll.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-search-ad.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-search-rx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-search-nx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/lib/naver-creator-advisor.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.41/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/polyfill/Object.fromEntries.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/polyfill/Array.prototype.flat.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/polyfill/String.prototype.matchAll.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-search-ad.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-search-rx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-search-nx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-creator-advisor.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/donation.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -42,8 +42,26 @@ GM_App(async function main() {
     GM_addStyle(`
     .custom-keyword-planner {}
     .custom-keyword-planner.custom-keyword-planner-loading { pointer-events: none !important; cursor: wait !important; opacity: 0.8 !important; }
-    .custom-keyword-planner .custom-table {}
-    .custom-keyword-planner .custom-table th[data-column="relKeyword"] { width: 200px !important; }
+    .custom-keyword-planner .custom-table table { table-layout: fixed; width: 100%; }
+    .custom-keyword-planner .custom-table table colgroup col:nth-child(1) { display: none; }
+    .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(2),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(1) { width: 300px !important; }
+    .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(1),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(4),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(5),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(6),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(1) > th:nth-child(7),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(2) > th:nth-child(3),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(2) > th:nth-child(4),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(2) > th:nth-child(5),
+    .custom-keyword-planner .custom-table thead > tr:nth-child(2) > th:nth-child(6),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(1),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(5),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(6),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(7),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(8),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(9),
+    .custom-keyword-planner .custom-table tbody > tr > td:nth-child(10) { display: none; }
     .custom-keyword-planner .custom-basic-column { font-size: 12px; height: 31px; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; white-space: nowrap; color: #4c4c4c; text-align: right; vertical-align: middle !important; border-bottom: 0 !important; position: relative; }
     .custom-keyword-planner .custom-basic-column span { overflow: hidden !important; display: block !important; }
     .custom-keyword-planner .custom-basic-column-header { font-weight: 700; text-align: center; }
@@ -85,6 +103,7 @@ GM_App(async function main() {
         elena.classList.add('custom-keyword-planner');
         const table = elena.querySelector('elena-table table'); if(!table) return;
         table.classList.add('custom-table');
+        const group = table.querySelector('colgroup'); if(group) group.remove();
         const thead1 = table.querySelector('thead tr:nth-child(1)');
         const thead2 = table.querySelector('thead tr:nth-child(2)');
         const tbody = Array.from(table.querySelectorAll('elena-keyword-planner elena-table table tbody tr'));
@@ -104,19 +123,19 @@ GM_App(async function main() {
         const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>주간조회수</span>', { colspan: 3 });
         const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>');
         const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>');
-        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플루언서</span>');
+        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플검</span>');
         const thead_view_writes = thead_append(thead1, 'col-view-writes', '<span>주간생산량</span>', { colspan: 4 });
         const thead_view_writes_nblog = thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
         const thead_view_writes_npost = thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
         const thead_view_writes_ncafe = thead_append(thead2, 'col-view-writes-ncafe', '<span>카페</span>');
         const thead_view_writes_ratio = thead_append(thead2, 'col-view-writes-ratio', '<span>포화도</span>');
         const thead_view_subject = thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
-        const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산선호</span>');
-        const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비선호</span>');
+        const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산</span>');
+        const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비</span>');
         const thead_view_ranking = thead_append(thead1, 'col-view-ranking', '<span>통합노출순위</span>', { colspan: 3 });
         const thead_view_ranking_nblog = thead_append(thead2, 'col-view-ranking-nblog', '<span>블로그</span>');
         const thead_view_ranking_npost = thead_append(thead2, 'col-view-ranking-npost', '<span>포스트</span>');
-        const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플루언서</span>');
+        const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플검</span>');
         thead_view_clicks.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
         thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
