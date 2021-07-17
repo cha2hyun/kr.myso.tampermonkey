@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.2
+// @version      1.0.3
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -178,8 +178,8 @@ GM_App(async function main() {
                 keyword_visit_post_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_post_per, 60, 240);
                 keyword_visit_infl_col.style.backgroundColor = hsla_col_perc(0.2, keyword_visit_infl_per, 60, 240);
                 keyword_visit_blog_col.dataset.tooltip = keyword_visit_blog_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
-                keyword_visit_post_col.dataset.tooltip = keyword_visit_post_grp.map(o=>`${o.channelName}\n${o.title}\n${o.contentId}\n주간조회수: ${o.metricValue}`).join('\n------------\n\n');
-                keyword_visit_infl_col.dataset.tooltip = keyword_visit_infl_grp.map(o=>`${o.channelName}\n${o.title}\n${o.contentId}\n주간조회수: ${o.metricValue}`).join('\n------------\n\n');
+                keyword_visit_post_col.dataset.tooltip = keyword_visit_post_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
+                keyword_visit_infl_col.dataset.tooltip = keyword_visit_infl_grp.map(o=>`채널명: ${o.channelName}\n글제목: ${o.title}\n글주소: ${o.contentId}\n조회수: ${o.metricValue}`).join('\n------------\n\n');
             }
             async function viewWritesWeek(){
                 const data = await Promise.props({
