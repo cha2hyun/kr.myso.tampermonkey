@@ -46,15 +46,14 @@ GM_App(async function main() {
   [data-terms-warn=""]::after { display:none !important; }
   `);
   async function handler(e) {
-      if(handler.working) return;
+      if(handler.working || e.keyCode !== 13) return;
       handler.timer = clearTimeout(handler);
       handler.tiemr = setTimeout(async () => {
           document.body.classList.toggle('se-working-keyword-warn', handler.working = true);
           const nodes = SE_parseNodes(document);
           await Promise.map(nodes, async (node)=>{
-              if(node.dataset.prevData == node.textContent) return;
-              node.dataset.prevData = node.textContent;
-              const bases = `${node.textContent} `;
+              if(node.dataset.prevData == node.textContent) { return; } else { node.dataset.prevData = node.textContent; }
+              const bases = Array.from(node.querySelectorAll('p')).map(el=>el.textContent).slice(-3).join('\n');
               const words = bases.split(/[\s]+/g);
               const terms = await NX_termsParagraph(bases);
               const items = _.uniq([...words, ...terms]);
