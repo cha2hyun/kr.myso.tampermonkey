@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.42
+// @version       1.0.43
 
 // ==/UserScript==
 
@@ -143,7 +143,7 @@
         const res = await NX_info(keyword).catch(e=>null);
         if(!res || !res.terms) return [];
         if(typeof res.terms == 'string') return [res.terms];
-        const terms = res.terms.map(item=>item && item.flat && item.flat()).flat();
+        const terms = res.terms.map(item=>item && item.flat && item.flat()).flat().filter(v=>!!v);
         return terms.filter((word, offset, terms)=>terms.filter((item)=>item.includes(word)).length == 2);
     }
     window.NX_termsParagraph = async function NX_termsParagraph(paragraph) {

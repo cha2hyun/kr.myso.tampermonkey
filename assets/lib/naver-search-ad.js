@@ -7,7 +7,7 @@
 // @description   네이버 검색 RX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.40
+// @version       1.0.45
 
 // ==/UserScript==
 
@@ -32,7 +32,7 @@
             const key = normalize(keyword);
             const ref = new URL('https://search.naver.com/search.naver?where=view&sm=tab_jum&query=')
             const uri = new URL('http://www.ryo.co.kr/naver/keyword?position=main&callback=update_keyword_analysis&dn=&keyword=');
-            ref.searchParams.set('keyword', key);
+            ref.searchParams.set('query', key);
             uri.searchParams.set('keyword', key);
             const res = await GM_xmlhttpRequestAsync(uri, { headers: { 'referer': ref.toString() } });
             function update_keyword_analysis(data){
@@ -47,6 +47,13 @@
             console.error(e);
             if(errors) return Promise.delay(500).then(()=>NA_search(keyword, --errors));
         }
+    }
+    window.NA_keywordBlockCheck = async function NA_keywordBlockCheck(keyword) {
+        const uri = new URL('https://search.naver.com/search.naver?where=view&sm=tab_jum&query=')
+        uri.searchParams.set('query', keyword);
+        const res = await GM_xmlhttpRequestAsync(uri);
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+        return !!doc.querySelector('.lst_noresult, .group_adult');
     }
     window.NA_keywordRelations = async function NA_keywordRelations(keyword) {
         const referer = 'https://m.naver.com/';
@@ -76,5 +83,13 @@
             item = items.find(value=>typeof value === 'string' && normalize(value) == norm);
         }
         return item || keyword;
+    }
+    window.NA_keywordBlockCheck = async function NA_keywordBlockCheck(keyword) {
+        const uri = new URL('https://m.search.naver.com/search.naver?where=m_view&sm=tab_jum&query=')
+        uri.searchParams.set('query', keyword);
+        const res = await GM_xmlhttpRequestAsync(uri);
+        const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
+        const els = Array.from(doc.querySelectorAll('.type_adult, .group_adult, .lst_noresult, .not_found02'));
+        return !!els.find(el=>['부적합', '신고된', '우려가'].reduce((r,k)=>r||el.textContent.includes(k), !1));
     }
   })(window);
