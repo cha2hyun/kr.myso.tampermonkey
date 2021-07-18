@@ -34,46 +34,46 @@
 // ==/OpenUserJS==
 // ---------------------
 GM_App(async function main() {
-  GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
-  GM_addStyle(`
-  @keyframes spin1 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-  .se-utils > ul > li > button { margin-top: 14px !important; }
-  .se-util-button-keyword-warn.se-util-button-active { border: 1px solid #0f0 !important; }
-  .se-util-button-keyword-warn::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F6E1\\FE0F' !important; }
-  .se-util-button-keyword-warn[data-loading="true"]::before { animation: spin1 2s infinite linear; }
-  [data-terms-warn] { position: relative; outline: 1px dashed red; background-color: rgba(255,0,0,0.1); }
-  [data-terms-warn]::after {
-    content:'제한키워드: ' attr(data-terms-warn); font-size:12px; line-height: 1.3em;
-    display: block; color: red; text-align: center; white-space: pre;
-    width: 693px; max-width: 100%; margin-left: auto; margin-right: auto; padding: 0.5em; border: 1px solid red; border-radius: 0.5em;
-  }
-  [data-terms-warn=""] { outline: 0 !important; background-color: transparent !important; }
-  [data-terms-warn=""]::after { display:none !important; }
-  `);
-  async function actions(btn) {
-      if(actions.working) return;
-      btn.dataset.loading = actions.working = true;
-      const nodes = SE_parseNodes(document);
-      await Promise.mapSeries(nodes, async (node)=>{
-          if(node.dataset.prevData == node.textContent) { return; } else { node.dataset.prevData = node.textContent; }
-          const bases = Array.from(node.querySelectorAll('p')).map(el=>el.textContent).slice(-3).join('\n');
-          const words = bases.split(/[\s]+/g);
-          const terms = await NX_termsParagraph(bases);
-          const items = _.uniq([...words, ...terms]);
-          const check = await Promise.map(items, async(query)=>({ query, block: await NA_keywordBlockCheck(query) }), { concurrency: 10 });
-          const warns = check.filter(o=>o.block).map(o=>o.query);
-          node.dataset.terms = terms.join(', ');
-          node.dataset.termsWarn = warns.join(', ');
-      });
-      btn.dataset.loading = actions.working = false;
-  }
-  async function handler(e) {
-      const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
-      const wrp = mnu.querySelector('.se-utils-item.se-utils-item-keyword-warn') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-keyword-warn'); mnu.prepend(wrp);
-      const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-keyword-warn'); btn.innerHTML = '<span class="se-utils-text">위험키 검사</span>'; wrp.append(btn);
-      btn.onclick = GM_donationApp(()=>actions(btn));
-  }
-  window.addEventListener('keyup', handler, false);
-  window.addEventListener('keydown', handler, false);
-  window.addEventListener('keypress', handler, false);
+    GM_donation('#viewTypeSelector, #postListBody, #wrap_blog_rabbit, #writeTopArea, #editor_frame', 0);
+    GM_addStyle(`
+    @keyframes spin1 { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+    .se-utils > ul > li > button { margin-top: 14px !important; }
+    .se-util-button-keyword-warn.se-util-button-active { border: 1px solid #0f0 !important; }
+    .se-util-button-keyword-warn::before { display: inline-block; width: 37px; height: 37px; line-height: 40px; text-align: center; font-size: 16px; color: #666; content: '\\1F6E1\\FE0F' !important; }
+    .se-util-button-keyword-warn[data-loading="true"]::before { animation: spin1 2s infinite linear; }
+    [data-terms-warn] { position: relative; outline: 1px dashed red; background-color: rgba(255,0,0,0.1); }
+    [data-terms-warn]::after {
+      content:'제한키워드: ' attr(data-terms-warn); font-size:12px; line-height: 1.3em;
+      display: block; color: red; text-align: center; white-space: pre;
+      width: 693px; max-width: 100%; margin-left: auto; margin-right: auto; padding: 0.5em; border: 1px solid red; border-radius: 0.5em;
+    }
+    [data-terms-warn=""] { outline: 0 !important; background-color: transparent !important; }
+    [data-terms-warn=""]::after { display:none !important; }
+    `);
+    async function actions(btn) {
+        if(actions.working) return;
+        btn.dataset.loading = actions.working = true;
+        const nodes = SE_parseNodes(document);
+        await Promise.mapSeries(nodes, async (node)=>{
+            if(node.dataset.prevData == node.textContent) { return; } else { node.dataset.prevData = node.textContent; }
+            const bases = Array.from(node.querySelectorAll('p')).map(el=>el.textContent).slice(-3).join('\n');
+            const words = bases.split(/[\s]+/g);
+            const terms = await NX_termsParagraph(bases);
+            const items = _.uniq([...words, ...terms]);
+            const check = await Promise.map(items, async(query)=>({ query, block: await NA_keywordBlockCheck(query) }), { concurrency: 10 });
+            const warns = check.filter(o=>o.block).map(o=>o.query);
+            node.dataset.terms = terms.join(', ');
+            node.dataset.termsWarn = warns.join(', ');
+        });
+        btn.dataset.loading = actions.working = false;
+    }
+    async function handler(e) {
+        const mnu = document.querySelector('.se-ultils-list'); if(!mnu) return;
+        const wrp = mnu.querySelector('.se-utils-item.se-utils-item-keyword-warn') || document.createElement('li'); wrp.classList.add('se-utils-item', 'se-utils-item-keyword-warn'); mnu.prepend(wrp);
+        const btn = wrp.querySelector('button') || document.createElement('button'); btn.classList.add('se-util-button', 'se-util-button-keyword-warn'); btn.innerHTML = '<span class="se-utils-text">위험키 검사</span>'; wrp.append(btn);
+        btn.onclick = GM_donationApp(()=>actions(btn));
+    }
+    window.addEventListener('keyup', handler, false);
+    window.addEventListener('keydown', handler, false);
+    window.addEventListener('keypress', handler, false);
 });
