@@ -7,7 +7,7 @@
 // @description   네이버 스마트에디터 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.22
+// @version       1.0.46
 
 // ==/UserScript==
 
@@ -378,5 +378,8 @@
         const res = await GM_xmlhttpRequestAsync(`https://m.blog.naver.com/PostView.nhn?blogId=${blogId}&logNo=${logNo}`);
         const doc = new DOMParser().parseFromString(res.responseText, 'text/html');
         return SE_parse(doc, { blogId, logNo });
+    }
+    window.SE_editor = async function() {
+        return window.SmartEditor && await window.SmartEditor._editorPromise;
     }
 })(window);

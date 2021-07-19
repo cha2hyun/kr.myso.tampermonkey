@@ -7,7 +7,7 @@
 // @description   네이버 블로그 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.27
+// @version       1.0.47
 
 // ==/UserScript==
 
@@ -37,7 +37,7 @@
     }
     window.NB_blogPostList = async function NB_blogPostList(blogId, limit = 10, options = {}) {
         let posts = [];
-        for(let currentPage = 1; currentPage < limit; currentPage++) {
+        for(let currentPage = 1; currentPage <= limit; currentPage++) {
             const data = await NB_blogInfo(blogId, 'PostListInfo', { ...options, currentPage }).catch(e=>({}));
             const list = data.postViewList; if(!list || !list.length) break;
             posts = posts.concat(list.filter(o=>o.categoryOpenYn && o.allOpenPost && o.searchYn));
