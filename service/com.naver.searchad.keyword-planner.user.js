@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.11
+// @version      1.0.12
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -14,18 +14,18 @@
 // @match        *://manage.searchad.naver.com/customers/*/tool/keyword-planner?*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/polyfill/Object.fromEntries.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/polyfill/Array.prototype.flat.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/polyfill/String.prototype.matchAll.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-search-ad.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-search-rx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-search-nx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/lib/naver-creator-advisor.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.42/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/polyfill/Object.fromEntries.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/polyfill/Array.prototype.flat.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/polyfill/String.prototype.matchAll.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-search-ad.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-search-rx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-search-nx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-creator-advisor.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/donation.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.7.2/bluebird.min.js
@@ -94,11 +94,11 @@ GM_App(async function main() {
     const range = _.range(7).map((i)=>moment().subtract(i + 1, 'days').format('YYYY-MM-DD'));
     async function creator_advisor_visits(keyword, date, service = 'naver_blog') {
         const channel = _.find(channels, { service }); if(!channel) return;
-        const params = { service: channel.service, channelId: channel.channelId, keyword, date };
-        if(params.service == 'influencer') Object.assign(params, { metric: 'cv', contentType: 'text', interval: 'day', limit: 5 });
-        if(params.service == 'naver_blog') Object.assign(params, { metric: 'cv', contentType: 'text', interval: 'day', limit: 5 });
-        if(params.service == 'naver_post') Object.assign(params, { metric: 'cv', contentType: 'text', interval: 'day', limit: 5 });
-        if(params.service == 'ntv') Object.assign(params, { metric: 'play_count', contentType: 'video', interval: 'day', limit: 5 });
+        const params = { service: channel.service, channelId: channel.channelId, keyword, date, limit: 20 };
+        if(params.service == 'influencer') Object.assign(params, { metric: 'cv', contentType: 'text', interval: 'day' });
+        if(params.service == 'naver_blog') Object.assign(params, { metric: 'cv', contentType: 'text', interval: 'day' });
+        if(params.service == 'naver_post') Object.assign(params, { metric: 'cv', contentType: 'text', interval: 'day' });
+        if(params.service == 'ntv') Object.assign(params, { metric: 'play_count', contentType: 'video', interval: 'day' });
         const contents = await CreatorAdvisor.exec('popular-contents', params);
         return { date, data: contents.data }
     }
