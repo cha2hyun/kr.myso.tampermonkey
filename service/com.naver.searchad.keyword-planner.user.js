@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.13
+// @version      1.0.14
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -136,19 +136,19 @@ GM_App(async function main() {
         const thead_view_subject = thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
         const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산</span>');
         const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비</span>');
-        //const thead_view_ranking = thead_append(thead1, 'col-view-ranking', '<span>통합노출순위</span>', { colspan: 3 });
-        //const thead_view_ranking_nblog = thead_append(thead2, 'col-view-ranking-nblog', '<span>블로그</span>');
-        //const thead_view_ranking_npost = thead_append(thead2, 'col-view-ranking-npost', '<span>포스트</span>');
-        //const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플검</span>');
+        const thead_view_ranking = thead_append(thead1, 'col-view-ranking', '<span>통합노출순위</span>', { colspan: 3 });
+        const thead_view_ranking_nblog = thead_append(thead2, 'col-view-ranking-nblog', '<span>블로그</span>');
+        const thead_view_ranking_npost = thead_append(thead2, 'col-view-ranking-npost', '<span>포스트</span>');
+        const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플검</span>');
         //thead_view_clicks.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
         //thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         //thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         //thead_view_clicks_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         thead_view_writes_ratio.dataset.tooltip = '생산된 글이 VIEW탭 상위 5위안에 포함되기 위한 경쟁률입니다.\n- 배경색상: VIEW탭 등록 난이도 (녹색: 쉬움, 적색: 어려움)';
-        //thead_view_ranking.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
-        //thead_view_ranking_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        //thead_view_ranking_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        //thead_view_ranking_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_ranking.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
+        thead_view_ranking_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_ranking_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        thead_view_ranking_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         // reset
         await Promise.map(tbody, async (row, i) => {
             const keyword = row.getAttribute('row-id'), keyword_last = row.dataset.lastRowId;
@@ -164,9 +164,9 @@ GM_App(async function main() {
             reset(row, 'col-view-writes-ratio');
             reset(row, 'col-view-subject-prod');
             reset(row, 'col-view-subject-view');
-            //reset(row, 'col-view-ranking-nblog');
-            //reset(row, 'col-view-ranking-npost');
-            //reset(row, 'col-view-ranking-ninfl');
+            reset(row, 'col-view-ranking-nblog');
+            reset(row, 'col-view-ranking-npost');
+            reset(row, 'col-view-ranking-ninfl');
         });
         // update
         await Promise.map(tbody.reverse(), async (row, i) => {
@@ -284,7 +284,7 @@ GM_App(async function main() {
                 if(ranking_ninfl.rank) ranking_ninfl_col.dataset.tooltip = `채널명: ${ranking_ninfl.channelName}\n글제목: ${ranking_ninfl.titleWithInspectMessage}\n글주소: ${ranking_ninfl.uri}`;
             }
             //await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject(), viewRanking()]);
-            await Promise.all([viewRelKeywords(), viewWritesWeek(), relSubject()]);
+            await Promise.all([viewRelKeywords(), viewWritesWeek(), relSubject(), viewRanking()]);
         }, { concurrency: 5 });
     }
     async function redraw(mutations) {
