@@ -4,7 +4,7 @@
 // @description  네이버 광고관리자 키워드 도구의 기능을 확장하는 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.12
+// @version      1.0.13
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.searchad.keyword-planner.user.js
 // @author       Won Choi
@@ -124,10 +124,10 @@ GM_App(async function main() {
         }
         const thead_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column', 'custom-basic-column-header']); }
         const tbody_append = (element, className, label, options = {}) => { return table_append(element, className, label, options, ['custom-basic-column']); }
-        const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>주간조회수</span>', { colspan: 3 });
-        const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>');
-        const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>');
-        const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플검</span>');
+        //const thead_view_clicks = thead_append(thead1, 'col-view-clicks', '<span>주간조회수</span>', { colspan: 3 });
+        //const thead_view_clicks_nblog = thead_append(thead2, 'col-view-clicks-nblog', '<span>블로그</span>');
+        //const thead_view_clicks_npost = thead_append(thead2, 'col-view-clicks-npost', '<span>포스트</span>');
+        //const thead_view_clicks_ninfl = thead_append(thead2, 'col-view-clicks-ninfl', '<span>인플검</span>');
         const thead_view_writes = thead_append(thead1, 'col-view-writes', '<span>주간생산량</span>', { colspan: 4 });
         const thead_view_writes_nblog = thead_append(thead2, 'col-view-writes-nblog', '<span>블로그</span>');
         const thead_view_writes_npost = thead_append(thead2, 'col-view-writes-npost', '<span>포스트</span>');
@@ -136,37 +136,37 @@ GM_App(async function main() {
         const thead_view_subject = thead_append(thead1, 'col-view-subject', '<span>검색어주제</span>', { colspan: 2 });
         const thead_view_subject_prod = thead_append(thead2, 'col-view-subject-prod', '<span>생산</span>');
         const thead_view_subject_view = thead_append(thead2, 'col-view-subject-view', '<span>소비</span>');
-        const thead_view_ranking = thead_append(thead1, 'col-view-ranking', '<span>통합노출순위</span>', { colspan: 3 });
-        const thead_view_ranking_nblog = thead_append(thead2, 'col-view-ranking-nblog', '<span>블로그</span>');
-        const thead_view_ranking_npost = thead_append(thead2, 'col-view-ranking-npost', '<span>포스트</span>');
-        const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플검</span>');
-        thead_view_clicks.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
-        thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        thead_view_clicks_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        //const thead_view_ranking = thead_append(thead1, 'col-view-ranking', '<span>통합노출순위</span>', { colspan: 3 });
+        //const thead_view_ranking_nblog = thead_append(thead2, 'col-view-ranking-nblog', '<span>블로그</span>');
+        //const thead_view_ranking_npost = thead_append(thead2, 'col-view-ranking-npost', '<span>포스트</span>');
+        //const thead_view_ranking_ninfl = thead_append(thead2, 'col-view-ranking-ninfl', '<span>인플검</span>');
+        //thead_view_clicks.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
+        //thead_view_clicks_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        //thead_view_clicks_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        //thead_view_clicks_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n실 조회수 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         thead_view_writes_ratio.dataset.tooltip = '생산된 글이 VIEW탭 상위 5위안에 포함되기 위한 경쟁률입니다.\n- 배경색상: VIEW탭 등록 난이도 (녹색: 쉬움, 적색: 어려움)';
-        thead_view_ranking.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
-        thead_view_ranking_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        thead_view_ranking_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
-        thead_view_ranking_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        //thead_view_ranking.dataset.tooltip = '※ 조회 불가 시 creator-advisor.naver.com 접속 후 새로고침';
+        //thead_view_ranking_nblog.dataset.tooltip = '네이버 블로그를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        //thead_view_ranking_npost.dataset.tooltip = '네이버 포스트를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
+        //thead_view_ranking_ninfl.dataset.tooltip = '네이버 인플루언서를 개설한 네이버 계정으로 로그인 되어있어야,\n순위 통계를 조회 가능합니다. (크리에이터 어드바이저 권한제한)';
         // reset
         await Promise.map(tbody, async (row, i) => {
             const keyword = row.getAttribute('row-id'), keyword_last = row.dataset.lastRowId;
             if(!keyword || keyword == keyword_last) { return; }
             function reset(row, className) { const col = tbody_append(row, className, ''); col.style.backgroundColor = ''; col.dataset.tooltip = ''; }
             const relKeyword = row.querySelector('.elenaColumn-relKeyword'); if(relKeyword) relKeyword.dataset.tooltip = '';
-            reset(row, 'col-view-clicks-nblog');
-            reset(row, 'col-view-clicks-npost');
-            reset(row, 'col-view-clicks-ninfl');
+            //reset(row, 'col-view-clicks-nblog');
+            //reset(row, 'col-view-clicks-npost');
+            //reset(row, 'col-view-clicks-ninfl');
             reset(row, 'col-view-writes-nblog');
             reset(row, 'col-view-writes-npost');
             reset(row, 'col-view-writes-ncafe');
             reset(row, 'col-view-writes-ratio');
             reset(row, 'col-view-subject-prod');
             reset(row, 'col-view-subject-view');
-            reset(row, 'col-view-ranking-nblog');
-            reset(row, 'col-view-ranking-npost');
-            reset(row, 'col-view-ranking-ninfl');
+            //reset(row, 'col-view-ranking-nblog');
+            //reset(row, 'col-view-ranking-npost');
+            //reset(row, 'col-view-ranking-ninfl');
         });
         // update
         await Promise.map(tbody.reverse(), async (row, i) => {
@@ -283,7 +283,8 @@ GM_App(async function main() {
                 if(ranking_npost.rank) ranking_npost_col.dataset.tooltip = `채널명: ${ranking_npost.channelName}\n글제목: ${ranking_npost.titleWithInspectMessage}\n글주소: ${ranking_npost.uri}`;
                 if(ranking_ninfl.rank) ranking_ninfl_col.dataset.tooltip = `채널명: ${ranking_ninfl.channelName}\n글제목: ${ranking_ninfl.titleWithInspectMessage}\n글주소: ${ranking_ninfl.uri}`;
             }
-            await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject(), viewRanking()]);
+            //await Promise.all([viewRelKeywords(), viewVisitsWeek(), viewWritesWeek(), relSubject(), viewRanking()]);
+            await Promise.all([viewRelKeywords(), viewWritesWeek(), relSubject()]);
         }, { concurrency: 5 });
     }
     async function redraw(mutations) {
