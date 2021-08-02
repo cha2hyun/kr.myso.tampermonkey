@@ -4,7 +4,7 @@
 // @description  네이버 블로그의 이웃,그룹 관리 기능을 확장합니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.12
+// @version      1.0.13
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-manage.follow.user.js
 // @author       Won Choi
@@ -12,11 +12,11 @@
 // @match        *://admin.blog.naver.com/BuddyListManage*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/donation.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/donation.js
 // ==/UserScript==
 
 // ==OpenUserJS==
@@ -29,7 +29,7 @@ GM_App(async function main() {
   GM_addScript(() => {
     async function delete_buddy(selfishes) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
-      const uri = new URL('https://admin.blog.naver.com/BuddyDelete.nhn');
+      const uri = new URL('https://admin.blog.naver.com/BuddyDelete.naver');
       const formData = new FormData(); selfishes.map(o=>formData.append('buddyBlogNo', o.blogNo));
       formData.append('blogId', blogId);
       formData.append('on', ''); formData.append('force', 'true');
@@ -40,7 +40,7 @@ GM_App(async function main() {
   GM_addScript(() => {
     async function search_buddy_page(callback, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
-      const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.nhn?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
+      const res = await fetch(`https://admin.blog.naver.com/BuddyListManage.naver?blogId=${blogId}&currentPage=${page}&searchText=&orderType=adddate`).then(r=>r.text());
       const doc = document.createElement('div'); doc.innerHTML = res;
       const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
       const has_next = pagenation_last.tagName == 'A' && !!pagenation_last.className, has_next_valid = pagenation_last.tagName != 'STRONG';
@@ -92,7 +92,7 @@ GM_App(async function main() {
   GM_addScript(() => {
     async function search_buddy_me_page(callback, page = 1, results = []) {
       const blogId = new URL(location.href).searchParams.get('blogId') || location.pathname.split('/')[1];
-      const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.nhn?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
+      const res = await fetch(`https://admin.blog.naver.com/BuddyMeManage.naver?relation=all&blogId=${blogId}&currentPage=${page}`).then(r=>r.text());
       const doc = document.createElement('div'); doc.innerHTML = res;
       const pagination = Array.from(doc.querySelector('div.paginate_re').children), pagenation_last = pagination[pagination.length - 1];
       const has_next = pagenation_last.tagName == 'A' && !!pagenation_last.className, has_next_valid = pagenation_last.tagName != 'STRONG';
@@ -278,7 +278,7 @@ GM_App(async function main() {
                 await window.opener.delete_buddy([user]);
                 
                 const blogId = new URL(window.opener.location.href).searchParams.get('blogId') || window.opener.location.pathname.split('/')[1];
-                const uri = new URL('https://admin.blog.naver.com/BuddyMultiBlockForm.nhn?relation=all&currentPage=1');
+                const uri = new URL('https://admin.blog.naver.com/BuddyMultiBlockForm.naver?relation=all&currentPage=1');
                 uri.searchParams.set('blogId', blogId);
                 uri.searchParams.append('targetBlogId', user.blogId);
                 
