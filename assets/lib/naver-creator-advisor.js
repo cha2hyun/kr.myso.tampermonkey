@@ -7,7 +7,7 @@
 // @description   네이버 크리에이터 어드바이저 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.25
+// @version       1.0.48
 
 // ==/UserScript==
 
@@ -30,7 +30,7 @@
 (function(window) {
   class CreatorAdvisorApi {
       constructor(endpoint, defaults) {
-          this.endpoint = new URL('https://creator-advisor.naver.com/api/v3' + endpoint);
+          this.endpoint = new URL('https://creator-advisor.naver.com/api/v4' + endpoint);
           this.defaults = Object.assign({}, Object.fromEntries(this.endpoint.searchParams.entries()), defaults);
       }
       exec(data) {

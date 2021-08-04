@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.10
+// @version      1.0.12
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -13,21 +13,21 @@
 // @match        *://admin.blog.naver.com/*/stat/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/polyfill/Object.fromEntries.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/polyfill/Array.prototype.flat.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/polyfill/String.prototype.matchAll.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-app.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-add-style.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-add-script.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/vendor/gm-xmlhttp-request-async.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-blog.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-blog-content.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-datalab.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-creator-advisor.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-search-ad.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-search-nx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/naver-search-rx.js
-// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.47/assets/lib/smart-editor-one.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/polyfill/Object.fromEntries.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/polyfill/Array.prototype.flat.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/polyfill/String.prototype.matchAll.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/vendor/gm-app.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/vendor/gm-add-style.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/vendor/gm-add-script.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/vendor/gm-xmlhttp-request-async.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-blog.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-blog-content.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-datalab.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-creator-advisor.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-search-ad.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-search-nx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/naver-search-rx.js
+// @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.48/assets/lib/smart-editor-one.js
 // @require      https://cdn.jsdelivr.net/npm/kr.myso.tampermonkey@1.0.25/assets/donation.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.33/moment-timezone.js
