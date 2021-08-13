@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.12
+// @version      1.0.13
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -429,7 +429,7 @@ GM_App(async function main() {
             const hash = md5(keys.map((k)=>_.get(value, k, k)).join('$'));
             const subpath = `$$.${path}.${hash}`;
             const cache = _.get(root_store, subpath, {});
-            if(cache.timestamp && moment().diff(cache.timestamp, 'days') < 3) return (items.push(cache.value), items);
+            if(cache.timestamp && moment().diff(cache.timestamp, 'days') < 3) return (!_.find(items, cache.value) && items.push(cache.value), items);
             cache.value = (typeof value === 'function') ? await value(root, subpath) : await Promise.resolve(value); cache.timestamp = Date.now();
             _.set(root_store, subpath, cache);
             _.set(root, path, (items.push(cache.value), root_cache.value = items));
@@ -579,7 +579,7 @@ GM_App(async function main() {
                     }).bind(null, 0), []);
                     item.titleWithInspectMessageCases = item.titleWithInspectMessageCases.filter(v=>!!v);
                 }
-                {
+                /*{
                     voice(`${blogId}/${logNo} 예상 키워드 분석 중...`);
                     item.titleWithInspectMessageScore = (await NX_items(item.titleWithInspectMessage, 1, 'view') || []).find(x=>x.blogId == blogId && x.logNo == logNo);
                     item.titleWithInspectMessageDetail = await Promise.map(await NR_termsAll(...item.titleWithInspectMessageUniqs), async (item) => {
@@ -590,7 +590,7 @@ GM_App(async function main() {
                         return item;
                     }, { concurrency: 10 });
                     item.titleWithInspectMessageDetail = item.titleWithInspectMessageDetail.filter(v=>!!v);
-                }
+                }*/
                 {
                     voice(`${blogId}/${logNo} 유입 키워드 분석 중...`);
                     item.statsReferrerTotalKeywords = item.statsReferrerTotal.map(({ stats })=>stats.map(({ detail }) => (detail?detail.refererDetail:[]).map(({searchQuery})=>searchQuery)).flat()).flat().filter((o,i,a)=>o&&a.indexOf(o)==i);
