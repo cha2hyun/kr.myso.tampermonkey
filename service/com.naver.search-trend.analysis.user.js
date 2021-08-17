@@ -4,7 +4,7 @@
 // @description  네이버 검색결과에서 데이터랩의 검색어 트렌드 정보를 확인할 수 있습니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.1.0
+// @version      1.1.1
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.search-trend.analysis.user.js
 // @author       Won Choi
@@ -106,9 +106,9 @@ GM_App(async function main() {
                     callbacks: {
                         label(context) {
                             if(context.dataset.viewtype == 'search_cnt') return (keyword_search.rval) ? `검색량: ${format_number(context.parsed.y.toFixed(0))}회` : `검색율: ${format_number(context.parsed.y.toFixed(2))}%`;
-                            if(context.dataset.viewtype == 'view_count') return `노출량: ${context.parsed.y.toFixed(0)}건 노출 됨`;
-                            if(context.dataset.viewtype == 'blog_count') return `블로그: ${context.parsed.y.toFixed(0)}건 생산 됨`;
-                            if(context.dataset.viewtype == 'cafe_count') return `카페: ${context.parsed.y.toFixed(0)}건 생산 됨`;
+                            if(context.dataset.viewtype == 'view_count') return `노출량: ${format_number(context.parsed.y.toFixed(0))}건 노출 됨`;
+                            if(context.dataset.viewtype == 'blog_count') return `블로그: ${format_number(context.parsed.y.toFixed(0))}건 생산 됨`;
+                            if(context.dataset.viewtype == 'cafe_count') return `카페: ${format_number(context.parsed.y.toFixed(0))}건 생산 됨`;
                             return '';
                         }
                     }
