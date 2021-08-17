@@ -7,7 +7,7 @@
 // @description   네이버 검색 NX 스크립트
 // @copyright     2021, myso (https://tampermonkey.myso.kr)
 // @license       Apache-2.0
-// @version       1.0.43
+// @version       1.0.49
 
 // ==/UserScript==
 
@@ -125,10 +125,10 @@
         types.push({ params: { term: 'w' }, where: ['post', 'm_post'] });
         types.push({ params: {}, where: ['influencer', 'm_influencer'] });
         const type = types.find(o=>o.where.includes(where)) || types[0];
-        Object.assign(params, type.params, params);
+        const prms = Object.assign({}, type.params, params);
         try {
-            if(['post', 'm_post'].includes(where)) return $NX_countNaverPost(keyword, params);
-            const res = await NX_Request(keyword, 1, where, mode, params);
+            if(['post', 'm_post'].includes(where)) return $NX_countNaverPost(keyword, prms);
+            const res = await NX_Request(keyword, 1, where, mode, prms);
             return parseInt(String(res.responseJson.total || res.responseJson.totalCount || 0).replace(/[^\d]+/g, ''));
         }catch(e){
             console.error(e);
