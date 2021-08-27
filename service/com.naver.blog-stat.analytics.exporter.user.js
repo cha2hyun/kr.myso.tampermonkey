@@ -4,7 +4,7 @@
 // @description  네이버 블로그 진단을 위해 블로그 통계 지표를 저장하는 기능의 프로그램입니다.
 // @copyright    2021, myso (https://tampermonkey.myso.kr)
 // @license      Apache-2.0
-// @version      1.0.14
+// @version      1.0.15
 // @updateURL    https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @downloadURL  https://github.com/myso-kr/kr.myso.tampermonkey/raw/master/service/com.naver.blog-stat.analytics.exporter.user.js
 // @author       Won Choi
@@ -536,7 +536,7 @@ GM_App(async function main() {
                     item.statsReferrerTotal = await Promise.map(dates, async (date) => {
                         voice(`${blogId}/${logNo} 유입 경로 분석 중... (${date})`);
                         const total = await NB_blogPostStat(logNo, 'referer/total', date, 'DATE');
-                        const stats = await Promise.map(total.refererTotal, async (item) => {
+                        const stats = await Promise.map(_.get(total, 'refererTotal', []), async (item) => {
                             voice(`${blogId}/${logNo} 유입 경로 분석 중... (${date}, ${item.referrerDomain || '-'})`);
                             const detail = await NB_blogPostStat(logNo, 'referer/total/detail', date, 'DATE', { searchEngine: item.referrerSearchEngine, refererDomain: item.referrerDomain })
                             if(detail && detail.refererDetail){
